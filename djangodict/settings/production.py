@@ -10,7 +10,7 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [<example.com>]
+ALLOWED_HOSTS = ['dari-dict.algor.cc', '127.0.0.1']
 
 CSRF_COOKIE_SECURE = True  # to avoid transmitting the CSRF cookie over HTTP accidentally.
 SESSION_COOKIE_SECURE = True  # to avoid transmitting the session cookie over HTTP accidentally.
