@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}
+    Profile
+{% endblock %}
+{% block main %}
+    <p class="action-link"><a href="{% url 'profiles_update' profile.id %}">Edit</a></p>
+    <p><strong>First Name:</strong> {{ profile.first_name }}</p>
+    <p><strong>Last Name:</strong> {{ profile.last_name }}</p>
+{% endblock %}

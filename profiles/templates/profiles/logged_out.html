@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Logged out{% endblock %}
+{% block main %}
+    <section class="wrapper">
+        <div class="loggedout">
+            You have been successfully logged out.
+            Do you wish to <a href="{% url 'profiles_login' %}?next={% url 'home' %}">login</a> again?
+        </div>
+    </section>
+{% endblock %}

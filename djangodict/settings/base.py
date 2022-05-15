@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django.urls import reverse_lazy
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -22,6 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # Application definition
 
 INSTALLED_APPS = [
+    'home',
+    'profiles',
+    'guardian',
+    'accounts',
+    'dict',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -111,3 +119,31 @@ STATICFILES_DIRS = [BASE_DIR / 'djangodict/static', ]
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'accounts.MyUser'
+AUTHENTICATION_BACKENDS = (
+    'accounts.backends.EmailBackend',
+    'guardian.backends.ObjectPermissionBackend',
+)
+ANONYMOUS_USER_NAME = 'AnonymousUser'
+LOGIN_URL = reverse_lazy('profiles_login')
+LOGOUT_URL = reverse_lazy('profiles_logout')
+LOGIN_REDIRECT_URL = reverse_lazy('dictionary')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
