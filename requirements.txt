@@ -1,0 +1,7 @@
+django
+psycopg2
+python-dotenv
+
+# wagtail
+# wagtailmedia
+# wagtail_footnotes
