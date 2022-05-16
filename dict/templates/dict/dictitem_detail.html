@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}
+    Item: {{ dictitem }}
+{% endblock %}
+{% block content %}
+    <a href="#">Edit</a>
+    <p id="id_value">Item: <strong>{{ dictitem.value }}</strong></p>
+    <p id="id_language">Language: {{ dictitem.language }}</p>
+    <p id="id_comment">Comment: {{ dictitem.comment }}</p>
+    {% for dictnode in dictitem.dictnode_set.all %}
+        <a href="#">{{ dictnode }}</a>
+    {% endfor %}
+
+{% endblock %}

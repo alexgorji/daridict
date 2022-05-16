@@ -1,9 +1,0 @@
-{% extends 'base.html' %}
-{% block title %}
-    Register Done
-{% endblock %}
-{% block main %}
-    New user {{ profile.get_full_name }} was successfully registered.
-    Do you wish to <a href="{% url 'profiles_login' %}?next={% url 'home' %}">log in</a>?
-{% endblock %}
-

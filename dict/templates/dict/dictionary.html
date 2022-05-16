@@ -1,10 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Dictionary</title>
-    </head>
-    <body>
-        BABAB
-    </body>
-</html>
+{% extends 'base.html' %}
+{% block title %}
+    Dictionary
+{% endblock %}
+{% block content %}
+    <div>
+
+        <form autocomplete="off" action="" method="POST">
+            {% csrf_token %}
+            <div>
+                <table>
+                    {% for form in dict_item_formset %}
+                        {{ form }}
+                    {% endfor %}
+                </table>
+            </div>
+        </form>
+    </div>
+    <div class="" style="height: 60vh;">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <!-- edit header -->
+                    <th>
+                        <p>Edit</p>
+                    </th>
+                    <!-- language headers -->
+                    {% for dict_language in dict_languages %}
+                        <th>
+                            <a href="#">{{ dict_language.value }}</a>
+                        </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for dict_node in dict_nodes %}
+                    <tr>
+                        <td>
+                            <button>edit</button>
+                            <button>copy</button>
+                            <button>delete</button>
+                        </td>
+                        {% for dict_item in dict_node.get_ordered_items %}
+                            <td>
+                                <a href="{% url 'dict_item' dict_item.pk %}">{{ dict_item.value }}</a>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
