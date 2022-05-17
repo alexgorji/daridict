@@ -73,7 +73,8 @@ class DictItemUpdateView(LoginRequiredMixin, generic.UpdateView):
         if delete_me:
             self.get_object().delete()
             return redirect('dictionary')
-        return super(request, *args, **kwargs)
+
+        return super().post(request, *args, **kwargs)
 
 
 class DictLanguageDetailView(LoginRequiredMixin, generic.DetailView):
