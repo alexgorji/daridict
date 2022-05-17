@@ -63,6 +63,12 @@ class DictItem(models.Model):
     def get_absolute_url(self):
         return reverse('dict_item', kwargs={'pk': self.pk})
 
+    def get_number_of_nodes(self):
+        return len(self.dictnode_set.all())
+
+    class Meta:
+        ordering = ['value']
+
 
 class DictNode(models.Model):
     items = models.ManyToManyField(to=DictItem, blank=True)

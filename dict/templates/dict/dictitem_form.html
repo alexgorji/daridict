@@ -3,8 +3,9 @@
     Edit Item: {{ dictitem }}
 {% endblock %}
 {% block content %}
-    <form method="post">{% csrf_token %}
+    <form method="post" novalidate>{% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Update">
+        <input class="btn bg-light" type="submit" name="update" value="Update">
+        <input class="btn bg-light" type="submit" name="delete" onclick="return confirm('Are you sure?')" value="del">
     </form>
 {% endblock %}

@@ -44,7 +44,7 @@ def dictionary(request):
                   DictLanguage.objects.all()]
     sorting_form = DictNodesSortingForm(initial={'sorted_by': sorted_by})
     dict_languages = DictLanguage.objects.all()
-    dict_nodes = sorted(DictNode.objects.all(), key=lambda x: x.get_language_item(sorted_by).value)
+    dict_nodes = sorted(DictNode.objects.all(), key=lambda x: x.get_language_item(sorted_by).value.lower())
     dict_language_items_json = DictItem.get_language_items_json()
     dict_pk_items_json = DictItem.get_pk_items_json()
     dict_node_json = serializers.serialize('json', DictNode.objects.all())
@@ -67,6 +67,13 @@ class DictItemDetailView(LoginRequiredMixin, generic.DetailView):
 class DictItemUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = DictItem
     form_class = DictItemUpdateForm
+
+    def post(self, request, *args, **kwargs):
+        delete_me = request.POST.get('delete')
+        if delete_me:
+            self.get_object().delete()
+            return redirect('dictionary')
+        return super(request, *args, **kwargs)
 
 
 class DictLanguageDetailView(LoginRequiredMixin, generic.DetailView):
