@@ -99154,3 +99154,69 @@ File /Users/aligorji/Desktop/tasks/djangoprojects/djangodict/venv/lib/python3.9/
 File /Users/aligorji/Desktop/tasks/djangoprojects/djangodict/home/migrations/__init__.py first seen with mtime 1639060479.845
 File /Users/aligorji/Desktop/tasks/djangoprojects/djangodict/venv/lib/python3.9/site-packages/django/contrib/auth/migrations/0009_alter_user_last_name_max_length.py first seen with mtime 1652638899.5235078
 File /Users/aligorji/bin/python/3.9.8/lib/python3.9/encodings/idna.py first seen with mtime 1636811436.6834729
+Not Found: /accounts/login/favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /accounts/login/favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /accounts/login/favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /dictionary/favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /dictionary/favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Internal Server Error: /dictionary/item/109/edit
+Traceback (most recent call last):
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/venv/lib/python3.8/site-packages/django/views/generic/base.py", line 84, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/venv/lib/python3.8/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/venv/lib/python3.8/site-packages/django/views/generic/base.py", line 119, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/dict/views.py", line 76, in post
+    return super(request, *args, **kwargs)
+TypeError: super() takes no keyword arguments
+Internal Server Error: /dictionary/item/109/edit
+Traceback (most recent call last):
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/venv/lib/python3.8/site-packages/django/views/generic/base.py", line 84, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/venv/lib/python3.8/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/venv/lib/python3.8/site-packages/django/views/generic/base.py", line 119, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/dict/views.py", line 76, in post
+    return super(request, *args, **kwargs)
+TypeError: super() takes no keyword arguments
+Internal Server Error: /dictionary/item/109/edit
+Traceback (most recent call last):
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/venv/lib/python3.8/site-packages/django/views/generic/base.py", line 84, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/venv/lib/python3.8/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/venv/lib/python3.8/site-packages/django/views/generic/base.py", line 119, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/ansibleadmin/sites/dari-dict.algor.cc/djangodict/dict/views.py", line 76, in post
+    return super(request, *args, **kwargs)
+TypeError: super() takes no keyword arguments
