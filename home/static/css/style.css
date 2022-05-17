@@ -1,3 +1,16 @@
-.my_log_nav{
+.my_log_nav {
     margin-left: 0;
+}
+
+.autocomplete-active {
+    background: aquamarine;
+}
+
+.autocomplete-items > div:hover {
+    background: aquamarine;
+    cursor: pointer;
+}
+
+a {
+    text-decoration: None;
 }

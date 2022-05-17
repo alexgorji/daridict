@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}
+    Dict Node: {{ dictnode.id }}
+{% endblock %}
+{% block content %}
+    <div>
+        <p>{{ dictnode }}</p>
+        <form autocomplete="off" action="" method="POST" novalidate>
+            {% csrf_token %}
+            <div>
+                <table>
+                    {% for form in item_forms %}
+                        {{ form }}
+                    {% endfor %}
+                </table>
+            </div>
+            <input class="btn bg-light" type="submit" name="delete" onclick="return confirm('Are you sure?')" value="del">
+            <input class="btn bg-light" type="submit" name="save" value="SAVE">
+            <a class="btn bg-light" href="{% url 'dictionary' %}">Cancel</a>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}
+    Language: {{ dictlanguage }}
+{% endblock %}
+{% block content %}
+    <h2>{{ dictlanguage }}</h2>
+    {% for item in dictlanguage.dictitem_set.all %}
+        <div>
+            <a href="{% url 'dict_item' item.pk %}">{{ item.value }}</a>
+        </div>
+    {% endfor %}
+{% endblock %}
