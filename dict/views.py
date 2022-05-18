@@ -14,7 +14,7 @@ sorted_by = 'Dari'
 def dictionary(request):
     global sorted_by
     filter_by_tags = []
-    initial_filter_by_tags = None
+    initial_filter_by_tags = ''
     if request.method == 'POST':
         del_node_id = request.POST.get('delNodeId', None)
         new_sorted_by = request.POST.get('sorted_by', None)
