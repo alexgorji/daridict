@@ -105,3 +105,21 @@ function autocomplete(inp, arr) {
         // return document.getElementById(inp).value
     });
 }
+
+function toggle_edit_buttons() {
+    $('.edit_toggle').on('click', function () {
+        const target_buttons = $("#" + $(this).attr('data-buttons'));
+        const symbol = $(this).children("i").first()
+        if ($(this).hasClass('opened')) {
+            $(symbol).removeClass('up')
+            $(symbol).addClass('right')
+            $(this).removeClass('opened')
+            target_buttons.hide(500)
+        } else {
+            $(this).addClass('opened')
+            $(symbol).removeClass('right')
+            $(symbol).addClass('up')
+            target_buttons.show(500)
+        }
+    });
+}

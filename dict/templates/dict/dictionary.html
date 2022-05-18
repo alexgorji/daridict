@@ -20,12 +20,18 @@
             <br>
         </form>
     </div>
-    <div>
+    <div class="mb-3">
         <form action="" method="POST" novalidate>
             {% csrf_token %}
             <label for="id_filter_by_tags">Filter by Tags:</label>
             <input type="text" name="filter_by_tags" id="id_filter_by_tags" value="{{ initial_filter_by_tags }}">
             <input type="submit">
+        </form>
+    </div>
+    <div>
+        <form id="id_sorting_form" action="" method="POST">
+            {% csrf_token %}
+            {{ sorting_form.as_p }}
         </form>
     </div>
     <div class="overflow-scroll" style="height: 60vh;">
@@ -34,10 +40,6 @@
                 <tr>
                     <!-- edit header -->
                     <th>
-                        <form id="id_sorting_form" action="" method="POST">
-                            {% csrf_token %}
-                            {{ sorting_form.as_p }}
-                        </form>
                     </th>
                     <!-- language headers -->
                     {% for dict_language in dict_languages %}
@@ -53,19 +55,27 @@
                     <tr>
                         <td>
                             <div class="d-flex">
-                                <a class="btn bg-light rounded-pill" href="{% url "dict_node_update" dict_node.pk %}">open</a>
-                                <form action="" method="POST">
-                                    {% csrf_token %}
-                                    <input type="hidden" id="delNodeId" name="delNodeId" value={{ dict_node.id }}>
-                                    <input class="btn bg-light rounded-circle" type="submit" onclick="return confirm('Are you sure?')"
-                                           value="del">
-                                </form>
-                                <button class="btn bg-light rounded-circle" onclick="copyClick({{ dict_node.id }}, this)">
-                                    cp
+                                <button class="btn bg-opacity-10 me-1 py-0 edit_toggle"
+                                        data-buttons="id_edit_buttons_{{ forloop.counter }}"><i class="arrow right"></i>
                                 </button>
-                                <button class="btn rounded-circle bg-light"
-                                        onclick="editClick({{ dict_node.id }}, this)"> ed
-                                </button>
+                                <div style="display: none" id="id_edit_buttons_{{ forloop.counter }}">
+                                    <div class="d-flex">
+                                        <a class="btn bg-light rounded-pill py-0" href="{% url "dict_node_update" dict_node.pk %}">open</a>
+                                        <form action="" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" id="delNodeId" name="delNodeId" value={{ dict_node.id }}>
+                                            <input class="btn bg-light rounded-pill py-0" type="submit"
+                                                   onclick="return confirm('Are you sure?')"
+                                                   value="del">
+                                        </form>
+                                        <button class="btn bg-light rounded-pill py-0" onclick="copyClick({{ dict_node.id }}, this)">
+                                            cp
+                                        </button>
+                                        <button class="btn rounded-pill bg-light py-0"
+                                                onclick="editClick({{ dict_node.id }}, this)"> ed
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </td>
                         {% for dict_item in dict_node.get_ordered_items %}
@@ -83,6 +93,7 @@
 {% endblock %}
 {% block extra_js %}
     <script>
+        toggle_edit_buttons()
         const fields = {
             'Deutsch': document.getElementById("Deutsch_value"),
             'Farsi': document.getElementById("Farsi_value"),
