@@ -70,8 +70,23 @@ class DictItem(models.Model):
         ordering = ['value']
 
 
+class Tag(models.Model):
+    name = models.fields.CharField(max_length=30)
+
+    def __str__(self):
+        return f'tag {self.id}: {self.name}'
+
+    @staticmethod
+    def pk_tag_json():
+        output = {}
+        for tag in Tag.objects.all():
+            output[tag.pk] = [tag.name]
+        return json.dumps(output)
+
+
 class DictNode(models.Model):
     items = models.ManyToManyField(to=DictItem, blank=True)
+    tags = models.ManyToManyField(to=Tag, blank=True)
 
     def __str__(self):
         return f'{self.id}: {" - ".join([item.value for item in self.items.all()])}'
@@ -90,6 +105,19 @@ class DictNode(models.Model):
             if item not in self.items.all():
                 self.items.add(item)
         self.save()
+
+    def edit_tags(self, tags):
+        tags = [Tag.objects.get_or_create(name=tag)[0] for tag in tags]
+        for tag in self.tags.all():
+            if tag not in tags:
+                self.tags.remove(tag)
+        for tag in tags:
+            if tag not in self.tags.all():
+                self.tags.add(tag)
+        self.save()
+
+    def get_tag_names(self):
+        return [tag.name for tag in self.tags.all()]
 
 
 def items_changed(sender, instance, action, **kwargs):

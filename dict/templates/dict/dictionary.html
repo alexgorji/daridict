@@ -13,8 +13,19 @@
                     {% endfor %}
                 </table>
             </div>
+            <div class="my-3">
+                {{ tag_form }}
+            </div>
             <div id="data-editInputs"></div>
             <br>
+        </form>
+    </div>
+    <div>
+        <form action="" method="POST" novalidate>
+            {% csrf_token %}
+            <label for="id_filter_by_tags">Filter by Tags:</label>
+            <input type="text" name="filter_by_tags" id="id_filter_by_tags" value="{{ initial_filter_by_tags }}">
+            <input type="submit">
         </form>
     </div>
     <div class="overflow-scroll" style="height: 60vh;">
@@ -79,6 +90,7 @@
         }
         const dictLanguageItemsJson = JSON.parse("{{ dict_language_items_json|escapejs }}");
         const dictPkItemsJson = JSON.parse("{{ dict_pk_items_json|escapejs }}")
+        const tagsPkTagJson = JSON.parse("{{ tags_pk_tag_json|escapejs }}")
         const dictNodeJson = JSON.parse("{{ dict_node_json|escapejs }}")
         let highlightedRow = null
 
@@ -93,10 +105,13 @@
         function writeNodeItemsToFields(nodeId) {
             let field;
             let language;
+            const nodes = getNode(nodeId)
+            const items = nodes.fields['items']
+            const tags = nodes.fields['tags']
+
             for (let key in fields) {
                 language = key;
                 field = fields[key];
-                const items = getNode(nodeId).fields['items']
                 let value = "";
                 for (let index in items) {
                     let x = dictPkItemsJson[items[index]]
@@ -105,6 +120,12 @@
                     }
                 }
                 field.value = value;
+                const tag_field = document.getElementById("id_tags")
+                value = ""
+                for (let index in tags) {
+                    value = tagsPkTagJson[tags[index]].join(', ')
+                }
+                tag_field.value = value;
 
             }
         }
