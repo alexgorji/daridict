@@ -24,8 +24,8 @@ def dictionary(request):
         else:
             tags = []
         filter_by_tags = request.POST.get('filter_by_tags', None)
-        initial_filter_by_tags = filter_by_tags
         if filter_by_tags:
+            initial_filter_by_tags = filter_by_tags
             filter_by_tags = list(set(filter_by_tags.split(', ')))
         else:
             filter_by_tags = []
