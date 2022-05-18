@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}
+    Tag: {{ tag }}
+{% endblock %}
+{% block content %}
+    <p>Tag: <strong>{{ tag.name }}</strong></p>
+    {% for dictnode in tag.dictnode_set.all %}
+        <div class="d-flex">
+            <p><a href="{% url 'dict_node_update' dictnode.pk %}">{{ dictnode }}</a></p>
+        </div>
+    {% endfor %}
+{% endblock %}

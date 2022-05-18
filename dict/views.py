@@ -147,3 +147,11 @@ def dict_node_update_view(request, pk):
             return redirect('dictionary')
 
     return render(request, 'dict/dictnode_form.html', context)
+
+
+class TagListView(LoginRequiredMixin, generic.ListView):
+    model = Tag
+
+
+class TagDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Tag

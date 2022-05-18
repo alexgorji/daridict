@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}
+    Tags
+{% endblock %}
+{% block content %}
+    {% for tag in tag_list %}
+        <div class="d-flex">
+            <div><a href="{% url 'tag_detail' tag.pk %}">{{ tag }}</a></div>
+            <div class="ps-3">nodes: {{ tag.dictnode_set.count }}</div>
+        </div>
+    {% endfor %}
+
+{% endblock %}
