@@ -6,16 +6,29 @@
     <div>
         <form autocomplete="off" action="" method="POST" novalidate>
             {% csrf_token %}
-            <div>
-                <table>
+            <table class="my_input_fields">
+                <tbody>
                     {% for form in dict_item_formset %}
-                        {{ form }}
+                        <tr>
+                            {% for field in form %}
+                                <td>
+                                    {{ field }}
+                                </td>
+                            {% endfor %}
+                        </tr>
                     {% endfor %}
-                </table>
-            </div>
-            <div class="my-3">
-                {{ tag_form }}
-            </div>
+                    <tr>
+                        {% for field in tag_form %}
+                            <td>
+                                {{ field.label_tag }}
+                            </td>
+                            <td>
+                                {{ field }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
             <div id="data-editInputs"></div>
             <br>
         </form>
@@ -36,7 +49,7 @@
     </div>
     <div class="overflow-scroll" style="height: 60vh;">
         <table class="table table-striped">
-            <thead class="sticky-top bg-white">
+            <thead class="bg-white">
                 <tr>
                     <!-- edit header -->
                     <th>
