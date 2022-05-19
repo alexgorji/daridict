@@ -54,8 +54,24 @@ table select {
     border: none;
 }
 
-.my_input_fields {
+.my_input_fields table{
     border-collapse: separate;
     border-spacing: 0 0.5em;
     margin-bottom: 1rem;
+}
+
+.main-table-wrapper {
+    height: calc(100vh - 200px);
+}
+
+@media screen and (min-width: 992px) {
+    .main-table-wrapper {
+        height:  calc(100vh - 100px);
+        margin-left: 5rem;
+        margin-top: 1rem;
+    }
+
+    .main-wrapper {
+        display: flex;
+    }
 }

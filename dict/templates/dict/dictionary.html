@@ -3,106 +3,118 @@
     Dictionary
 {% endblock %}
 {% block content %}
-    <div>
-        <form autocomplete="off" action="" method="POST" novalidate>
-            {% csrf_token %}
-            <table class="my_input_fields">
+    <div class="main-wrapper">
+        <div class="main-input-fields">
+            <button id="id_input_fields_button" class="btn btn-primary d-lg-none" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#id_input_fields"
+                    aria-expanded="false"
+                    aria-controls="id_input_fields">
+                input fields
+            </button>
+            <div class="collapse my_input_fields show" id="id_input_fields">
+                <form autocomplete="off" action="" method="POST" novalidate>
+                    {% csrf_token %}
+                    <table>
+                        <tbody>
+                            {% for form in dict_item_formset %}
+                                <tr>
+                                    {% for field in form %}
+                                        <td>
+                                            {{ field }}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                {% for field in tag_form %}
+                                    <td>
+                                        {{ field.label_tag }}
+                                    </td>
+                                    <td>
+                                        {{ field }}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="data-editInputs"></div>
+                    <br>
+                </form>
+            </div>
+            <div class="mb-3">
+                <form action="" method="POST" novalidate>
+                    {% csrf_token %}
+                    <div>Filter by Tags:</div>
+                    <input type="text" name="filter_by_tags" id="id_filter_by_tags" value="{{ initial_filter_by_tags }}">
+                    <input type="submit" value="submit">
+                </form>
+            </div>
+            <div>
+                <form id="id_sorting_form" action="" method="POST">
+                    {% csrf_token %}
+                    {{ sorting_form.as_p }}
+                </form>
+            </div>
+        </div>
+        <div class="overflow-scroll main-table-wrapper">
+            <table class="table table-striped">
+                <thead class="bg-white">
+                    <tr>
+                        <!-- edit header -->
+                        <th>
+                        </th>
+                        <!-- language headers -->
+                        {% for dict_language in dict_languages %}
+                            <th>
+                                <p><a href="{% url 'dict_language' dict_language.pk %}">{{ dict_language.value }}</a></p>
+                            </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+
                 <tbody>
-                    {% for form in dict_item_formset %}
+                    {% for dict_node in dict_nodes %}
                         <tr>
-                            {% for field in form %}
+                            <td>
+                                <div class="d-flex">
+                                    <button class="btn bg-opacity-10 me-1 py-0 edit_toggle"
+                                            data-buttons="id_edit_buttons_{{ forloop.counter }}"><i class="arrow right"></i>
+                                    </button>
+                                    <div style="display: none" id="id_edit_buttons_{{ forloop.counter }}">
+                                        <div class="d-flex">
+                                            <a class="btn bg-light rounded-pill py-0"
+                                               href="{% url "dict_node_update" dict_node.pk %}">open</a>
+                                            <form action="" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" id="delNodeId" name="delNodeId" value={{ dict_node.id }}>
+                                                <input class="btn bg-light rounded-pill py-0" type="submit"
+                                                       onclick="return confirm('Are you sure?')"
+                                                       value="del">
+                                            </form>
+                                            <button class="btn bg-light rounded-pill py-0" onclick="copyClick({{ dict_node.id }}, this)">
+                                                cp
+                                            </button>
+                                            <button class="btn rounded-pill bg-light py-0"
+                                                    onclick="editClick({{ dict_node.id }}, this)"> ed
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            {% for dict_item in dict_node.get_ordered_items %}
                                 <td>
-                                    {{ field }}
+                                    <p {% if dict_item.language.direction == 'RTL' %} dir="rtl"{% endif %}><a
+                                            href="{% url 'dict_item' dict_item.pk %}">
+                                        {{ dict_item.value }}{% if dict_item.comment != "" %}*{% endif %}</a></p>
                                 </td>
                             {% endfor %}
                         </tr>
                     {% endfor %}
-                    <tr>
-                        {% for field in tag_form %}
-                            <td>
-                                {{ field.label_tag }}
-                            </td>
-                            <td>
-                                {{ field }}
-                            </td>
-                        {% endfor %}
-                    </tr>
                 </tbody>
             </table>
-            <div id="data-editInputs"></div>
-            <br>
-        </form>
+        </div>
     </div>
-    <div class="mb-3">
-        <form action="" method="POST" novalidate>
-            {% csrf_token %}
-            <label for="id_filter_by_tags">Filter by Tags:</label>
-            <input type="text" name="filter_by_tags" id="id_filter_by_tags" value="{{ initial_filter_by_tags }}">
-            <input type="submit">
-        </form>
-    </div>
-    <div>
-        <form id="id_sorting_form" action="" method="POST">
-            {% csrf_token %}
-            {{ sorting_form.as_p }}
-        </form>
-    </div>
-    <div class="overflow-scroll" style="height: 60vh;">
-        <table class="table table-striped">
-            <thead class="bg-white">
-                <tr>
-                    <!-- edit header -->
-                    <th>
-                    </th>
-                    <!-- language headers -->
-                    {% for dict_language in dict_languages %}
-                        <th>
-                            <p><a href="{% url 'dict_language' dict_language.pk %}">{{ dict_language.value }}</a></p>
-                        </th>
-                    {% endfor %}
-                </tr>
-            </thead>
 
-            <tbody>
-                {% for dict_node in dict_nodes %}
-                    <tr>
-                        <td>
-                            <div class="d-flex">
-                                <button class="btn bg-opacity-10 me-1 py-0 edit_toggle"
-                                        data-buttons="id_edit_buttons_{{ forloop.counter }}"><i class="arrow right"></i>
-                                </button>
-                                <div style="display: none" id="id_edit_buttons_{{ forloop.counter }}">
-                                    <div class="d-flex">
-                                        <a class="btn bg-light rounded-pill py-0" href="{% url "dict_node_update" dict_node.pk %}">open</a>
-                                        <form action="" method="POST">
-                                            {% csrf_token %}
-                                            <input type="hidden" id="delNodeId" name="delNodeId" value={{ dict_node.id }}>
-                                            <input class="btn bg-light rounded-pill py-0" type="submit"
-                                                   onclick="return confirm('Are you sure?')"
-                                                   value="del">
-                                        </form>
-                                        <button class="btn bg-light rounded-pill py-0" onclick="copyClick({{ dict_node.id }}, this)">
-                                            cp
-                                        </button>
-                                        <button class="btn rounded-pill bg-light py-0"
-                                                onclick="editClick({{ dict_node.id }}, this)"> ed
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        {% for dict_item in dict_node.get_ordered_items %}
-                            <td>
-                                <p {% if dict_item.language.direction == 'RTL' %} dir="rtl"{% endif %}><a
-                                        href="{% url 'dict_item' dict_item.pk %}">
-                                    {{ dict_item.value }}{% if dict_item.comment != "" %}*{% endif %}</a></p>
-                            </td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
 {% endblock %}
 {% block extra_js %}
     <script>
