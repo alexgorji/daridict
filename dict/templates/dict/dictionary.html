@@ -269,6 +269,10 @@
             $('#id_sorted_by').change(function () {
                 $("#id_sorting_form").submit()
             });
+            if (parseInt($(window).width()) < 992) {
+                $('#id_input_fields').removeClass('show');
+            }
+
         })
     </script>
 {% endblock %}
