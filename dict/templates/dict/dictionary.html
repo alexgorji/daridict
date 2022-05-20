@@ -11,7 +11,7 @@
                     aria-controls="id_input_fields">
                 input fields
             </button>
-            <div class="collapse my_input_fields show" id="id_input_fields">
+            <div class="collapse my_input_fields" id="id_input_fields">
                 <form autocomplete="off" action="" method="POST" novalidate>
                     {% csrf_token %}
                     <table>
@@ -139,6 +139,9 @@
         }
 
         function writeNodeItemsToFields(nodeId) {
+            if (!$('#id_input_fields').hasClass('show')) {
+                $('#id_input_fields_button').trigger("click");
+            }
             let field;
             let language;
             const nodes = getNode(nodeId)
@@ -269,10 +272,6 @@
             $('#id_sorted_by').change(function () {
                 $("#id_sorting_form").submit()
             });
-            if (parseInt($(window).width()) < 992) {
-                $('#id_input_fields').removeClass('show');
-            }
-
         })
     </script>
 {% endblock %}

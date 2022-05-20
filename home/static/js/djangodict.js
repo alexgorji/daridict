@@ -113,13 +113,8 @@ function toggle_edit_buttons() {
     $('.edit_toggle').on('click', function () {
         const target_buttons = $("#" + $(this).attr('data-buttons'));
         const symbol = $(this).children("i").first()
-        const input_fields = $("#id_input_fields")
-        const input_button = $("#id_input_fields_button")
         if ($(this).hasClass('opened')) {
             $(symbol).removeClass('up')
-            if (parseInt($(window).width()) < 992 && $(input_fields).hasClass('show')) {
-                $(input_button).trigger("click");
-            }
             $(symbol).addClass('right')
             $(this).removeClass('opened')
             target_buttons.hide(500)
@@ -133,9 +128,6 @@ function toggle_edit_buttons() {
                 $("#" + $(opened_edit_buttons).attr('data-buttons')).hide(500);
             }
             $(this).addClass('opened')
-            if (!$(input_fields).hasClass('show')) {
-                $(input_button).trigger("click");
-            }
             $(symbol).removeClass('right')
             $(symbol).addClass('up')
             target_buttons.show(500)

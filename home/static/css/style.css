@@ -74,4 +74,8 @@ table select {
     .main-wrapper {
         display: flex;
     }
+
+    .my_input_fields{
+        display: block !important;
+    }
 }
