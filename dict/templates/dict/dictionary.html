@@ -139,7 +139,7 @@
         }
 
         function writeNodeItemsToFields(nodeId) {
-            if (!$('#id_input_fields').hasClass('show')) {
+            if (parseInt($(window).width()) < 992 && !$('#id_input_fields').hasClass('show')) {
                 $('#id_input_fields_button').trigger("click");
             }
             let field;
