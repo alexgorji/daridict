@@ -14,3 +14,68 @@
 a {
     text-decoration: None;
 }
+
+.hide-buttons {
+    display: none !important;
+}
+
+.arrow {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+.up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}
+
+.table {
+    width: auto;
+}
+
+.table td, .table th {
+    border: #447e9b solid 1px;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+}
+
+table select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-overflow: '';
+    background: white;
+    border: none;
+}
+
+.my_input_fields table{
+    border-collapse: separate;
+    border-spacing: 0 0.5em;
+    margin-bottom: 1rem;
+}
+
+.main-table-wrapper {
+    height: calc(100vh - 200px);
+}
+
+@media screen and (min-width: 992px) {
+    .main-table-wrapper {
+        height:  calc(100vh - 100px);
+        margin-left: 5rem;
+        margin-top: 1rem;
+    }
+
+    .main-wrapper {
+        display: flex;
+    }
+
+    .my_input_fields{
+        display: block !important;
+    }
+}
