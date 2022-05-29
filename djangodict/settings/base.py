@@ -69,7 +69,7 @@ WSGI_APPLICATION = 'djangodict.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'djangodict_db',
+        'NAME': 'daridict_db',
         'USER': 'ansibleadmin',
         'PORT': '',
     }
