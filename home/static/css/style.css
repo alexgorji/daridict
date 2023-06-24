@@ -36,15 +36,16 @@ a {
     -webkit-transform: rotate(-135deg);
 }
 
-.table {
-    width: auto;
+
+
+
+
+.my_input_fields table{
+    border-collapse: separate;
+    border-spacing: 0 0.5em;
+    margin-bottom: 1rem;
 }
 
-.table td, .table th {
-    border: #447e9b solid 1px;
-    padding-right: 0.5rem;
-    padding-left: 0.5rem;
-}
 
 table select {
     -webkit-appearance: none;
@@ -54,14 +55,42 @@ table select {
     border: none;
 }
 
-.my_input_fields table{
-    border-collapse: separate;
-    border-spacing: 0 0.5em;
-    margin-bottom: 1rem;
-}
-
 .main-table-wrapper {
     height: calc(100vh - 200px);
+    border-bottom: #447e9b solid 1px;
+    border-right: #447e9b solid 1px;
+
+}
+
+.table td, .table th {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+}
+
+.table tr:nth-child(odd) {
+  background-color: #e7e3ec;
+}
+
+.header-fixed         {
+    overflow: auto;
+}
+.header-fixed  thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: white;
+}
+
+table  {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.header-fixed td {
+  box-shadow: inset 1px -1px #447e9b;
+}
+.header-fixed th {
+  box-shadow: inset 1px 1px #447e9b, 0 1px #447e9b;
 }
 
 @media screen and (min-width: 992px) {

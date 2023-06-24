@@ -121,22 +121,25 @@ function toggle_edit_buttons() {
             opened_edit_buttons = null
             opened_symbol = null
         } else {
+            $(this).addClass('opened')
+            $(symbol).removeClass('right')
+            $(symbol).addClass('up')
+
             if (opened_edit_buttons) {
+                target_buttons.show()
                 $(opened_symbol).removeClass('up');
                 $(opened_symbol).addClass('right');
                 $(opened_edit_buttons).removeClass('opened');
                 $("#" + $(opened_edit_buttons).attr('data-buttons')).hide(500);
+            }else{
+                target_buttons.show(500)
             }
-            $(this).addClass('opened')
-            $(symbol).removeClass('right')
-            $(symbol).addClass('up')
-            target_buttons.show(500)
             opened_edit_buttons = this
             opened_symbol = symbol
             const that = this
             setTimeout(function () {
                 $(".main-table-wrapper").animate({
-                            scrollTop: $(that).closest('tr').position().top
+                            scrollTop: $(that).closest('tr').position().top - 55
                 }, 300);
             }, 500);
         }
