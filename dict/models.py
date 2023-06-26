@@ -123,6 +123,20 @@ class DictNode(models.Model):
         return [tag.name for tag in self.tags.all()]
 
 
+class DictEntry(models.Model):
+    item_dari = models.ForeignKey(to=DictItem, blank=True, on_delete=models.CASCADE, related_name='item_dari',
+                                  null=True)
+    item_farsi = models.ForeignKey(to=DictItem, blank=True, on_delete=models.CASCADE, related_name='item_farsi',
+                                   null=True)
+    item_german = models.ForeignKey(to=DictItem, blank=True, on_delete=models.CASCADE, related_name='item_german',
+                                    null=True)
+    tags = models.ManyToManyField(to=Tag, blank=True)
+
+    def __str__(self):
+        items = [item.value if item else '  ' for item in [self.item_dari, self.item_farsi, self.item_german]]
+        return f'{self.id}: {" - ".join(items)}'
+
+
 def items_changed(sender, instance, action, **kwargs):
     if action in ['post_add', 'post_remove']:
         languages = [item.language.id for item in instance.items.all()]

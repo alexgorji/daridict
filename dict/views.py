@@ -5,9 +5,17 @@ from django.shortcuts import render, redirect
 from django.views import generic
 
 from .forms import DictItemForm, DictItemUpdateForm, DictNodesSortingForm, TagForm
-from .models import DictItem, DictLanguage, DictNode, Tag
+from .models import DictItem, DictLanguage, DictNode, Tag, DictEntry
 
 sorted_by = 'Dari'
+
+
+@login_required
+def show_entries(request):
+    entries = DictEntry.objects.all()
+    return render(request, 'dict/entries.html', {
+        'entries': entries
+    })
 
 
 @login_required
@@ -114,9 +122,11 @@ def dict_node_update_view(request, pk):
                 return item.value
         return ""
 
-    item_forms = [DictItemForm(initial={'language': language, 'value': get_language_value(language)}, auto_id=f"{language}_%s") for language
-                  in
-                  DictLanguage.objects.all()]
+    item_forms = [
+        DictItemForm(initial={'language': language, 'value': get_language_value(language)}, auto_id=f"{language}_%s")
+        for language
+        in
+        DictLanguage.objects.all()]
     tags_form = TagForm(initial={'tags': ", ".join(dictnode.get_tag_names())})
 
     context = {

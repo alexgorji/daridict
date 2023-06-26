@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}
+    Entries
+{% endblock %}
+{% block content %}
+    <div class="main-wrapper">
+        {% for entry in entries %}
+            <p>{{ entry }}</p>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}
+{% block extra_js %}
+{% endblock %}

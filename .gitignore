@@ -1,3 +1,3 @@
-debug.log
+debug*
 *.pyc
 __pycache__/
