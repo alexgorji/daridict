@@ -120,8 +120,10 @@ LOGGING = {
     'handlers': {
         'file': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': BASE_DIR / 'debug.log',
+            'backupCount': 1,  # keep at most 10 log files
+            'maxBytes': 5242880,  # 5*1024*1024 bytes (2MB)
         },
     },
     'loggers': {
