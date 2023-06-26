@@ -12,7 +12,7 @@ class DictNodeLanguageException(Exception):
 
 
 class DictLanguage(models.Model):
-    value = models.CharField(max_length=20, blank=False)
+    value = models.CharField(max_length=20, blank=False, unique=True)
 
     LTR = 'LTR'
     RTL = 'RTL'
@@ -40,6 +40,12 @@ class DictItem(models.Model):
     value = models.CharField(max_length=40, blank=False)
     comment = models.TextField(blank=True)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['language', 'value'], name='unique value in language')
+        ]
+        ordering = ['value']
+
     def __str__(self):
         return f"{self.language.value}: {self.value}"
 
@@ -65,9 +71,6 @@ class DictItem(models.Model):
 
     def get_number_of_nodes(self):
         return len(self.dictnode_set.all())
-
-    class Meta:
-        ordering = ['value']
 
 
 class Tag(models.Model):
