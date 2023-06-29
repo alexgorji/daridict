@@ -12,7 +12,7 @@ sorted_by = 'Dari'
 
 @login_required
 def show_entries(request):
-    entries = DictEntry.objects.all()
+    entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__cleaned_value')
     return render(request, 'dict/entries.html', {
         'entries': entries
     })

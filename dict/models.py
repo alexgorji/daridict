@@ -37,7 +37,8 @@ class DictLanguage(models.Model):
 
 class DictItem(models.Model):
     language = models.ForeignKey(to=DictLanguage, on_delete=models.CASCADE)
-    value = models.CharField(max_length=40, blank=False)
+    value = models.CharField(max_length=250, blank=False)
+    cleaned_value = models.CharField(max_length=250, blank=False)
     comment = models.TextField(blank=True)
 
     class Meta:
