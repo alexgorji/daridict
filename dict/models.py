@@ -39,6 +39,7 @@ class DictItem(models.Model):
     language = models.ForeignKey(to=DictLanguage, on_delete=models.CASCADE)
     value = models.CharField(max_length=250, blank=False)
     cleaned_value = models.CharField(max_length=250, blank=False)
+    sorting_value = models.CharField(max_length=250, blank=False)
     comment = models.TextField(blank=True)
 
     class Meta:
@@ -134,7 +135,7 @@ class DictEntry(models.Model):
     tags = models.ManyToManyField(to=Tag, blank=True)
 
     def __str__(self):
-        items = [item.value if item else '  ' for item in [self.item_dari, self.item_farsi, self.item_german]]
+        items = [item.value if item else '___' for item in [self.item_dari, self.item_farsi, self.item_german]]
         return f'{self.id}: {" - ".join(items)}'
 
 

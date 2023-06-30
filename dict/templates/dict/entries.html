@@ -3,6 +3,15 @@
     Entries
 {% endblock %}
 {% block content %}
+{#    <div>#}
+{#        <form>#}
+{#            {% for persian_letter in persian_letters %}#}
+{#                <button type="submit" id="per_1" name="persian-alphabet"#}
+{#                        value="{{ persian_letter }}">{{ persian_letter }}#}
+{#                </button>#}
+{#            {% endfor %}#}
+{#        </form>#}
+{#    </div>#}
     <div>
         {% for entry in entries %}
             <p>{{ entry }}</p>

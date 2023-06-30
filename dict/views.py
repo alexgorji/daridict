@@ -9,12 +9,22 @@ from .models import DictItem, DictLanguage, DictNode, Tag, DictEntry
 
 sorted_by = 'Dari'
 
+persian_letters = ['آ', 'ا', 'ب', 'پ', 'ت', 'ث', 'ج', 'چ', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'ژ', 'س', 'ش', 'ص', 'ض', 'ط',
+                   'ظ', 'ع', 'غ', 'ف', 'ق', 'ک', 'گ', 'ل', 'م', 'ن', 'و', 'ه', 'ی']
+
 
 @login_required
 def show_entries(request):
-    entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__cleaned_value')
+    entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
+    # if request.method == 'POST':
+    #     print('posting')
+    # elif request.method == 'GET':
+    #     print(request.GET)
+    #     if request.GET.get('persian_alphabet'):
+    #         entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__cleaned_value')
     return render(request, 'dict/entries.html', {
-        'entries': entries
+        'entries': entries,
+        # 'persian_letters': persian_letters
     })
 
 
