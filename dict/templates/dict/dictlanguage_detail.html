@@ -4,10 +4,10 @@
 {% endblock %}
 {% block content %}
     <h2>{{ dictlanguage }}</h2>
-    {% for item in dictlanguage.dictitem_set.all %}
+    {% for item in dictlanguage.get_sorted_items %}
         <div class="d-flex">
             <div><a href="{% url 'dict_item' item.pk %}">{{ item.id }}: {{ item.value }}</a></div>
-            <div class="ps-3">nodes: {{ item.get_number_of_nodes }}</div>
+            <div class="ps-3">entries: {{ item.get_entries|length }}</div>
         </div>
     {% endfor %}
 {% endblock %}

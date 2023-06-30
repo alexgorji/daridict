@@ -31,6 +31,9 @@ class DictLanguage(models.Model):
     def __str__(self):
         return self.value
 
+    def get_sorted_items(self):
+        return self.dictitem_set.all().order_by('sorting_value')
+
     class Meta:
         ordering = ['id']
 
@@ -71,8 +74,15 @@ class DictItem(models.Model):
     def get_absolute_url(self):
         return reverse('dict_item', kwargs={'pk': self.pk})
 
-    def get_number_of_nodes(self):
-        return len(self.dictnode_set.all())
+    def get_entries(self):
+        if self.language.value == 'Dari':
+            return self.entry_dari_item.all()
+        elif self.language.value == 'Dari':
+            return self.entry_dari_item.all()
+        elif self.language.value == 'Deutsch':
+            return self.entry_dari_item.all()
+        else:
+            raise NotImplementedError(f'language: {self.language.value} is not an entry language.')
 
 
 class Tag(models.Model):
@@ -126,17 +136,20 @@ class DictNode(models.Model):
 
 
 class DictEntry(models.Model):
-    item_dari = models.ForeignKey(to=DictItem, blank=True, on_delete=models.CASCADE, related_name='item_dari',
+    item_dari = models.ForeignKey(to=DictItem, blank=True, on_delete=models.CASCADE, related_name='entry_dari_item',
                                   null=True)
-    item_farsi = models.ForeignKey(to=DictItem, blank=True, on_delete=models.CASCADE, related_name='item_farsi',
+    item_farsi = models.ForeignKey(to=DictItem, blank=True, on_delete=models.CASCADE, related_name='entry_farsi_item',
                                    null=True)
-    item_german = models.ForeignKey(to=DictItem, blank=True, on_delete=models.CASCADE, related_name='item_german',
+    item_german = models.ForeignKey(to=DictItem, blank=True, on_delete=models.CASCADE, related_name='entry_german_item',
                                     null=True)
     tags = models.ManyToManyField(to=Tag, blank=True)
 
     def __str__(self):
-        items = [item.value if item else '___' for item in [self.item_dari, self.item_farsi, self.item_german]]
+        items = [item.value if item else '___' for item in self.get_ordered_items()]
         return f'{self.id}: {" - ".join(items)}'
+
+    def get_ordered_items(self):
+        return self.item_dari, self.item_farsi, self.item_german
 
 
 def items_changed(sender, instance, action, **kwargs):

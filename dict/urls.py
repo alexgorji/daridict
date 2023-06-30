@@ -9,5 +9,4 @@ urlpatterns = [
     path('node/<int:pk>/edit', views.dict_node_update_view, name='dict_node_update'),
     path('tags/', views.TagListView.as_view(), name='tag_list'),
     path('tags/<int:pk>/', views.TagDetailView.as_view(), name='tag_detail'),
-    # path('entries/', views.show_entries, name='dict_entries'),
 ]
