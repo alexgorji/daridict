@@ -37,74 +37,59 @@ a {
 }
 
 
-
-
-
-.my_input_fields table{
+.my_input_fields table {
     border-collapse: separate;
     border-spacing: 0 0.5em;
     margin-bottom: 1rem;
 }
 
-
-table select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    text-overflow: '';
-    background: white;
-    border: none;
-}
-
-.main-table-wrapper {
+.table-wrapper {
     height: calc(100vh - 200px);
-    border-bottom: #447e9b solid 1px;
-    border-right: #447e9b solid 1px;
-
+    margin-top: 1rem;
 }
 
-.table td, .table th {
-    padding-right: 0.5rem;
-    padding-left: 0.5rem;
+.my-table td, .my-table th {
+    padding: 0.75em 0.5em 0 0.5em;
 }
 
-.table tr:nth-child(odd) {
-  background-color: #e7e3ec;
+
+th,
+td {
+    /*padding: 0.25em 0.5em 0.25em 1em;*/
 }
 
-.header-fixed         {
-    overflow: auto;
-}
-.header-fixed  thead th {
+th {
+    vertical-align: bottom;
+    text-align: center;
+    background-color: #d9dade;
+    position: -webkit-sticky;
     position: sticky;
     top: 0;
-    z-index: 1;
-    background: white;
+    z-index: 2;
 }
 
-table  {
-    border-collapse: collapse;
-    width: 100%;
+.my-table a {
+    color: dimgray;
 }
 
-.header-fixed td {
-  box-shadow: inset 1px -1px #447e9b;
+tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.05);
 }
-.header-fixed th {
-  box-shadow: inset 1px 1px #447e9b, 0 1px #447e9b;
+
+tr:nth-child(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 @media screen and (min-width: 992px) {
-    .main-table-wrapper {
-        height:  calc(100vh - 100px);
-        margin-left: 5rem;
-        margin-top: 1rem;
+    .table-wrapper {
+        height: calc(100vh - 100px);
     }
 
     .main-wrapper {
         display: flex;
     }
 
-    .my_input_fields{
+    .my_input_fields {
         display: block !important;
     }
 }
