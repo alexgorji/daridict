@@ -19,7 +19,14 @@
     {##}
     {#    </div>#}
     <div class="row">
-        <div class="col-12 col-md-3">huhuasdfasdf</div>
+        <div class="col-12 col-md-3">
+            <div>
+                <form id="id_sorting_form" action="" method="POST">
+                    {% csrf_token %}
+                    {{ sorting_form.as_p }}
+                </form>
+            </div>
+        </div>
         <div class="col-12 col-md-9 table-wrapper overflow-scroll">
             <table class="my-table">
                 <thead>
@@ -63,4 +70,11 @@
     </div>
 {% endblock %}
 {% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            $('#id_sorted_by').change(function () {
+                $("#id_sorting_form").submit()
+            });
+        })
+    </script>
 {% endblock %}

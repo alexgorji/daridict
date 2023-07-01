@@ -28,3 +28,7 @@ class DictNodesSortingForm(forms.Form):
 
 class TagForm(forms.Form):
     tags = forms.CharField(max_length=500)
+
+class DictEntrySortingForm(forms.Form):
+    CHOICES = [(language.value, language.value) for language in DictLanguage.objects.all()]
+    sorted_by = forms.ChoiceField(choices=CHOICES)

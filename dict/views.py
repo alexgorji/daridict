@@ -15,10 +15,15 @@ persian_letters = ['آ', 'ا', 'ب', 'پ', 'ت', 'ث', 'ج', 'چ', 'ح', 'خ', '
 
 @login_required
 def show_entries(request):
+    global sorted_by
     entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
     dict_languages = DictLanguage.objects.all()
-    # if request.method == 'POST':
-    #     print('posting')
+    sorting_form = DictNodesSortingForm(initial={'sorted_by': sorted_by})
+    if request.method == 'POST':
+        print('posting', request.POST)
+        new_sorted_by = request.POST.get('sorted_by', None)
+        if new_sorted_by:
+            sorted_by = new_sorted_by
     # elif request.method == 'GET':
     #     print(request.GET)
     #     if request.GET.get('persian_alphabet'):
@@ -26,6 +31,7 @@ def show_entries(request):
     return render(request, 'dict/entries.html', {
         'entries': entries,
         'dict_languages': dict_languages,
+        'sorting_form': sorting_form,
         # 'persian_letters': persian_letters
     })
 
