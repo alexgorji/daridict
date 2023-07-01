@@ -39,7 +39,7 @@ class DictLanguage(models.Model):
 
 
 class DictItem(models.Model):
-    language = models.ForeignKey(to=DictLanguage, on_delete=models.CASCADE)
+    language = models.ForeignKey(to=DictLanguage, on_delete=models.RESTRICT)
     value = models.CharField(max_length=250, blank=False)
     cleaned_value = models.CharField(max_length=250, blank=False)
     sorting_value = models.CharField(max_length=250, blank=False)
@@ -52,7 +52,7 @@ class DictItem(models.Model):
         ordering = ['value']
 
     def __str__(self):
-        return f"{self.language.value}: {self.value}"
+        return f"{self.id}: {self.language.value}: {self.value}"
 
     @staticmethod
     def get_language_items_json():
@@ -136,11 +136,11 @@ class DictNode(models.Model):
 
 
 class DictEntry(models.Model):
-    item_dari = models.ForeignKey(to=DictItem, blank=True, on_delete=models.CASCADE, related_name='entry_dari_item',
+    item_dari = models.ForeignKey(to=DictItem, blank=True, on_delete=models.RESTRICT, related_name='entry_dari_item',
                                   null=True)
-    item_farsi = models.ForeignKey(to=DictItem, blank=True, on_delete=models.CASCADE, related_name='entry_farsi_item',
+    item_farsi = models.ForeignKey(to=DictItem, blank=True, on_delete=models.RESTRICT, related_name='entry_farsi_item',
                                    null=True)
-    item_german = models.ForeignKey(to=DictItem, blank=True, on_delete=models.CASCADE, related_name='entry_german_item',
+    item_german = models.ForeignKey(to=DictItem, blank=True, on_delete=models.RESTRICT, related_name='entry_german_item',
                                     null=True)
     tags = models.ManyToManyField(to=Tag, blank=True)
 
