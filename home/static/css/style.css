@@ -48,6 +48,12 @@ a {
     margin-top: 1rem;
 }
 
+.left-side-bar {
+    margin-top: 1rem;
+    background-color: mediumaquamarine;
+    padding: 1rem 1rem 0.25rem 1rem;
+}
+
 .my-table td, .my-table th {
     padding: 0.75em 0.5em 0 0.5em;
 }
@@ -70,6 +76,10 @@ th {
 
 .my-table a {
     color: dimgray;
+}
+
+.my-table a:hover {
+    color: #9d9d9d;
 }
 
 tr:nth-child(even) {

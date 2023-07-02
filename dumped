@@ -978,7 +978,6 @@ COPY public.dict_dictentry (id, item_dari_id, item_farsi_id, item_german_id) FRO
 2230	101	99	100
 2231	102	103	104
 2232	105	106	107
-2233	109	110	\N
 2234	\N	112	113
 2235	114	115	116
 2236	117	118	\N
@@ -1374,6 +1373,7 @@ COPY public.dict_dictentry (id, item_dari_id, item_farsi_id, item_german_id) FRO
 2626	1036	1037	1038
 2627	1039	1037	1038
 2628	1040	1041	\N
+2629	\N	\N	2268
 \.
 
 
@@ -1476,7 +1476,7 @@ COPY public.dict_dictitem (id, value, comment, language_id, cleaned_value, sorti
 108	کِلکین		1	کلکین	qsqxu
 5	یخَن		1	یخن	xau
 4	یقه		2	یقه	xpw
-110			2		
+2268	Testing		3		
 6	Kragen (r)		3	Kragen (r)	Kragen (r)
 146	Umfeld (n)		3	Umfeld (n)	Umfeld (n)
 134	Blinker (r)		3	Blinker (r)	Blinker (r)
@@ -2421,7 +2421,6 @@ COPY public.dict_dictlanguage (id, value, direction) FROM stdin;
 2	Farsi	RTL
 3	Deutsch	LTR
 1	Dari	RTL
-4	German	LTR
 \.
 
 
@@ -2977,7 +2976,6 @@ COPY public.dict_dictnode_items (id, dictnode_id, dictitem_id) FROM stdin;
 238	73	106
 239	73	107
 243	75	109
-244	75	110
 247	76	112
 248	76	113
 249	77	114
@@ -4171,6 +4169,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 36	dict	0013_alter_dictitem_value	2023-06-26 10:49:20.159523+02
 37	dict	0002_dictitem_cleaned_value	2023-06-27 10:12:00.452345+02
 38	dict	0003_dictitem_sorting_value	2023-06-30 11:49:16.075364+02
+39	dict	0004_alter_dictentry_item_dari_alter_dictentry_item_farsi_and_more	2023-07-01 12:44:55.268129+02
 \.
 
 
@@ -4272,7 +4271,7 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 -- Name: dict_dictentry_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ansibleadmin
 --
 
-SELECT pg_catalog.setval('public.dict_dictentry_id_seq', 2628, true);
+SELECT pg_catalog.setval('public.dict_dictentry_id_seq', 2629, true);
 
 
 --
@@ -4286,7 +4285,7 @@ SELECT pg_catalog.setval('public.dict_dictentry_tags_id_seq', 1, false);
 -- Name: dict_dictitem_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ansibleadmin
 --
 
-SELECT pg_catalog.setval('public.dict_dictitem_id_seq', 2267, true);
+SELECT pg_catalog.setval('public.dict_dictitem_id_seq', 2268, true);
 
 
 --
@@ -4342,7 +4341,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 13, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ansibleadmin
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 38, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 39, true);
 
 
 --
