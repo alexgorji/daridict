@@ -6,11 +6,17 @@ from django.views import generic
 
 from .forms import DictItemForm, DictItemUpdateForm, DictNodesSortingForm, TagForm
 from .models import DictItem, DictLanguage, DictNode, Tag, DictEntry
+from django.http import HttpResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 sorted_by = 'Dari'
 
 persian_letters = ['آ', 'ا', 'ب', 'پ', 'ت', 'ث', 'ج', 'چ', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'ژ', 'س', 'ش', 'ص', 'ض', 'ط',
                    'ظ', 'ع', 'غ', 'ف', 'ق', 'ک', 'گ', 'ل', 'م', 'ن', 'و', 'ه', 'ی']
+
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
 @login_required
@@ -25,16 +31,32 @@ def show_entries(request):
                 sorted_by = 'German'
             else:
                 sorted_by = new_sorted_by
+
     sorting_form = DictNodesSortingForm(initial={'sorted_by': sorted_by})
     entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
-    # elif request.method == 'GET':
-    #     print(request.GET)
-    #     if request.GET.get('persian_alphabet'):
-    #         entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__cleaned_value')
+    paginator = Paginator(entries, 50)
+    page = request.GET.get('page')
+    try:
+        entries = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer deliver the first page
+        entries = paginator.page(1)
+    except EmptyPage:
+        if is_ajax(request):
+            # If the request is AJAX and the page is out of range
+            # return an empty page
+            return HttpResponse('')
+        # If page is out of range deliver last page of results
+        entries = paginator.page(paginator.num_pages)
+    if is_ajax(request):
+        return render(request,
+                      'dict/list_ajax.html',
+                      {'entries': entries})
     return render(request, 'dict/entries.html', {
         'entries': entries,
         'dict_languages': dict_languages,
         'sorting_form': sorting_form,
+        'number_of_pages': paginator.num_pages
         # 'persian_letters': persian_letters
     })
 

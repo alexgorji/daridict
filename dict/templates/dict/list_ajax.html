@@ -1,0 +1,21 @@
+{% for entry in entries %}
+<tr>
+    <td>
+
+    </td>
+    {% for dict_item in entry.get_ordered_items %}
+        <td>
+            {% if dict_item %}
+                <p {% if dict_item.language.direction == 'RTL' %} dir="rtl"{% endif %}>
+                    <a href="{% url 'dict_item' dict_item.pk %}">
+                        {{ dict_item.value }}{% if dict_item.comment != "" %}*{% endif %}
+                    </a>
+                </p>
+            {% else %}
+                <p>---</p>
+            {% endif %}
+
+        </td>
+    {% endfor %}
+</tr>
+{% endfor %}

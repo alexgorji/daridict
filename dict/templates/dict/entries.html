@@ -44,37 +44,50 @@
                 </tr>
                 </thead>
 
-                <tbody>
-                {% for entry in entries %}
-                    <tr>
-                        <td>
-
-                        </td>
-                        {% for dict_item in entry.get_ordered_items %}
-                            <td>
-                                {% if dict_item %}
-                                    <p {% if dict_item.language.direction == 'RTL' %} dir="rtl"{% endif %}><a
-                                            href="{% url 'dict_item' dict_item.pk %}">
-                                        {{ dict_item.value }}{% if dict_item.comment != "" %}*{% endif %}</a></p>
-                                {% else %}
-                                    <p>---</p>
-                                {% endif %}
-
-                            </td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
+                <tbody id="entries">
+                {% include "dict/list_ajax.html" %}
                 </tbody>
             </table>
         </div>
     </div>
 {% endblock %}
-{% block extra_js %}
-    <script>
-        $(document).ready(function () {
-            $('#id_sorted_by').change(function () {
-                $("#id_sorting_form").submit()
+{% block domready %}
+    $('#id_sorted_by').change(function () {
+    $("#id_sorting_form").submit()
+    });
+
+{#    console.log('number of pages', {{ number_of_pages }})#}
+{#    for (let page = 1; page <= {{ number_of_pages }} + 1; page++){#}
+{#        console.log("page:", page)#}
+{#        $.get('?page=' + page, function(data) {#}
+{#            if(data != '') {#}
+{#                $('#entries').append(data);#}
+{#            }else{#}
+{#                console.log("No data in page", page)#}
+{#            }#}
+{#        });#}
+{#    }#}
+console.log('number of pages', {{ number_of_pages }})
+    let page = 1;
+    let empty_page = false;
+    let block_request = false;
+    $(".table-wrapper").scroll(function() {
+        let margin = $(".table-wrapper").height() * 4/5;
+{#        console.log("height:", $(".table-wrapper").height())#}
+{#        console.log("margin:", margin)#}
+{#        console.log($(".table-wrapper").scrollTop())#}
+        if($(".table-wrapper").scrollTop() > margin && empty_page == false && block_request == false) {
+            block_request = true;
+            page += 1;
+            $.get('?page=' + page, function(data) {
+                if(data == '') {
+                    empty_page = true;
+                }
+                else {
+                    block_request = false;
+                    $('#entries').append(data);
+                }
             });
-        })
-    </script>
+        }
+    });
 {% endblock %}
