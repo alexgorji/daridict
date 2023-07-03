@@ -34,7 +34,9 @@ def show_entries(request):
 
     sorting_form = DictNodesSortingForm(initial={'sorted_by': sorted_by})
     entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
-    paginator = Paginator(entries, 50)
+    number_of_entries_per_page = 100
+    paginator = Paginator(entries, number_of_entries_per_page)
+    number_of_pages = paginator.num_pages
     page = request.GET.get('page')
     try:
         entries = paginator.page(page)
@@ -46,18 +48,21 @@ def show_entries(request):
             # return an empty page
             return HttpResponse('')
         # If page is out of range deliver last page of results
-        entries = paginator.page(paginator.num_pages)
+        entries = paginator.page(number_of_pages)
     if is_ajax(request):
         return render(request,
                       'dict/list_ajax.html',
                       {'entries': entries,
-                       'page': page})
+                       'page': page,
+                       'number_of_pages': number_of_pages,
+                       'number_of_entries_per_page': number_of_entries_per_page})
     return render(request, 'dict/entries.html', {
         'entries': entries,
         'dict_languages': dict_languages,
         'sorting_form': sorting_form,
         'number_of_pages': paginator.num_pages,
-        'page': 1
+        'page': 1,
+        'number_of_entries_per_page': number_of_entries_per_page
     })
 
 
