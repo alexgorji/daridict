@@ -1,7 +1,7 @@
 {% for entry in entries %}
 <tr>
     <td>
-
+        {{ page }}:{{ forloop.counter}}
     </td>
     {% for dict_item in entry.get_ordered_items %}
         <td>

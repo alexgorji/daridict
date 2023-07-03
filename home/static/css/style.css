@@ -46,6 +46,7 @@ a {
 .table-wrapper {
     height: calc(100vh - 200px);
     margin-top: 1rem;
+    scrollbar-color: rgba(0,0,0,0) rgba(0,0,0,0);
 }
 
 .left-side-bar {
@@ -73,18 +74,25 @@ th {
     top: 0;
     z-index: 2;
 }
-table{
+
+table {
     table-layout: fixed;
 }
-th, td{
+
+th, td {
     width: 30%;
 }
-th:first-child, td:first-child{
+
+th:first-child, td:first-child {
     width: 10%
 }
 
 .my-table a {
     color: dimgray;
+}
+
+.my-table{
+    width: 100%;
 }
 
 .my-table a:hover {
@@ -112,3 +120,5 @@ tr:nth-child(odd) {
         display: block !important;
     }
 }
+
+

@@ -39,7 +39,6 @@ def show_entries(request):
     try:
         entries = paginator.page(page)
     except PageNotAnInteger:
-        # If page is not an integer deliver the first page
         entries = paginator.page(1)
     except EmptyPage:
         if is_ajax(request):
@@ -51,13 +50,14 @@ def show_entries(request):
     if is_ajax(request):
         return render(request,
                       'dict/list_ajax.html',
-                      {'entries': entries})
+                      {'entries': entries,
+                       'page': page})
     return render(request, 'dict/entries.html', {
         'entries': entries,
         'dict_languages': dict_languages,
         'sorting_form': sorting_form,
-        'number_of_pages': paginator.num_pages
-        # 'persian_letters': persian_letters
+        'number_of_pages': paginator.num_pages,
+        'page': 1
     })
 
 
