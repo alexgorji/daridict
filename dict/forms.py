@@ -6,7 +6,8 @@ from dict.models import DictItem, DictNode, DictLanguage, Tag
 class DictItemForm(forms.ModelForm):
     class Meta:
         model = DictItem
-        fields = ['language', 'value']
+        fields = ['value']
+        # fields = ['language', 'value']
 
 
 class DictItemUpdateForm(forms.ModelForm):

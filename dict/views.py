@@ -38,6 +38,8 @@ def show_entries(request):
     paginator = Paginator(entries, number_of_entries_per_page)
     number_of_pages = paginator.num_pages
     page = request.GET.get('page')
+    item_forms = [DictItemForm(initial={'language': language}, auto_id=f"{language}_%s") for language in
+                  DictLanguage.objects.all()]
     try:
         entries = paginator.page(page)
     except PageNotAnInteger:
@@ -62,7 +64,8 @@ def show_entries(request):
         'sorting_form': sorting_form,
         'number_of_pages': paginator.num_pages,
         'page': 1,
-        'number_of_entries_per_page': number_of_entries_per_page
+        'number_of_entries_per_page': number_of_entries_per_page,
+        'dict_item_formset': item_forms,
     })
 
 
@@ -119,7 +122,7 @@ def dictionary(request):
     dict_nodes = DictNode.objects.all()
     while filter_by_tags:
         dict_nodes = dict_nodes.filter(tags__name=filter_by_tags.pop())
-    dict_nodes = sorted(dict_nodes, key=lambda x: x.get_language_item(sorted_by).value.lower())
+    # dict_nodes = sorted(dict_nodes, key=lambda x: x.get_language_item(sorted_by).value.lower())
     dict_language_items_json = DictItem.get_language_items_json()
     dict_pk_items_json = DictItem.get_pk_items_json()
     dict_node_json = serializers.serialize('json', DictNode.objects.all())

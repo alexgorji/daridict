@@ -1,0 +1,20 @@
+<div class="my_input_fields" id="id_input_fields">
+    <form autocomplete="off" action="" method="POST" novalidate>
+        {% csrf_token %}
+        <table>
+            <tbody>
+            {% for form in dict_item_formset %}
+                <tr>
+                    {% for field in form %}
+                        <td>
+                            {{ field }}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div id="data-editInputs"></div>
+        <br>
+    </form>
+</div>

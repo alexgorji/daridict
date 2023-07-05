@@ -43,6 +43,10 @@ a {
     margin-bottom: 1rem;
 }
 
+.my_input_fields input{
+    width: 100%;
+}
+
 .table-wrapper {
     height: calc(100vh - 200px);
     margin-top: 1rem;
