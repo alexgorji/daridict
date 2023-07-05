@@ -4,10 +4,20 @@ from dict.models import DictItem, DictNode, DictLanguage, Tag
 
 
 class DictItemForm(forms.ModelForm):
+
     class Meta:
         model = DictItem
         fields = ['value']
-        # fields = ['language', 'value']
+
+    def __init__(self, *args, **kwargs):
+        label = None
+        try:
+            label = kwargs.pop('label')
+        except KeyError:
+            pass
+
+        super().__init__(*args, **kwargs)
+        self.fields['value'].widget.attrs['placeholder'] = label
 
 
 class DictItemUpdateForm(forms.ModelForm):

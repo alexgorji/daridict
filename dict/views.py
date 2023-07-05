@@ -25,12 +25,23 @@ def show_entries(request):
     dict_languages = DictLanguage.objects.all()
 
     if request.method == 'POST':
+        print(request.POST)
         new_sorted_by = request.POST.get('sorted_by', None)
+        # create = request.POST.get('newInput', None)
+
         if new_sorted_by:
             if new_sorted_by == 'Deutsch':
                 sorted_by = 'German'
             else:
                 sorted_by = new_sorted_by
+        else:
+            values = request.POST.getlist('value')
+            if len(set(values)) == 1 and "" in set(values):
+                pass
+            else:
+                items = [None if value == "" else DictItem.objects.get_or_create(value=value, language=language)[0] for
+                         value, language in zip(values, dict_languages)]
+                DictEntry.objects.get_or_create(item_dari=items[0], item_farsi=items[1], item_german=items[2])
 
     sorting_form = DictNodesSortingForm(initial={'sorted_by': sorted_by})
     entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
@@ -38,7 +49,8 @@ def show_entries(request):
     paginator = Paginator(entries, number_of_entries_per_page)
     number_of_pages = paginator.num_pages
     page = request.GET.get('page')
-    item_forms = [DictItemForm(initial={'language': language}, auto_id=f"{language}_%s") for language in
+    item_forms = [DictItemForm(initial={'language': language}, auto_id=f"{language}_%s", label=language.value) for
+                  language in
                   DictLanguage.objects.all()]
     try:
         entries = paginator.page(page)
