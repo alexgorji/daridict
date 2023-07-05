@@ -25,9 +25,7 @@ def show_entries(request):
     dict_languages = DictLanguage.objects.all()
 
     if request.method == 'POST':
-        print(request.POST)
         new_sorted_by = request.POST.get('sorted_by', None)
-        # create = request.POST.get('newInput', None)
 
         if new_sorted_by:
             if new_sorted_by == 'Deutsch':

@@ -4,6 +4,8 @@ from django.db import models
 from django.db.models.signals import m2m_changed
 from django.urls import reverse
 
+from dict.model_helpers import remove_redundant_spaces, remove_short_vowels, translate_to_sorting_value
+
 
 class DictNodeLanguageException(Exception):
     def __init__(self, *args):
@@ -84,6 +86,15 @@ class DictItem(models.Model):
         else:
             raise NotImplementedError(f'language: {self.language.value} is not an entry language.')
 
+    def save(self, *args, **kwargs):
+        self.cleaned_value = remove_redundant_spaces(self.value)
+        if self.language.value in ['Dari', 'Farsi']:
+            self.cleaned_value = remove_short_vowels(self.cleaned_value)
+            self.sorting_value = translate_to_sorting_value(self.cleaned_value)
+        else:
+            self.sorting_value = self.cleaned_value
+        super().save(*args, **kwargs)
+
 
 class Tag(models.Model):
     name = models.fields.CharField(max_length=30)
@@ -140,7 +151,8 @@ class DictEntry(models.Model):
                                   null=True)
     item_farsi = models.ForeignKey(to=DictItem, blank=True, on_delete=models.RESTRICT, related_name='entry_farsi_item',
                                    null=True)
-    item_german = models.ForeignKey(to=DictItem, blank=True, on_delete=models.RESTRICT, related_name='entry_german_item',
+    item_german = models.ForeignKey(to=DictItem, blank=True, on_delete=models.RESTRICT,
+                                    related_name='entry_german_item',
                                     null=True)
     tags = models.ManyToManyField(to=Tag, blank=True)
 
