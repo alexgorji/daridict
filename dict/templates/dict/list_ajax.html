@@ -2,7 +2,36 @@
 {% for entry in entries %}
     <tr>
         <td>
-            {{ page | add:-1 | multiply:number_of_entries_per_page | add:forloop.counter}}
+            <div class="d-flex">
+                <button class="btn bg-opacity-10 me-1 edit_toggle"
+                        data-buttons="id_edit_buttons_{{ forloop.counter }}"><i class="arrow right"></i>
+                </button>
+{#                <div style="display: none" id="id_edit_buttons_{{ forloop.counter }}">#}
+{#                    <div class="d-flex">#}
+{#                        <a class="btn bg-light rounded-pill py-0"#}
+{#                           href="{% url "dict_node_update" dict_node.pk %}">open</a>#}
+{#                        <form action="" method="POST">#}
+{#                            {% csrf_token %}#}
+{#                            <input type="hidden" id="delNodeId" name="delNodeId" value={{ dict_node.id }}>#}
+{#                            <input class="btn bg-light rounded-pill py-0" type="submit"#}
+{#                                   onclick="return confirm('Are you sure?')"#}
+{#                                   value="del">#}
+{#                        </form>#}
+{#                        <button class="btn bg-light rounded-pill py-0" onclick="copyClick({{ dict_node.id }}, this)">#}
+{#                            cp#}
+{#                        </button>#}
+{#                        <button class="btn rounded-pill bg-light py-2"#}
+{#                                onclick="editClick({{ entry.id }}, this)"> ed#}
+{#                        </button>#}
+{#                    </div>#}
+
+{#                </div>#}
+
+            </div>
+
+        </td>
+        <td>
+            <p>{{ page | add:-1 | multiply:number_of_entries_per_page | add:forloop.counter}}</p>
         </td>
         {% for dict_item in entry.get_ordered_items %}
             <td>
