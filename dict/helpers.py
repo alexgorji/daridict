@@ -22,7 +22,7 @@ def delete_all_entries():
 def create_entries(item_dari, item_farsi, item_german):
     dari = DictLanguage.objects.get_or_create(value='Dari')[0]
     farsi = DictLanguage.objects.get_or_create(value='Farsi')[0]
-    german = DictLanguage.objects.get_or_create(value='Deutsch')[0]
+    german = DictLanguage.objects.get_or_create(value='German')[0]
 
     def create_item(item, language):
         item = DictItem.objects.get(id=item.id)

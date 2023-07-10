@@ -81,7 +81,7 @@ class DictItem(models.Model):
             return self.entry_dari_item.all()
         elif self.language.value == 'Farsi':
             return self.entry_farsi_item.all()
-        elif self.language.value == 'Deutsch':
+        elif self.language.value == 'German':
             return self.entry_german_item.all()
         else:
             raise NotImplementedError(f'language: {self.language.value} is not an entry language.')

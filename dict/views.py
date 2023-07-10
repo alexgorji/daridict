@@ -28,10 +28,7 @@ def show_entries(request):
         new_sorted_by = request.POST.get('sorted_by', None)
 
         if new_sorted_by:
-            if new_sorted_by == 'Deutsch':
-                sorted_by = 'German'
-            else:
-                sorted_by = new_sorted_by
+            sorted_by = new_sorted_by
         else:
             values = request.POST.getlist('value')
             if len(set(values)) == 1 and "" in set(values):
