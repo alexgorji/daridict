@@ -39,52 +39,33 @@
         </div>
     </div>
 {% endblock %}
-{% block domready %}
-    $('#id_sorted_by').change(function () {
-    $("#id_sorting_form").submit()
-    });
+{% block extra_js %}
+    <script>
+        toggle_edit_buttons()
+        page = 2
 
+        function loopPages() {
+            $.get('?page=' + page, function (data) {
+                if (data != '') {
+                    $('#entries').append(data);
+                } else {
+                    console.log("No data in page", page)
+                }
+            });
+            setTimeout(function () {
+                console.log("page:", page)
+                page++;
+                if (page <= {{ number_of_pages }}) {
+                    loopPages()
+                }
+            }, 500)
+        }
 
-    page = 2
-    function loopPages() {
-    $.get('?page=' + page, function(data) {
-    if(data != '') {
-    $('#entries').append(data);
-    }else{
-    console.log("No data in page", page)
-    }
-    });
-    setTimeout(function() {
-    console.log("page:", page)
-    page++;
-    if (page <= {{ number_of_pages }}){
-    loopPages()
-    }
-    }, 1000)
-    }
-    loopPages()
-
-    {#    let page = 1;#}
-    {#    let empty_page = false;#}
-    {#    let block_request = false;#}
-
-    {#    $(".table-wrapper").scroll(function() {#}
-    {#        let margin = $(".table-wrapper").height() * 4/5;#}
-    {#        console.log("height:", $(".table-wrapper").height())#}
-    {#        console.log("margin:", margin)#}
-    {#        console.log($(".table-wrapper").scrollTop())#}
-    {#        if($(".table-wrapper").scrollTop() > margin && empty_page == false && block_request == false) {#}
-    {#            block_request = true;#}
-    {#            page += 1;#}
-    {#            $.get('?page=' + page, function(data) {#}
-    {#                if(data == '') {#}
-    {#                    empty_page = true;#}
-    {#                }#}
-    {#                else {#}
-    {#                    block_request = false;#}
-    {#                    $('#entries').append(data);#}
-    {#                }#}
-    {#            });#}
-    {#        }#}
-    {#    });#}
+        $(document).ready(function () {
+            $('#id_sorted_by').change(function () {
+                $("#id_sorting_form").submit()
+            });
+            loopPages()
+        });
+    </script>
 {% endblock %}

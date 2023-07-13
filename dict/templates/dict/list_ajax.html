@@ -1,16 +1,16 @@
 {% load calculationtags %}
 {% for entry in entries %}
     <tr>
-        <td>
-            <p class="latin-font"><a href="{% url 'entry_update' entry.pk %}">
-                {{ page | add:-1 | multiply:number_of_entries_per_page | add:forloop.counter}}</a></p>
-        </td>
         <td class="arrow-td">
             <div class="arrow-div">
                 <button class="edit_toggle"
-                        data-buttons="id_edit_buttons_{{ forloop.counter }}"> <i class="arrow right"></i>
+                        data-buttons="id_edit_buttons_{{ forloop.counter }}"><i class="arrow right"></i>
                 </button>
             </div>
+        </td>
+        <td>
+            <p class="latin-font"><a href="{% url 'entry_update' entry.pk %}">
+                {{ page | add:-1 | multiply:number_of_entries_per_page | add:forloop.counter}}</a></p>
         </td>
         {% for dict_item in entry.get_ordered_items %}
             <td>
@@ -29,4 +29,28 @@
             </td>
         {% endfor %}
     </tr>
+    <tr class="edit_buttons-tr">
+        <td colspan="5">
+            <div style="display: none" id="id_edit_buttons_{{ forloop.counter }}">
+                <div class="d-flex">
+                    <a class="btn rounded-pill py-0"
+                       href="{% url "entry_update" entry.pk %}">open</a>
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" id="delEntryId" name="delEntryId" value={{ entry.id }}>
+                        <input class="btn rounded-pill py-0" type="submit"
+                               onclick="return confirm('Are you sure?')"
+                               value="del">
+                    </form>
+                    <button class="btn rounded-pill py-0" onclick="copyClick({{ entry.id }}, this)">
+                        cp
+                    </button>
+                    <button class="btn rounded-pill py-0"
+                            onclick="editClick({{ entry.id }}, this)"> ed
+                    </button>
+                </div>
+            </div>
+        </td>
+    </tr>
+
 {% endfor %}

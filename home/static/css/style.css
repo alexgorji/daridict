@@ -38,7 +38,7 @@ a {
     /*margin: 0 !important;*/
 }
 
-.arrow-td{
+.arrow-td {
     padding: 0 !important;
 }
 
@@ -109,11 +109,19 @@ th:nth-child(1) > div, td:nth-child(1), th:nth-child(2) > div, td:nth-child(2) >
 }
 
 th:nth-child(1), td:nth-child(1) {
-    width: 15%
+    width: 5%
 }
 
 th:nth-child(2), td:nth-child(2) {
-    width: 5%;
+    width: 15%;
+}
+
+tr.edit_buttons-tr > td > div {
+    padding: 0.25em 0 0.ls5em 0.5em;
+}
+
+tr.edit_buttons-tr > td {
+    padding: 0;
 }
 
 .my-table a {
@@ -128,13 +136,16 @@ th:nth-child(2), td:nth-child(2) {
     color: #9d9d9d;
 }
 
-tr:nth-child(even) {
+
+tr{
+    background-color: rgba(255, 255, 255, 0.05);
+
+}
+
+tr:nth-child(4n-1){
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-tr:nth-child(odd) {
-    background-color: rgba(255, 255, 255, 0.05);
-}
 
 #Farsi_value, #Dari_value {
     direction: rtl;
@@ -142,6 +153,11 @@ tr:nth-child(odd) {
 
 .latin-font {
     font-size: 14px;
+}
+
+.edit_buttons-tr .btn{
+    background-color: coral;
+    margin: 1px;
 }
 
 @media screen and (min-width: 992px) {
