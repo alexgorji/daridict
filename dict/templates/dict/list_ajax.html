@@ -2,49 +2,30 @@
 {% for entry in entries %}
     <tr>
         <td>
-            <div class="d-flex">
-                <button class="btn bg-opacity-10 me-1 edit_toggle"
-                        data-buttons="id_edit_buttons_{{ forloop.counter }}"><i class="arrow right"></i>
-                </button>
-{#                <div style="display: none" id="id_edit_buttons_{{ forloop.counter }}">#}
-{#                    <div class="d-flex">#}
-{#                        <a class="btn bg-light rounded-pill py-0"#}
-{#                           href="{% url "dict_node_update" dict_node.pk %}">open</a>#}
-{#                        <form action="" method="POST">#}
-{#                            {% csrf_token %}#}
-{#                            <input type="hidden" id="delNodeId" name="delNodeId" value={{ dict_node.id }}>#}
-{#                            <input class="btn bg-light rounded-pill py-0" type="submit"#}
-{#                                   onclick="return confirm('Are you sure?')"#}
-{#                                   value="del">#}
-{#                        </form>#}
-{#                        <button class="btn bg-light rounded-pill py-0" onclick="copyClick({{ dict_node.id }}, this)">#}
-{#                            cp#}
-{#                        </button>#}
-{#                        <button class="btn rounded-pill bg-light py-2"#}
-{#                                onclick="editClick({{ entry.id }}, this)"> ed#}
-{#                        </button>#}
-{#                    </div>#}
-
-{#                </div>#}
-
-            </div>
-
+            <p class="latin-font"><a href="{% url 'entry_update' entry.pk %}">
+                {{ page | add:-1 | multiply:number_of_entries_per_page | add:forloop.counter}}</a></p>
         </td>
-        <td>
-            <p>{{ page | add:-1 | multiply:number_of_entries_per_page | add:forloop.counter}}</p>
+        <td class="arrow-td">
+            <div class="arrow-div">
+                <button class="edit_toggle"
+                        data-buttons="id_edit_buttons_{{ forloop.counter }}"> <i class="arrow right"></i>
+                </button>
+            </div>
         </td>
         {% for dict_item in entry.get_ordered_items %}
             <td>
-                {% if dict_item %}
-                    <p {% if dict_item.language.direction == 'RTL' %} dir="rtl"{% endif %}>
-                        <a href="{% url 'dict_item' dict_item.pk %}">
-                            {{ dict_item.value }}{% if dict_item.comment != "" %}*{% endif %}
-                        </a>
-                    </p>
-                {% else %}
-                    <p>---</p>
-                {% endif %}
-
+                <div>
+                    {% if dict_item %}
+                        <p {% if dict_item.language.direction == 'RTL' %} dir="rtl"{% else %}
+                                                                          class="latin-font"{% endif %}>
+                            <a href="{% url 'dict_item' dict_item.pk %}">
+                                {{ dict_item.value }}{% if dict_item.comment != "" %}*{% endif %}
+                            </a>
+                        </p>
+                    {% else %}
+                        <p>---</p>
+                    {% endif %}
+                </div>
             </td>
         {% endfor %}
     </tr>

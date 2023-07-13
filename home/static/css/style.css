@@ -26,6 +26,22 @@ a {
     padding: 3px;
 }
 
+.arrow-div > button {
+    background: transparent;
+    border: None;
+    padding: 1px 0 8px 3px;
+
+}
+
+.arrow-div {
+    /*padding: 0 !important;*/
+    /*margin: 0 !important;*/
+}
+
+.arrow-td{
+    padding: 0 !important;
+}
+
 .right {
     transform: rotate(-45deg);
     -webkit-transform: rotate(-45deg);
@@ -41,16 +57,17 @@ a {
     border-collapse: separate;
     border-spacing: 0 0.5em;
     margin-bottom: 1rem;
+
 }
 
-.my_input_fields input{
+.my_input_fields input {
     width: 100%;
 }
 
 .table-wrapper {
     height: calc(100vh - 200px);
     margin-top: 1rem;
-    scrollbar-color: rgba(0,0,0,0) rgba(0,0,0,0);
+    scrollbar-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
 }
 
 .left-side-bar {
@@ -63,11 +80,6 @@ a {
     padding: 0.75em 0.5em 0 0.5em;
 }
 
-
-th,
-td {
-    /*padding: 0.25em 0.5em 0.25em 1em;*/
-}
 
 th {
     vertical-align: bottom;
@@ -84,17 +96,31 @@ table {
 }
 
 th, td {
-    width: 30%;
+    width: 28%;
+    /*border: 2px solid #1b1b1b;*/
 }
-th:nth-child(1), td:nth-child(1), th:nth-child(2), td:nth-child(2){
-    width: 5%
+
+th > div, td > div {
+    overflow-y: scroll;
+}
+
+th:nth-child(1) > div, td:nth-child(1), th:nth-child(2) > div, td:nth-child(2) > div {
+    overflow-y: visible;
+}
+
+th:nth-child(1), td:nth-child(1) {
+    width: 15%
+}
+
+th:nth-child(2), td:nth-child(2) {
+    width: 5%;
 }
 
 .my-table a {
     color: dimgray;
 }
 
-.my-table{
+.my-table {
     width: 100%;
 }
 
@@ -110,8 +136,12 @@ tr:nth-child(odd) {
     background-color: rgba(255, 255, 255, 0.05);
 }
 
-#Farsi_value, #Dari_value{
+#Farsi_value, #Dari_value {
     direction: rtl;
+}
+
+.latin-font {
+    font-size: 14px;
 }
 
 @media screen and (min-width: 992px) {

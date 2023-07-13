@@ -154,14 +154,21 @@ class DictEntry(models.Model):
     item_german = models.ForeignKey(to=DictItem, blank=True, on_delete=models.RESTRICT,
                                     related_name='entry_german_item',
                                     null=True)
+    order_of_items = ['item_dari', 'item_farsi', 'item_german']
     tags = models.ManyToManyField(to=Tag, blank=True)
 
     def __str__(self):
         items = [item.value if item else '___' for item in self.get_ordered_items()]
         return f'{self.id}: {" - ".join(items)}'
 
+    def edit_items(self, items):
+        items = [item if item != '' else None for item in items]
+        for self_item, item in zip(self.order_of_items, items):
+            setattr(self, self_item, item)
+        self.save()
+
     def get_ordered_items(self):
-        return self.item_dari, self.item_farsi, self.item_german
+        return [getattr(self, item) for item in self.order_of_items]
 
 
 def items_changed(sender, instance, action, **kwargs):
