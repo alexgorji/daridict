@@ -88,11 +88,13 @@ class DictItem(models.Model):
 
     def save(self, *args, **kwargs):
         self.cleaned_value = remove_redundant_spaces(self.value)
-        if self.language.value in ['Dari', 'Farsi']:
-            self.cleaned_value = remove_short_vowels(self.cleaned_value)
-            self.sorting_value = translate_to_sorting_value(self.cleaned_value)
-        else:
-            self.sorting_value = self.cleaned_value
+        self.cleaned_value = remove_short_vowels(self.cleaned_value)
+        self.sorting_value = translate_to_sorting_value(self.cleaned_value.lower())
+        # if self.language.value in ['Dari', 'Farsi']:
+        #     self.cleaned_value = remove_short_vowels(self.cleaned_value)
+        #     self.sorting_value = translate_to_sorting_value(self.cleaned_value)
+        # else:
+        #     self.sorting_value = self.cleaned_value.lower()
         super().save(*args, **kwargs)
 
 
@@ -147,14 +149,15 @@ class DictNode(models.Model):
 
 
 class DictEntry(models.Model):
-    item_dari = models.ForeignKey(to=DictItem, blank=True, on_delete=models.RESTRICT, related_name='entry_dari_item',
+    item_dari = models.ForeignKey(to='dict.DictItem', blank=True, on_delete=models.RESTRICT, related_name='entry_dari_item',
                                   null=True)
-    item_farsi = models.ForeignKey(to=DictItem, blank=True, on_delete=models.RESTRICT, related_name='entry_farsi_item',
+    item_farsi = models.ForeignKey(to='dict.DictItem', blank=True, on_delete=models.RESTRICT, related_name='entry_farsi_item',
                                    null=True)
-    item_german = models.ForeignKey(to=DictItem, blank=True, on_delete=models.RESTRICT,
+    item_german = models.ForeignKey(to='dict.DictItem', blank=True, on_delete=models.RESTRICT,
                                     related_name='entry_german_item',
                                     null=True)
-    order_of_items = ['item_dari', 'item_farsi', 'item_german']
+    order_of_languages = ['Dari', 'Farsi', 'German']
+    order_of_items = [f'item_{language.lower()}' for language in order_of_languages]
     tags = models.ManyToManyField(to=Tag, blank=True)
 
     def __str__(self):
@@ -169,6 +172,10 @@ class DictEntry(models.Model):
 
     def get_ordered_items(self):
         return [getattr(self, item) for item in self.order_of_items]
+
+    def get_ordered_item_attributes(self):
+        return {language: item.value if item else '' for language, item in
+                zip([DictLanguage.objects.get(value=lang) for lang in self.order_of_languages], self.get_ordered_items())}
 
 
 def items_changed(sender, instance, action, **kwargs):

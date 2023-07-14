@@ -110,7 +110,7 @@ let opened_edit_buttons
 let opened_symbol
 
 function toggle_edit_buttons() {
-    $('.edit_toggle').on('click', function () {
+    $('.edit_toggle').off('click').on('click', function () {
         const target_buttons = $("#" + $(this).attr('data-buttons'));
         const symbol = $(this).children("i").first()
         if ($(this).hasClass('opened')) {
@@ -131,7 +131,7 @@ function toggle_edit_buttons() {
                 $(opened_symbol).addClass('right');
                 $(opened_edit_buttons).removeClass('opened');
                 $("#" + $(opened_edit_buttons).attr('data-buttons')).hide(500);
-            }else{
+            } else {
                 target_buttons.show(500)
             }
             opened_edit_buttons = this
@@ -139,9 +139,124 @@ function toggle_edit_buttons() {
             const that = this
             setTimeout(function () {
                 $(".main-table-wrapper").animate({
-                            scrollTop: $(that).closest('tr').position().top - 55
+                    scrollTop: $(that).closest('tr').position().top - 55
                 }, 300);
             }, 500);
         }
     });
+}
+
+function createInput(id, value, type) {
+    const edit_inputs_div_element = document.getElementById("data-editInputs");
+    for (let i = 0; i < edit_inputs_div_element.children.length; ++i) {
+        let child = edit_inputs_div_element.children[i];
+        if (child.id === id) {
+            return
+        }
+    }
+    const new_input = document.createElement("input");
+    new_input.setAttribute("type", type);
+    new_input.setAttribute("class", "edit_button");
+    new_input.setAttribute("id", id);
+    new_input.setAttribute("name", id);
+    new_input.setAttribute("value", value);
+    edit_inputs_div_element.appendChild(new_input);
+    return new_input
+}
+
+function createCancelInput() {
+    const button_input = createInput("cancelButton", "CANCEL", "button")
+    if (button_input) {
+        button_input.onclick = function () {
+            cancel();
+        };
+    }
+}
+
+let highlightedRow = null
+
+function writeEntryItemsToFields(entryID, caller) {
+    console.log(entryID)
+    // console.log($(caller.closest('tr')).prev())
+    $.get('?entry_id=' + entryID, function (data) {
+        console.log(data)
+        $('#entry_form').children().replaceWith(data);
+    })
+    // $.get('?page=' + page, function (data) {
+    //     if (data != '') {
+    //         $('#entries').append(data);
+    //     } else {
+    //         console.log("No data in page", page)
+    //     }
+    // });
+    // console.log($(caller.closest('tr')).prev())
+
+    //     $('#id_input_fields_button').trigger("click");
+    // }
+    // let field;
+    // let language;
+    // const entries = getEntry(entryID)
+    // const items = entries.fields['items']
+    // const tags = nodes.fields['tags']
+    //
+    // for (let key in fields) {
+    //     language = key;
+    //     field = fields[key];
+    //     let value = "";
+    //     for (let index in items) {
+    //         let x = dictPkItemsJson[items[index]]
+    //         if (x[0] === language) {
+    //             value = x[1];
+    //         }
+    //     }
+    //     field.value = value;
+    //     const tag_field = document.getElementById("id_tags")
+    //     value = ""
+    //     for (let index in tags) {
+    //         value = tagsPkTagJson[tags[index]].join(', ')
+    //     }
+    //     tag_field.value = value;
+    //
+    // }
+}
+
+function prepareEditChild(entryID, caller) {
+    writeEntryItemsToFields(entryID, caller)
+    // removeEditChild("editInput")
+    // removeEditChild("newInput")
+    // removeEditChild("copyInput")
+    // removeEditChild("cancelButton")
+    // removeEditChild("editEntryId")
+    // if (highlightedRow) {
+    //     highlightedRow.removeAttribute("class")
+    // }
+    // highlightedRow = caller.closest('tr');
+    // highlightedRow.setAttribute("class", "highlight")
+
+}
+
+function editClick(entryId, caller) {
+    console.log('editClick', entryId)
+    prepareEditChild(entryId, caller)
+    // createInput("editEntryId", entryId, "hidden")
+    // createInput("editInput", "SAVE", "submit")
+    // createCancelInput()
+}
+
+function loopPages(page, number_of_pages) {
+    $.get('?page=' + page, function (data) {
+        if (data != '') {
+            $('#entries').append(data);
+        } else {
+            console.log("No data in page", page)
+        }
+    });
+    setTimeout(function () {
+        console.log("page:", page)
+        page++;
+        if (page <= number_of_pages) {
+            loopPages(page, number_of_pages)
+        }
+        toggle_edit_buttons()
+    }, 500);
 }

@@ -4,7 +4,8 @@
         <td class="arrow-td">
             <div class="arrow-div">
                 <button class="edit_toggle"
-                        data-buttons="id_edit_buttons_{{ forloop.counter }}"><i class="arrow right"></i>
+                        data-buttons="id_edit_buttons_{{ page | add:-1 | multiply:number_of_entries_per_page | add:forloop.counter }}"><i
+                        class="arrow right"></i>
                 </button>
             </div>
         </td>
@@ -31,7 +32,7 @@
     </tr>
     <tr class="edit_buttons-tr">
         <td colspan="5">
-            <div style="display: none" id="id_edit_buttons_{{ forloop.counter }}">
+            <div style="display: none" id="id_edit_buttons_{{  page | add:-1 | multiply:number_of_entries_per_page | add:forloop.counter  }}">
                 <div class="d-flex">
                     <a class="btn rounded-pill py-0"
                        href="{% url "entry_update" entry.pk %}">open</a>

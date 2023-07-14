@@ -4,8 +4,10 @@ from .models import DictItem, DictEntry, DictLanguage, DictNode
 
 def delete_not_noded_items():
     for item in DictItem.objects.all():
-        if not item.dictnode_set.all() and not (item.item_dari.all() or item.item_farsi.all() or item.item_german.all()):
+        if not item.dictnode_set.all() and not (
+                item.item_dari.all() or item.item_farsi.all() or item.item_german.all()):
             item.delete()
+
 
 def check_items():
     for item in DictItem.objects.all():
@@ -13,6 +15,7 @@ def check_items():
             print(f'item {item} no node but entry')
         if item.dictnode_set.all() and not (item.item_dari.all() or item.item_farsi.all() or item.item_german.all()):
             print(f'item {item} no entry but node')
+
 
 def delete_all_entries():
     for entry in DictEntry.objects.all():
@@ -54,19 +57,7 @@ def translate_dict_node_to_dict_entries():
                 item_farsi = item
             else:
                 item_german = item
-        # print(node.id, item_dari, item_farsi, item_german)
         create_entries(item_dari, item_farsi, item_german)
-
-
-# def remove_short_vowels(value):
-#     return ''.join([x if x not in ['َ', 'ِ', 'ُ'] else '' for x in value])
-#
-#
-# def remove_redundant_spaces(value):
-#     value = value.strip()
-#     value = value.strip('\u200c')
-#     value = value.strip('\u200b')
-#     return value
 
 
 def fill_cleaned_values():
@@ -78,17 +69,11 @@ def fill_cleaned_values():
         dict_item.save()
 
 
-
-
-
 def fill_sorting_values():
     for dict_item in DictItem.objects.all():
-        if dict_item.language.value in ['Dari', 'Farsi']:
-            dict_item.sorting_value = translate_to_sorting_value(dict_item.cleaned_value)
-        else:
-            dict_item.sorting_value = dict_item.cleaned_value
-
+        dict_item.sorting_value = translate_to_sorting_value(dict_item.cleaned_value.lower())
         dict_item.save()
+
 
 def remove_empty_items():
     for entry in DictEntry.objects.all():
@@ -105,6 +90,7 @@ def remove_empty_items():
             save = True
         if save:
             entry.save()
+
 
 def get_or_create_item(value, language):
     language = DictLanguage.objects.get(value=language)

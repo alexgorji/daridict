@@ -11,7 +11,9 @@
                     {{ sorting_form.as_p }}
                 </form>
             </div>
-            {% include "dict/entry_input_fields.html" %}
+            <div id="entry_form">
+                {% include "dict/entry_form_ajax.html" %}
+            </div>
         </div>
         <div class="col-12 col-md-9 table-wrapper overflow-scroll">
             <table class="my-table">
@@ -43,29 +45,11 @@
     <script>
         toggle_edit_buttons()
         page = 2
-
-        function loopPages() {
-            $.get('?page=' + page, function (data) {
-                if (data != '') {
-                    $('#entries').append(data);
-                } else {
-                    console.log("No data in page", page)
-                }
-            });
-            setTimeout(function () {
-                console.log("page:", page)
-                page++;
-                if (page <= {{ number_of_pages }}) {
-                    loopPages()
-                }
-            }, 500)
-        }
-
         $(document).ready(function () {
             $('#id_sorted_by').change(function () {
                 $("#id_sorting_form").submit()
             });
-            loopPages()
+            loopPages(page, {{ number_of_pages }})
         });
     </script>
 {% endblock %}

@@ -53,18 +53,28 @@ def show_entries(request):
         entries = paginator.page(1)
     except EmptyPage:
         if is_ajax(request):
-            # If the request is AJAX and the page is out of range
-            # return an empty page
             return HttpResponse('')
-        # If page is out of range deliver last page of results
         entries = paginator.page(number_of_pages)
     if is_ajax(request):
-        return render(request,
-                      'dict/list_ajax.html',
-                      {'entries': entries,
-                       'page': page,
-                       'number_of_pages': number_of_pages,
-                       'number_of_entries_per_page': number_of_entries_per_page})
+        if 'page' in request.GET:
+            return render(request,
+                          'dict/list_ajax.html',
+                          {'entries': entries,
+                           'page': page,
+                           'number_of_pages': number_of_pages,
+                           'number_of_entries_per_page': number_of_entries_per_page})
+        elif 'entry_id' in request.GET:
+            entry_id = request.GET['entry_id']
+            entry = DictEntry.objects.get(id=entry_id)
+            item_forms = [DictItemForm(initial={'language': language, 'value': value},
+                                       auto_id=f"{language}_%s",
+                                       label=language.value)
+                          for language, value in entry.get_ordered_item_attributes().items()]
+            return render(request, 'dict/entry_form_ajax.html',
+                          {'selected_entry_id': entry_id,
+                           'item_forms': item_forms,
+                           }
+                          )
     return render(request, 'dict/entries.html', {
         'entries': entries,
         'dict_languages': dict_languages,
@@ -72,7 +82,8 @@ def show_entries(request):
         'number_of_pages': paginator.num_pages,
         'page': 1,
         'number_of_entries_per_page': number_of_entries_per_page,
-        'dict_item_formset': item_forms,
+        'item_forms': item_forms,
+        'selected_entry': None
     })
 
 
@@ -87,7 +98,8 @@ def dict_entry_update_view(request, pk):
         return ""
 
     item_forms = [
-        DictItemForm(initial={'language': language, 'value': get_language_value(language)}, auto_id=f"{language}_%s", label=language.value)
+        DictItemForm(initial={'language': language, 'value': get_language_value(language)}, auto_id=f"{language}_%s",
+                     label=language.value)
         for language in DictLanguage.objects.all()]
 
     # tags_form = TagForm(initial={'tags': ", ".join(entry.get_tag_names())})
