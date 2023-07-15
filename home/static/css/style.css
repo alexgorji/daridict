@@ -1,3 +1,12 @@
+
+a {
+    text-decoration: None;
+}
+
+input[type='text']{
+    width: 100%;
+}
+
 .my_log_nav {
     margin-left: 0;
 }
@@ -9,10 +18,6 @@
 .autocomplete-items > div:hover {
     background: aquamarine;
     cursor: pointer;
-}
-
-a {
-    text-decoration: None;
 }
 
 .hide-buttons {
@@ -52,17 +57,29 @@ a {
     -webkit-transform: rotate(-135deg);
 }
 
-
-.my_input_fields table {
-    border-collapse: separate;
-    border-spacing: 0 0.5em;
-    margin-bottom: 1rem;
-
+#Farsi_value, #Dari_value {
+    direction: rtl;
 }
 
-.my_input_fields input {
-    width: 100%;
+.latin-font {
+    font-size: 14px;
 }
+
+.edit_buttons-tr .btn {
+    background-color: coral;
+    margin: 1px;
+}
+
+/*.my_input_fields table {*/
+/*    border-collapse: separate;*/
+/*    border-spacing: 0 0.5em;*/
+/*    margin-bottom: 1rem;*/
+
+/*}*/
+
+/*.my_input_fields input {*/
+/*    width: 100%;*/
+/*}*/
 
 .table-wrapper {
     height: calc(100vh - 200px);
@@ -76,12 +93,45 @@ a {
     padding: 1rem 1rem 0.25rem 1rem;
 }
 
+/* my-table */
+.my-table {
+    width: 100%;
+}
+
+.my-table table {
+    table-layout: fixed;
+}
+
+.my-table a {
+    color: dimgray;
+}
+
+.my-table a:hover {
+    color: #9d9d9d;
+}
+
+.my-table tr {
+    background-color: rgba(255, 255, 255, 0.05);
+
+}
+
+.my-table tr.edit_buttons-tr > td > div {
+    padding: 0.25em 0 0.5em 0.5em;
+}
+
+.my-table tr.edit_buttons-tr > td {
+    padding: 0;
+}
+
+.my-table tr:nth-child(4n-1) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
 .my-table td, .my-table th {
     padding: 0.75em 0.5em 0 0.5em;
 }
 
-
-th {
+.my-table th {
     vertical-align: bottom;
     text-align: center;
     background-color: #d9dade;
@@ -91,74 +141,28 @@ th {
     z-index: 2;
 }
 
-table {
-    table-layout: fixed;
-}
-
-th, td {
+.my-table th, .my-table td {
     width: 28%;
     /*border: 2px solid #1b1b1b;*/
 }
 
-th > div, td > div {
+.my-table th > div, .my-table td > div {
     overflow-y: scroll;
 }
 
-th:nth-child(1) > div, td:nth-child(1), th:nth-child(2) > div, td:nth-child(2) > div {
+.my-table th:nth-child(1) > div, .my-table td:nth-child(1), .my-table th:nth-child(2) > div, .my-table td:nth-child(2) > div {
     overflow-y: visible;
 }
 
-th:nth-child(1), td:nth-child(1) {
+.my-table th:nth-child(1), .my-table td:nth-child(1) {
     width: 5%
 }
 
-th:nth-child(2), td:nth-child(2) {
+.my-table th:nth-child(2), .my-table td:nth-child(2) {
     width: 15%;
 }
 
-tr.edit_buttons-tr > td > div {
-    padding: 0.25em 0 0.5em 0.5em;
-}
 
-tr.edit_buttons-tr > td {
-    padding: 0;
-}
-
-.my-table a {
-    color: dimgray;
-}
-
-.my-table {
-    width: 100%;
-}
-
-.my-table a:hover {
-    color: #9d9d9d;
-}
-
-
-tr{
-    background-color: rgba(255, 255, 255, 0.05);
-
-}
-
-tr:nth-child(4n-1){
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
-
-#Farsi_value, #Dari_value {
-    direction: rtl;
-}
-
-.latin-font {
-    font-size: 14px;
-}
-
-.edit_buttons-tr .btn{
-    background-color: coral;
-    margin: 1px;
-}
 
 @media screen and (min-width: 992px) {
     .table-wrapper {
