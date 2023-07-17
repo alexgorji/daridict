@@ -111,6 +111,7 @@ let opened_symbol
 
 function toggle_edit_buttons() {
     $('.edit_toggle').off('click').on('click', function () {
+        console.log('edit toggled', $(this))
         const target_buttons = $("#" + $(this).attr('data-buttons'));
         const top_tr = $(this).closest('tr')
         const symbol = $(this).children("i").first()
@@ -239,7 +240,7 @@ function prepareEditChild(entryID, caller) {
 
 function editClick(entryID, caller) {
 
-    $.get('', {'entry_id': entryID, 'edit':'edit'}, function (data) {
+    $.get('', {'entry_id': entryID, 'edit': 'edit'}, function (data) {
         console.log(data)
         $('#entry_form').children().replaceWith(data);
     })
@@ -254,12 +255,17 @@ function editClick(entryID, caller) {
 //     myinput.removeClass('hide')
 // }
 
+function cancelClick() {
+    console.log('cancelling')
+    $.get('', {'cancel': 'cancel'}, function (data) {
+        $('#entry_form').children().replaceWith(data);
+    })
+}
 
 function copyClick(entryID, caller) {
     // console.log('copyClick', entryId)
 
-    $.get('', {'entry_id': entryID, 'copy':'copy'}, function (data) {
-        console.log(data)
+    $.get('', {'entry_id': entryID, 'copy': 'copy'}, function (data) {
         $('#entry_form').children().replaceWith(data);
     })
     // const saveButton = $("input[name = entry-save]");

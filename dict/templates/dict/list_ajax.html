@@ -34,11 +34,11 @@
         <td colspan="5">
             <div style="display: none" id="id_edit_buttons_{{  page | add:-1 | multiply:number_of_entries_per_page | add:forloop.counter  }}">
                 <div class="d-flex">
-                    <a class="btn rounded-pill py-0"
-                       href="{% url "entry_update" entry.pk %}">open</a>
                     <form action="" method="POST">
                         {% csrf_token %}
-                        <input type="hidden" id="delEntryId" name="delEntryId" value={{ entry.id }}>
+                        <input type="hidden" id="delEntryId" name="selected_entry_id" value={{ entry.id }}>
+                        <input type="hidden" name="entry-delete" value="Delete">
+
                         <input class="btn rounded-pill py-0" type="submit"
                                onclick="return confirm('Are you sure?')"
                                value="del">

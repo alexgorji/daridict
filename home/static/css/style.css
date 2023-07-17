@@ -80,6 +80,7 @@ input[type='text']{
     margin-top: 1rem;
     background-color: mediumaquamarine;
     padding: 1rem 1rem 0.25rem 1rem;
+    /*min-width: 300px;*/
 }
 
 .my-table td, .my-table th {
@@ -103,7 +104,6 @@ table {
 
 th, td {
     width: 28%;
-    /*border: 2px solid #1b1b1b;*/
 }
 
 th > div, td > div {
@@ -174,6 +174,21 @@ tr:nth-child(4n-1){
     background-color: rgba(255, 127, 80, 0.1);
     transition: background-color 1s ease, border 1s ease;
 }
+
+.cancel-button{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+#entry_form{
+    position: relative;
+}
+.entry-form{
+    width: 100%;
+}
+/*#Dari_value{*/
+/*    width: 100%;*/
+/*}*/
 
 @media screen and (min-width: 992px) {
     .table-wrapper {
