@@ -3,7 +3,7 @@ a {
     text-decoration: None;
 }
 
-input[type='text']{
+.entry-form input[type='text']{
     width: 100%;
 }
 

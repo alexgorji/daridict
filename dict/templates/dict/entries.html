@@ -11,9 +11,11 @@
                     {{ sorting_form.as_p }}
                 </form>
             </div>
+            {% if user.is_authenticated %}
             <div id="entry_form">
                 {% include "dict/entry_form_ajax.html" %}
             </div>
+            {% endif %}
         </div>
         <div class="col-12 col-md-9 table-wrapper overflow-scroll">
             <table class="my-table">
@@ -27,7 +29,7 @@
                     <!-- language headers -->
                     {% for dict_language in dict_languages %}
                         <th>
-                            <p><a href="{% url 'dict_language' dict_language.pk %}">{{ dict_language.value }}</a>
+                            <p>{% if user.is_authenticated %}<a href="{% url 'dict_language' dict_language.pk %}">{% endif %}{{ dict_language.value }}</a>
                             </p>
                         </th>
                     {% endfor %}

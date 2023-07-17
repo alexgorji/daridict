@@ -19,7 +19,7 @@ def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
-@login_required
+# @login_required
 def show_and_update_entries(request):
     global sorted_by
     dict_languages = DictLanguage.objects.all()
@@ -27,28 +27,32 @@ def show_and_update_entries(request):
     entry_copy_display = 'hide'
     entry_update_display = 'hide'
     entry_cancel_display = 'hide'
+
     if request.method == 'POST':
         new_sorted_by = request.POST.get('sorted_by', None)
-        selected_entry_id = request.POST.get('selected_entry_id')
-        if selected_entry_id == "":
-            selected_entry = None
-        else:
-            selected_entry = DictEntry.objects.get(id=selected_entry_id)
 
         if new_sorted_by:
             sorted_by = new_sorted_by
-        if request.POST.get('entry-delete', None):
-            selected_entry.delete()
-            return redirect('dictionary')
-
-        else:
-            values = request.POST.getlist('value')
-            if len(set(values)) == 1 and "" in set(values):
-                pass
+        if request.user.is_authenticated:
+            selected_entry_id = request.POST.get('selected_entry_id')
+            if selected_entry_id == "":
+                selected_entry = None
             else:
-                items = [None if value == "" else DictItem.objects.get_or_create(value=value, language=language)[0] for
-                         value, language in zip(values, dict_languages)]
-                DictEntry.objects.get_or_create(item_dari=items[0], item_farsi=items[1], item_german=items[2])
+                selected_entry = DictEntry.objects.get(id=selected_entry_id)
+
+            if request.POST.get('entry-delete', None):
+                selected_entry.delete()
+                return redirect('dictionary')
+
+            else:
+                values = request.POST.getlist('value')
+                if len(set(values)) == 1 and "" in set(values):
+                    pass
+                else:
+                    items = [None if value == "" else DictItem.objects.get_or_create(value=value, language=language)[0]
+                             for
+                             value, language in zip(values, dict_languages)]
+                    DictEntry.objects.get_or_create(item_dari=items[0], item_farsi=items[1], item_german=items[2])
 
     sorting_form = DictNodesSortingForm(initial={'sorted_by': sorted_by})
     entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
@@ -75,7 +79,7 @@ def show_and_update_entries(request):
                            'page': page,
                            'number_of_pages': number_of_pages,
                            'number_of_entries_per_page': number_of_entries_per_page})
-        elif 'entry_id' in request.GET:
+        elif 'entry_id' in request.GET and request.user.is_authenticated:
             entry_id = request.GET['entry_id']
             if 'edit' in request.GET:
                 entry_save_display = 'hide'
@@ -109,7 +113,7 @@ def show_and_update_entries(request):
                            'entry_cancel_display': entry_cancel_display,
                            }
                           )
-        elif 'cancel' in request.GET:
+        elif 'cancel' in request.GET and request.user.is_authenticated:
             output = render(request, 'dict/entry_form_ajax.html', {
                 'item_forms': item_forms,
                 'selected_entry': None,
