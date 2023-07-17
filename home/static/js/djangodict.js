@@ -112,12 +112,14 @@ let opened_symbol
 function toggle_edit_buttons() {
     $('.edit_toggle').off('click').on('click', function () {
         const target_buttons = $("#" + $(this).attr('data-buttons'));
+        const top_tr = $(this).closest('tr')
         const symbol = $(this).children("i").first()
         if ($(this).hasClass('opened')) {
             $(symbol).removeClass('up')
             $(symbol).addClass('right')
             $(this).removeClass('opened')
             target_buttons.hide(500)
+            top_tr.removeClass('top-tr')
             opened_edit_buttons = null
             opened_symbol = null
         } else {
@@ -127,12 +129,14 @@ function toggle_edit_buttons() {
 
             if (opened_edit_buttons) {
                 target_buttons.show()
+                top_tr.addClass('top-tr')
                 $(opened_symbol).removeClass('up');
                 $(opened_symbol).addClass('right');
                 $(opened_edit_buttons).removeClass('opened');
                 $("#" + $(opened_edit_buttons).attr('data-buttons')).hide(500);
             } else {
                 target_buttons.show(500)
+                top_tr.addClass('top-tr')
             }
             opened_edit_buttons = this
             opened_symbol = symbol
@@ -176,9 +180,7 @@ function createCancelInput() {
 let highlightedRow = null
 
 function writeEntryItemsToFields(entryID, caller) {
-    console.log(entryID)
-    // console.log($(caller.closest('tr')).prev())
-    $.get('?entry_id=' + entryID, function (data) {
+    $.get('?entry_id=' + entryID + '?entry_id', function (data) {
         console.log(data)
         $('#entry_form').children().replaceWith(data);
     })
@@ -235,9 +237,33 @@ function prepareEditChild(entryID, caller) {
 
 }
 
-function editClick(entryId, caller) {
-    console.log('editClick', entryId)
-    prepareEditChild(entryId, caller)
+function editClick(entryID, caller) {
+
+    $.get('', {'entry_id': entryID, 'edit':'edit'}, function (data) {
+        console.log(data)
+        $('#entry_form').children().replaceWith(data);
+    })
+    // prepareEditChild(entryId, caller)
+    // createInput("editEntryId", entryId, "hidden")
+    // createInput("editInput", "SAVE", "submit")
+    // createCancelInput()
+}
+
+// function showInput(myname){
+//     const myinput = $(input[name = myname])
+//     myinput.removeClass('hide')
+// }
+
+
+function copyClick(entryID, caller) {
+    // console.log('copyClick', entryId)
+
+    $.get('', {'entry_id': entryID, 'copy':'copy'}, function (data) {
+        console.log(data)
+        $('#entry_form').children().replaceWith(data);
+    })
+    // const saveButton = $("input[name = entry-save]");
+    // console.log(saveButton)
     // createInput("editEntryId", entryId, "hidden")
     // createInput("editInput", "SAVE", "submit")
     // createCancelInput()

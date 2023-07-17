@@ -20,15 +20,32 @@ def is_ajax(request):
 
 
 @login_required
-def show_entries(request):
+def show_and_update_entries(request):
     global sorted_by
     dict_languages = DictLanguage.objects.all()
+    entry_save_display = 'show'
+    entry_copy_display = 'hide'
+    entry_update_display = 'hide'
+    entry_cancel_display = 'hide'
 
     if request.method == 'POST':
         new_sorted_by = request.POST.get('sorted_by', None)
+        new = request.POST.get('new', None)
+        delete_me = request.POST.get('delete', None)
+        update_me = request.POST.get('update', None)
+        copy_me = request.POST.get('copy', None)
+        selected_entry = request.POST.get('selected_entry_id')
+        if selected_entry == "":
+            selected_entry = None
+        else:
+            selected_entry = DictEntry.objects.get(selected_entry)
+        print(selected_entry)
 
         if new_sorted_by:
             sorted_by = new_sorted_by
+        if delete_me:
+            selected_entry.delete()
+            return redirect('dictionary')
         else:
             values = request.POST.getlist('value')
             if len(set(values)) == 1 and "" in set(values):
@@ -56,6 +73,7 @@ def show_entries(request):
             return HttpResponse('')
         entries = paginator.page(number_of_pages)
     if is_ajax(request):
+        print('ajax request', request.POST, request.GET)
         if 'page' in request.GET:
             return render(request,
                           'dict/list_ajax.html',
@@ -65,14 +83,37 @@ def show_entries(request):
                            'number_of_entries_per_page': number_of_entries_per_page})
         elif 'entry_id' in request.GET:
             entry_id = request.GET['entry_id']
-            entry = DictEntry.objects.get(id=entry_id)
-            item_forms = [DictItemForm(initial={'language': language, 'value': value},
-                                       auto_id=f"{language}_%s",
-                                       label=language.value)
-                          for language, value in entry.get_ordered_item_attributes().items()]
+            print('request.GET', request.GET)
+            if 'edit' in request.GET:
+                entry_save_display = 'hide'
+                entry_copy_display = 'hide'
+                entry_update_display = 'show'
+                entry_cancel_display = 'show'
+            elif 'copy' in request.GET:
+                    entry_save_display = 'hide'
+                    entry_copy_display = 'show'
+                    entry_update_display = 'hide'
+                    entry_cancel_display = 'show'
+            else:
+                pass
+            if entry_id != '':
+                entry = DictEntry.objects.get(id=entry_id)
+                item_forms = [DictItemForm(initial={'language': language, 'value': value},
+                                           auto_id=f"{language}_%s",
+                                           label=language.value)
+                              for language, value in entry.get_ordered_item_attributes().items()]
+            else:
+                item_forms = [DictItemForm(initial={'language': language},
+                                           auto_id=f"{language}_%s",
+                                           label=language.value)
+                              for language in DictLanguage.objects.all()]
             return render(request, 'dict/entry_form_ajax.html',
                           {'selected_entry_id': entry_id,
                            'item_forms': item_forms,
+                           'entry_save_display': entry_save_display,
+                           'entry_copy_display': entry_copy_display,
+                           'entry_update_display': entry_update_display,
+                           'entry_cancel_display': entry_cancel_display,
                            }
                           )
     return render(request, 'dict/entries.html', {
@@ -83,7 +124,11 @@ def show_entries(request):
         'page': 1,
         'number_of_entries_per_page': number_of_entries_per_page,
         'item_forms': item_forms,
-        'selected_entry': None
+        'selected_entry': None,
+        'entry_save_display': entry_save_display,
+        'entry_copy_display': entry_copy_display,
+        'entry_update_display': entry_update_display,
+        'entry_cancel_display': entry_cancel_display,
     })
 
 
