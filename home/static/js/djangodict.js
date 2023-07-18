@@ -275,20 +275,22 @@ function copyClick(entryID, caller) {
     // createCancelInput()
 }
 
-function loopPages(page, number_of_pages) {
-    $.get('?page=' + page, function (data) {
+function get_and_append_page(page) {
+    return $.get('?page=' + page, function (data) {
         if (data != '') {
             $('#entries').append(data);
         } else {
             console.log("No data in page", page)
         }
     });
-    setTimeout(function () {
-        console.log("page:", page)
-        page++;
-        if (page <= number_of_pages) {
+}
+
+function loopPages(page, number_of_pages) {
+    get_and_append_page(page).done(function(data){
+        page += 1
+        // console.log('in done, next page', page)
+        if (page <= number_of_pages){
             loopPages(page, number_of_pages)
         }
-        toggle_edit_buttons()
-    }, 500);
+    });
 }
