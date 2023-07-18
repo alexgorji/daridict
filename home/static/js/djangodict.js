@@ -292,5 +292,6 @@ function loopPages(page, number_of_pages) {
         if (page <= number_of_pages){
             loopPages(page, number_of_pages)
         }
+        toggle_edit_buttons()
     });
 }
