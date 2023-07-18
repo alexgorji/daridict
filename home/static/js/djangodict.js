@@ -1,3 +1,13 @@
+const fields = {
+    'German': document.getElementById("German_value"),
+    'Farsi': document.getElementById("Farsi_value"),
+    'Dari': document.getElementById("Dari_value"),
+}
+
+console.log(fields)
+
+
+
 function autocomplete(inp, arr) {
     /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/
