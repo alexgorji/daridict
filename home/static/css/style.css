@@ -11,13 +11,18 @@ a {
     margin-left: 0;
 }
 
-.autocomplete-active {
-    background: aquamarine;
+.autocomplete {
+    /*background: aquamarine;*/
+    background-color: rgba(255, 255, 255, 0.9);
+    width: 100%;
 }
 
 .autocomplete-items > div:hover {
     background: aquamarine;
     cursor: pointer;
+}
+.autocomplete-active{
+    background: aquamarine;
 }
 
 .hide {
@@ -58,17 +63,6 @@ a {
     -webkit-transform: rotate(-135deg);
 }
 
-
-/*.my_input_fields table {*/
-/*    border-collapse: separate;*/
-/*    border-spacing: 0 0.5em;*/
-/*    margin-bottom: 1rem;*/
-
-/*}*/
-
-/*.my_input_fields input {*/
-/*    width: 100%;*/
-/*}*/
 
 .table-wrapper {
     height: calc(100vh - 200px);
@@ -153,7 +147,7 @@ tr:nth-child(4n-1){
 }
 
 
-#Farsi_value, #Dari_value {
+#farsi_value, #dari_value {
     direction: rtl;
 }
 
@@ -186,9 +180,6 @@ tr:nth-child(4n-1){
 .entry-form{
     width: 100%;
 }
-/*#Dari_value{*/
-/*    width: 100%;*/
-/*}*/
 
 @media screen and (min-width: 992px) {
     .table-wrapper {

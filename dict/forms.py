@@ -9,14 +9,15 @@ class DictItemForm(forms.ModelForm):
         fields = ['value']
 
     def __init__(self, *args, **kwargs):
-        label = None
+        language = None
         try:
-            label = kwargs.pop('label')
+            language = kwargs.pop('language')
         except KeyError:
             pass
 
         super().__init__(*args, **kwargs)
-        self.fields['value'].widget.attrs['placeholder'] = label
+        self.fields['value'].widget.attrs['placeholder'] = language
+        # self.fields['language'] = language
 
 
 class DictItemUpdateForm(forms.ModelForm):

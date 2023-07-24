@@ -1,12 +1,15 @@
 <div class="d-flex">
-    <form class="entry-form" method="post" novalidate>{% csrf_token %}
+    <form class="entry-form" method="post" novalidate autocomplete="off">{% csrf_token %}
         {% for form in item_forms %}
             {% for field in form %}
-                <p>{{ field }}</p>
+                {{ field }}
+                <div id="{{ field.auto_id }}_autocomplete" style="position: absolute" class="autocomplete">
+                    <div></div>
+                </div>
+                <p></p>
             {% endfor %}
         {% endfor %}
 
-        {{ item_forms.as_p }}
         <input type="hidden" name="selected_entry_id" value="{{ selected_entry_id }}">
         <input class="btn bg-light {{ entry_save_display }}" type="submit" name="entry-save" value="Save">
         <input class="btn bg-light {{ entry_copy_display }}" type="submit" name="entry-copy" value="Copy">

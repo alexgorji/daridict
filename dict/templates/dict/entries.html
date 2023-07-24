@@ -13,7 +13,7 @@
             </div>
             {% if user.is_authenticated %}
                 <div id="entry_form">
-                    {% include "dict/entry_form_ajax.html" %}
+                    {% include "dict/ajax_entry_form.html" %}
                 </div>
             {% endif %}
         </div>
@@ -38,7 +38,7 @@
                 </thead>
 
                 <tbody id="entries">
-                {% include "dict/list_ajax.html" %}
+                {% include "dict/ajax_page_entries.html" %}
                 </tbody>
             </table>
         </div>
@@ -54,5 +54,21 @@
             });
             loopPages(page, {{ number_of_pages }})
         });
+
+        const fields = {
+            'german': $("#german_value"),
+            'farsi': $("#farsi_value"),
+            'dari': $("#dari_value"),
+        }
+
+        window.onload = function () {
+            let language;
+            let field;
+            for (let key in fields) {
+                language = key;
+                field = fields[key];
+                autocomplete(field, language);
+            }
+        }
     </script>
 {% endblock %}

@@ -5,8 +5,9 @@ from django.shortcuts import render, redirect
 from django.views import generic
 
 from .forms import DictItemForm, DictItemUpdateForm, DictNodesSortingForm, TagForm
+from .model_helpers import remove_redundant_spaces, remove_short_vowels
 from .models import DictItem, DictLanguage, DictNode, Tag, DictEntry
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 sorted_by = 'Dari'
@@ -61,14 +62,13 @@ def show_and_update_entries(request):
                     elif request.POST.get('entry-copy', None):
                         DictEntry.objects.get_or_create(item_dari=items[0], item_farsi=items[1], item_german=items[2])
 
-
     sorting_form = DictNodesSortingForm(initial={'sorted_by': sorted_by})
     entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
     number_of_entries_per_page = 50
     paginator = Paginator(entries, number_of_entries_per_page)
     number_of_pages = paginator.num_pages
     page = request.GET.get('page')
-    item_forms = [DictItemForm(initial={'language': language}, auto_id=f"{language}_%s", label=language.value) for
+    item_forms = [DictItemForm(initial={'language': language}, auto_id=f"{language.value.lower()}_%s", language=language.value) for
                   language in
                   DictLanguage.objects.all()]
     try:
@@ -82,11 +82,22 @@ def show_and_update_entries(request):
     if is_ajax(request):
         if 'page' in request.GET:
             return render(request,
-                          'dict/list_ajax.html',
+                          'dict/ajax_page_entries.html',
                           {'entries': entries,
                            'page': page,
                            'number_of_pages': number_of_pages,
                            'number_of_entries_per_page': number_of_entries_per_page})
+        elif 'autocomplete' in request.GET:
+            word_beginning = request.GET['autocomplete']
+            items = []
+            if len(word_beginning)<2:
+                pass
+            else:
+                language = request.GET['language']
+                word_beginning = remove_short_vowels(remove_redundant_spaces(word_beginning)).lower()
+                items = [item.value for item in DictItem.objects.filter(language__value=language.capitalize(), cleaned_value__istartswith=word_beginning)]
+            # return JsonResponse({key:item for key, item in enumerate(items)})
+            return render(request, 'dict/ajax_autocomplete.html', {'items': items})
         elif 'entry_id' in request.GET and request.user.is_authenticated:
             entry_id = request.GET['entry_id']
             if 'edit' in request.GET:
@@ -103,16 +114,15 @@ def show_and_update_entries(request):
                 pass
             if entry_id != '':
                 entry = DictEntry.objects.get(id=entry_id)
-                item_forms = [DictItemForm(initial={'language': language, 'value': value},
+                item_forms = [DictItemForm(initial={'value': value},
                                            auto_id=f"{language}_%s",
-                                           label=language.value)
+                                           language=language.value)
                               for language, value in entry.get_ordered_item_attributes().items()]
             else:
-                item_forms = [DictItemForm(initial={'language': language},
-                                           auto_id=f"{language}_%s",
-                                           label=language.value)
+                item_forms = [DictItemForm(auto_id=f"{language}_%s",
+                                           language=language.value)
                               for language in DictLanguage.objects.all()]
-            return render(request, 'dict/entry_form_ajax.html',
+            return render(request, 'dict/ajax_entry_form.html',
                           {'selected_entry_id': entry_id,
                            'item_forms': item_forms,
                            'entry_save_display': entry_save_display,
@@ -122,7 +132,7 @@ def show_and_update_entries(request):
                            }
                           )
         elif 'cancel' in request.GET and request.user.is_authenticated:
-            output = render(request, 'dict/entry_form_ajax.html', {
+            output = render(request, 'dict/ajax_entry_form.html', {
                 'item_forms': item_forms,
                 'selected_entry': None,
                 'entry_save_display': entry_save_display,
@@ -131,6 +141,9 @@ def show_and_update_entries(request):
                 'entry_cancel_display': entry_cancel_display,
             })
             return output
+        else:
+            raise NotImplementedError()
+
     return render(request, 'dict/entries.html', {
         'entries': entries,
         'dict_languages': dict_languages,
@@ -159,7 +172,7 @@ def dict_entry_update_view(request, pk):
 
     item_forms = [
         DictItemForm(initial={'language': language, 'value': get_language_value(language)}, auto_id=f"{language}_%s",
-                     label=language.value)
+                     language=language.value)
         for language in DictLanguage.objects.all()]
 
     # tags_form = TagForm(initial={'tags': ", ".join(entry.get_tag_names())})
