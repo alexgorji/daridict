@@ -3,9 +3,9 @@ import json
 from django.db import models
 from django.db.models.signals import m2m_changed
 from django.urls import reverse
+from simple_history.models import HistoricalRecords
 
 from dict.model_helpers import remove_redundant_spaces, remove_short_vowels, translate_to_sorting_value
-
 
 class DictNodeLanguageException(Exception):
     def __init__(self, *args):
@@ -15,7 +15,7 @@ class DictNodeLanguageException(Exception):
 
 class DictLanguage(models.Model):
     value = models.CharField(max_length=20, blank=False, unique=True)
-
+    history = HistoricalRecords()
     LTR = 'LTR'
     RTL = 'RTL'
     SOPHOMORE = 'SO'
@@ -46,6 +46,7 @@ class DictItem(models.Model):
     cleaned_value = models.CharField(max_length=250, blank=False)
     sorting_value = models.CharField(max_length=250, blank=False)
     comment = models.TextField(blank=True)
+    history = HistoricalRecords()
 
     class Meta:
         constraints = [
@@ -90,11 +91,6 @@ class DictItem(models.Model):
         self.cleaned_value = remove_redundant_spaces(self.value)
         self.cleaned_value = remove_short_vowels(self.cleaned_value)
         self.sorting_value = translate_to_sorting_value(self.cleaned_value.lower())
-        # if self.language.value in ['Dari', 'Farsi']:
-        #     self.cleaned_value = remove_short_vowels(self.cleaned_value)
-        #     self.sorting_value = translate_to_sorting_value(self.cleaned_value)
-        # else:
-        #     self.sorting_value = self.cleaned_value.lower()
         super().save(*args, **kwargs)
 
 
@@ -159,7 +155,7 @@ class DictEntry(models.Model):
     order_of_languages = ['Dari', 'Farsi', 'German']
     order_of_items = [f'item_{language.lower()}' for language in order_of_languages]
     tags = models.ManyToManyField(to=Tag, blank=True)
-
+    history = HistoricalRecords()
     def __str__(self):
         items = [item.value if item else '___' for item in self.get_ordered_items()]
         return f'{self.id}: {" - ".join(items)}'
