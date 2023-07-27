@@ -11,6 +11,15 @@
                     {{ sorting_form.as_p }}
                 </form>
             </div>
+            <div>
+                <form id="id_search_form" action="" method="POST">
+                    {% csrf_token %}
+                    <div class="d-flex">
+                        <input type="text" name="searchText" placeholder="SEARCH" autocomplete="off">
+                        <input class="btn bg-light search-button" type="submit" name="searchSubmit" value="Search">
+                    </div>
+                </form>
+            </div>
             {% if user.is_authenticated %}
                 <div id="entry_form">
                     {% include "dict/ajax_entry_form.html" %}
@@ -47,13 +56,17 @@
 {% block extra_js %}
     <script>
         toggle_edit_buttons()
-        page = 2
-        $(document).ready(function () {
-            $('#id_sorted_by').change(function () {
-                $("#id_sorting_form").submit()
+        if ({{ number_of_pages }}>1)
+        {
+            page = 2
+            $(document).ready(function () {
+                $('#id_sorted_by').change(function () {
+                    $("#id_sorting_form").submit()
+                });
+                loopPages(page, {{ number_of_pages }})
             });
-            loopPages(page, {{ number_of_pages }})
-        });
+        }
+
 
         const fields = {
             'german': $("#german_value"),

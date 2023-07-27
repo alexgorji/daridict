@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core import serializers
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views import generic
 
@@ -28,7 +29,7 @@ def show_and_update_entries(request):
     entry_copy_display = 'hide'
     entry_update_display = 'hide'
     entry_cancel_display = 'hide'
-
+    entries = None
     if request.method == 'POST':
         new_sorted_by = request.POST.get('sorted_by', None)
 
@@ -61,16 +62,27 @@ def show_and_update_entries(request):
                         selected_entry.save()
                     elif request.POST.get('entry-copy', None):
                         DictEntry.objects.get_or_create(item_dari=items[0], item_farsi=items[1], item_german=items[2])
+        if request.POST.get('searchText'):
+            search_value = request.POST['searchText']
+            entries = DictEntry.objects.all().filter(
+                Q(item_dari__cleaned_value__contains=search_value) |
+                Q(item_farsi__cleaned_value__contains=search_value) |
+                Q(item_german__cleaned_value__contains=search_value)
+            ).order_by(f'item_{sorted_by.lower()}__sorting_value')
 
+    if not entries:
+        entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
     sorting_form = DictNodesSortingForm(initial={'sorted_by': sorted_by})
-    entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
+
     number_of_entries_per_page = 50
     paginator = Paginator(entries, number_of_entries_per_page)
     number_of_pages = paginator.num_pages
     page = request.GET.get('page')
-    item_forms = [DictItemForm(initial={'language': language}, auto_id=f"{language.value.lower()}_%s", language=language.value) for
-                  language in
-                  DictLanguage.objects.all()]
+    item_forms = [
+        DictItemForm(initial={'language': language}, auto_id=f"{language.value.lower()}_%s", language=language.value)
+        for
+        language in
+        DictLanguage.objects.all()]
     try:
         entries = paginator.page(page)
     except PageNotAnInteger:
@@ -90,13 +102,17 @@ def show_and_update_entries(request):
         elif 'autocomplete' in request.GET:
             word_beginning = request.GET['autocomplete']
             items = []
-            if len(word_beginning)<2:
+            if len(word_beginning) < 2:
                 pass
             else:
-                language = request.GET['language']
                 word_beginning = remove_short_vowels(remove_redundant_spaces(word_beginning)).lower()
-                items = [item.value for item in DictItem.objects.filter(language__value=language.capitalize(), cleaned_value__istartswith=word_beginning)]
-            # return JsonResponse({key:item for key, item in enumerate(items)})
+                language = request.GET.get('language')
+                if language:
+                    items = [item.value for item in DictItem.objects.filter(language__value=language.capitalize(),
+                                                                            cleaned_value__istartswith=word_beginning)]
+                else:
+                    items = [item.value for item in DictItem.objects.filter(cleaned_value__istartswith=word_beginning)]
+                    items = list(dict.fromkeys(items))
             return render(request, 'dict/ajax_autocomplete.html', {'items': items})
         elif 'entry_id' in request.GET and request.user.is_authenticated:
             entry_id = request.GET['entry_id']

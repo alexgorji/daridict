@@ -147,7 +147,7 @@ tr:nth-child(4n-1){
 }
 
 
-#farsi_value, #dari_value {
+#farsi_value, #dari_value, #farsi_value_autocomplete .autocomplete-item, #dari_value_autocomplete .autocomplete-item{
     direction: rtl;
 }
 
@@ -169,6 +169,10 @@ tr:nth-child(4n-1){
     transition: background-color 1s ease, border 1s ease;
 }
 
+.search-button{
+    width: fit-content !important;
+    margin-left: 1rem;
+}
 .cancel-button{
     position: absolute;
     bottom: 0;
@@ -179,6 +183,11 @@ tr:nth-child(4n-1){
 }
 .entry-form{
     width: 100%;
+}
+
+#id_search_form input{
+    width: 100%;
+    margin-bottom: 1rem;
 }
 
 @media screen and (min-width: 992px) {

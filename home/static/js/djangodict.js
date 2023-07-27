@@ -2,7 +2,7 @@ let currentFocus = -1;
 
 function autocomplete(inp, language) {
     /*inp: text field element for each language */
-    inp.on("input", function () {
+    inp.on("input.entry-form", function () {
         let value = inp.val()
         $.get('', {'language': language, 'autocomplete': value}, function (data) {
             $('#' + language + '_value_autocomplete').children().replaceWith(data);
@@ -122,109 +122,12 @@ function toggle_edit_buttons() {
     });
 }
 
-function createInput(id, value, type) {
-    const edit_inputs_div_element = document.getElementById("data-editInputs");
-    for (let i = 0; i < edit_inputs_div_element.children.length; ++i) {
-        let child = edit_inputs_div_element.children[i];
-        if (child.id === id) {
-            return
-        }
-    }
-    const new_input = document.createElement("input");
-    new_input.setAttribute("type", type);
-    new_input.setAttribute("class", "edit_button");
-    new_input.setAttribute("id", id);
-    new_input.setAttribute("name", id);
-    new_input.setAttribute("value", value);
-    edit_inputs_div_element.appendChild(new_input);
-    return new_input
-}
-
-function createCancelInput() {
-    const button_input = createInput("cancelButton", "CANCEL", "button")
-    if (button_input) {
-        button_input.onclick = function () {
-            cancel();
-        };
-    }
-}
-
-let highlightedRow = null
-
-function writeEntryItemsToFields(entryID, caller) {
-    $.get('?entry_id=' + entryID, function (data) {
-        // console.log(data)
-        $('#entry_form').children().replaceWith(data);
-    })
-    // $.get('?page=' + page, function (data) {
-    //     if (data != '') {
-    //         $('#entries').append(data);
-    //     } else {
-    //         console.log("No data in page", page)
-    //     }
-    // });
-    // console.log($(caller.closest('tr')).prev())
-
-    //     $('#id_input_fields_button').trigger("click");
-    // }
-    // let field;
-    // let language;
-    // const entries = getEntry(entryID)
-    // const items = entries.fields['items']
-    // const tags = nodes.fields['tags']
-    //
-    // for (let key in fields) {
-    //     language = key;
-    //     field = fields[key];
-    //     let value = "";
-    //     for (let index in items) {
-    //         let x = dictPkItemsJson[items[index]]
-    //         if (x[0] === language) {
-    //             value = x[1];
-    //         }
-    //     }
-    //     field.value = value;
-    //     const tag_field = document.getElementById("id_tags")
-    //     value = ""
-    //     for (let index in tags) {
-    //         value = tagsPkTagJson[tags[index]].join(', ')
-    //     }
-    //     tag_field.value = value;
-    //
-    // }
-}
-
-function prepareEditChild(entryID, caller) {
-    writeEntryItemsToFields(entryID, caller)
-    // removeEditChild("editInput")
-    // removeEditChild("newInput")
-    // removeEditChild("copyInput")
-    // removeEditChild("cancelButton")
-    // removeEditChild("editEntryId")
-    // if (highlightedRow) {
-    //     highlightedRow.removeAttribute("class")
-    // }
-    // highlightedRow = caller.closest('tr');
-    // highlightedRow.setAttribute("class", "highlight")
-
-}
-
-function editClick(entryID, caller) {
-
+function editClick(entryID) {
     $.get('', {'entry_id': entryID, 'edit': 'edit'}, function (data) {
         // console.log(data)
         $('#entry_form').children().replaceWith(data);
-    })
-    // prepareEditChild(entryId, caller)
-    // createInput("editEntryId", entryId, "hidden")
-    // createInput("editInput", "SAVE", "submit")
-    // createCancelInput()
+    });
 }
-
-// function showInput(myname){
-//     const myinput = $(input[name = myname])
-//     myinput.removeClass('hide')
-// }
 
 function cancelClick() {
     console.log('cancelling')
@@ -233,17 +136,11 @@ function cancelClick() {
     })
 }
 
-function copyClick(entryID, caller) {
-    // console.log('copyClick', entryId)
+function copyClick(entryID) {
 
     $.get('', {'entry_id': entryID, 'copy': 'copy'}, function (data) {
         $('#entry_form').children().replaceWith(data);
     })
-    // const saveButton = $("input[name = entry-save]");
-    // console.log(saveButton)
-    // createInput("editEntryId", entryId, "hidden")
-    // createInput("editInput", "SAVE", "submit")
-    // createCancelInput()
 }
 
 function get_and_append_page(page) {
