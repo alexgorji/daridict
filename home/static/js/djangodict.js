@@ -156,7 +156,7 @@ function get_and_append_page(page) {
 function loopPages(page, number_of_pages) {
     get_and_append_page(page).done(function (data) {
         page += 1
-        // console.log('in done, next page', page)
+        console.log('in get_and_append_page done, next page', page)
         if (page <= number_of_pages) {
             loopPages(page, number_of_pages)
         }

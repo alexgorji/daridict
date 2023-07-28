@@ -171,7 +171,8 @@ tr:nth-child(4n-1){
 
 .search-button{
     width: fit-content !important;
-    margin-left: 1rem;
+    margin-right: 0.2rem;
+    height: 30px;
 }
 .cancel-button{
     position: absolute;

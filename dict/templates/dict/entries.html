@@ -6,17 +6,12 @@
     <div class="row gx-0">
         <div class="col-12 col-md-3 left-side-bar">
             <div>
-                <form id="id_sorting_form" action="" method="POST">
-                    {% csrf_token %}
-                    {{ sorting_form.as_p }}
-                </form>
-            </div>
-            <div>
-                <form id="id_search_form" action="" method="POST">
-                    {% csrf_token %}
+                <form id="id_search_form" action="" method="get">
+                        {{ sorting_form.as_p }}
                     <div class="d-flex">
-                        <input type="text" name="searchText" placeholder="SEARCH" autocomplete="off">
-                        <input class="btn bg-light search-button" type="submit" name="searchSubmit" value="Search">
+                        <input type="text" name="search" placeholder="SEARCH" autocomplete="off"
+                               value="{{ search_value }}">
+
                     </div>
                 </form>
             </div>
@@ -56,17 +51,15 @@
 {% block extra_js %}
     <script>
         toggle_edit_buttons()
-        if ({{ number_of_pages }}>1)
-        {
-            page = 2
-            $(document).ready(function () {
-                $('#id_sorted_by').change(function () {
-                    $("#id_sorting_form").submit()
-                });
-                loopPages(page, {{ number_of_pages }})
+        {#if ({{ number_of_pages }}>1)#}
+        {#{#}
+        page = 1
+        $(document).ready(function () {
+            $('#id_sorted_by').change(function () {
+                $("#id_search_form").submit()
             });
-        }
-
+            loopPages(page, {{ number_of_pages }})
+        });
 
         const fields = {
             'german': $("#german_value"),

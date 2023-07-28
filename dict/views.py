@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views import generic
 
-from .forms import DictItemForm, DictItemUpdateForm, DictNodesSortingForm, TagForm
+from .forms import DictItemForm, DictItemUpdateForm, DictEntrySortingForm, TagForm
 from .model_helpers import remove_redundant_spaces, remove_short_vowels
 from .models import DictItem, DictLanguage, DictNode, Tag, DictEntry
 from django.http import HttpResponse, JsonResponse
@@ -24,17 +24,19 @@ def is_ajax(request):
 # @login_required
 def show_and_update_entries(request):
     global sorted_by
+    global paginator
     dict_languages = DictLanguage.objects.all()
+    item_forms = [
+        DictItemForm(initial={'language': language}, auto_id=f"{language.value.lower()}_%s",
+                     language=language.value)
+        for language in dict_languages]
     entry_save_display = 'show'
     entry_copy_display = 'hide'
     entry_update_display = 'hide'
     entry_cancel_display = 'hide'
-    entries = None
-    if request.method == 'POST':
-        new_sorted_by = request.POST.get('sorted_by', None)
+    number_of_entries_per_page = 50
 
-        if new_sorted_by:
-            sorted_by = new_sorted_by
+    if request.method == 'POST':
         if request.user.is_authenticated:
             selected_entry_id = request.POST.get('selected_entry_id')
             selected_entry = None
@@ -62,118 +64,113 @@ def show_and_update_entries(request):
                         selected_entry.save()
                     elif request.POST.get('entry-copy', None):
                         DictEntry.objects.get_or_create(item_dari=items[0], item_farsi=items[1], item_german=items[2])
-        if request.POST.get('searchText'):
-            search_value = request.POST['searchText']
-            entries = DictEntry.objects.all().filter(
-                Q(item_dari__cleaned_value__contains=search_value) |
-                Q(item_farsi__cleaned_value__contains=search_value) |
-                Q(item_german__cleaned_value__contains=search_value)
-            ).order_by(f'item_{sorted_by.lower()}__sorting_value')
+    elif request.method == 'GET':
+        search_value = request.GET.get('search', '')
+        new_sorted_by = request.GET.get('sorted_by', None)
+        if new_sorted_by:
+            sorted_by = new_sorted_by
+        sorting_form = DictEntrySortingForm(initial={'sorted_by': sorted_by})
 
-    if not entries:
-        entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
-    sorting_form = DictNodesSortingForm(initial={'sorted_by': sorted_by})
+        if not is_ajax(request):
+            if search_value != '':
+                queried_entries = DictEntry.objects.all().filter(
+                    Q(item_dari__cleaned_value__icontains=search_value) |
+                    Q(item_farsi__cleaned_value__icontains=search_value) |
+                    Q(item_german__cleaned_value__icontains=search_value)
+                ).order_by(f'item_{sorted_by.lower()}__sorting_value')
+            else:
+                queried_entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
+            paginator = Paginator(queried_entries, number_of_entries_per_page)
 
-    number_of_entries_per_page = 50
-    paginator = Paginator(entries, number_of_entries_per_page)
-    number_of_pages = paginator.num_pages
-    page = request.GET.get('page')
-    item_forms = [
-        DictItemForm(initial={'language': language}, auto_id=f"{language.value.lower()}_%s", language=language.value)
-        for
-        language in
-        DictLanguage.objects.all()]
-    try:
-        entries = paginator.page(page)
-    except PageNotAnInteger:
-        entries = paginator.page(1)
-    except EmptyPage:
+        number_of_pages = paginator.num_pages
         if is_ajax(request):
-            return HttpResponse('')
-        entries = paginator.page(number_of_pages)
-    if is_ajax(request):
-        if 'page' in request.GET:
-            return render(request,
-                          'dict/ajax_page_entries.html',
-                          {'entries': entries,
-                           'page': page,
-                           'number_of_pages': number_of_pages,
-                           'number_of_entries_per_page': number_of_entries_per_page})
-        elif 'autocomplete' in request.GET:
-            word_beginning = request.GET['autocomplete']
-            items = []
-            if len(word_beginning) < 2:
-                pass
-            else:
-                word_beginning = remove_short_vowels(remove_redundant_spaces(word_beginning)).lower()
-                language = request.GET.get('language')
-                if language:
-                    items = [item.value for item in DictItem.objects.filter(language__value=language.capitalize(),
-                                                                            cleaned_value__istartswith=word_beginning)]
+            if 'page' in request.GET:
+                page = request.GET.get('page')
+                entries = paginator.page(page)
+                return render(request,
+                              'dict/ajax_page_entries.html',
+                              {'entries': entries,
+                               'page': page,
+                               'number_of_pages': number_of_pages,
+                               'number_of_entries_per_page': number_of_entries_per_page})
+            elif 'autocomplete' in request.GET:
+                word_beginning = request.GET['autocomplete']
+                items = []
+                if len(word_beginning) < 2:
+                    pass
                 else:
-                    items = [item.value for item in DictItem.objects.filter(cleaned_value__istartswith=word_beginning)]
-                    items = list(dict.fromkeys(items))
-            return render(request, 'dict/ajax_autocomplete.html', {'items': items})
-        elif 'entry_id' in request.GET and request.user.is_authenticated:
-            entry_id = request.GET['entry_id']
-            if 'edit' in request.GET:
-                entry_save_display = 'hide'
-                entry_copy_display = 'hide'
-                entry_update_display = 'show'
-                entry_cancel_display = 'show'
-            elif 'copy' in request.GET:
-                entry_save_display = 'hide'
-                entry_copy_display = 'show'
-                entry_update_display = 'hide'
-                entry_cancel_display = 'show'
+                    word_beginning = remove_short_vowels(remove_redundant_spaces(word_beginning)).lower()
+                    language = request.GET.get('language')
+                    if language:
+                        items = [item.value for item in DictItem.objects.filter(language__value=language.capitalize(),
+                                                                                cleaned_value__istartswith=word_beginning)]
+                    else:
+                        items = [item.value for item in
+                                 DictItem.objects.filter(cleaned_value__istartswith=word_beginning)]
+                        items = list(dict.fromkeys(items))
+                return render(request, 'dict/ajax_autocomplete.html', {'items': items})
+            elif 'entry_id' in request.GET and request.user.is_authenticated:
+                entry_id = request.GET['entry_id']
+                if 'edit' in request.GET:
+                    entry_save_display = 'hide'
+                    entry_copy_display = 'hide'
+                    entry_update_display = 'show'
+                    entry_cancel_display = 'show'
+                elif 'copy' in request.GET:
+                    entry_save_display = 'hide'
+                    entry_copy_display = 'show'
+                    entry_update_display = 'hide'
+                    entry_cancel_display = 'show'
+                else:
+                    pass
+                if entry_id != '':
+                    entry = DictEntry.objects.get(id=entry_id)
+                    item_forms = [DictItemForm(initial={'value': value},
+                                               auto_id=f"{language}_%s",
+                                               language=language.value)
+                                  for language, value in entry.get_ordered_item_attributes().items()]
+                else:
+                    item_forms = [DictItemForm(auto_id=f"{language}_%s",
+                                               language=language.value)
+                                  for language in DictLanguage.objects.all()]
+                return render(request, 'dict/ajax_entry_form.html',
+                              {'selected_entry_id': entry_id,
+                               'item_forms': item_forms,
+                               'entry_save_display': entry_save_display,
+                               'entry_copy_display': entry_copy_display,
+                               'entry_update_display': entry_update_display,
+                               'entry_cancel_display': entry_cancel_display,
+                               }
+                              )
+            elif 'cancel' in request.GET and request.user.is_authenticated:
+                output = render(request, 'dict/ajax_entry_form.html', {
+                    'item_forms': item_forms,
+                    'selected_entry': None,
+                    'entry_save_display': entry_save_display,
+                    'entry_copy_display': entry_copy_display,
+                    'entry_update_display': entry_update_display,
+                    'entry_cancel_display': entry_cancel_display,
+                })
+                return output
             else:
-                pass
-            if entry_id != '':
-                entry = DictEntry.objects.get(id=entry_id)
-                item_forms = [DictItemForm(initial={'value': value},
-                                           auto_id=f"{language}_%s",
-                                           language=language.value)
-                              for language, value in entry.get_ordered_item_attributes().items()]
-            else:
-                item_forms = [DictItemForm(auto_id=f"{language}_%s",
-                                           language=language.value)
-                              for language in DictLanguage.objects.all()]
-            return render(request, 'dict/ajax_entry_form.html',
-                          {'selected_entry_id': entry_id,
-                           'item_forms': item_forms,
-                           'entry_save_display': entry_save_display,
-                           'entry_copy_display': entry_copy_display,
-                           'entry_update_display': entry_update_display,
-                           'entry_cancel_display': entry_cancel_display,
-                           }
-                          )
-        elif 'cancel' in request.GET and request.user.is_authenticated:
-            output = render(request, 'dict/ajax_entry_form.html', {
+                raise NotImplementedError()
+
+        else:
+            return render(request, 'dict/entries.html', {
+                'entries': None,
+                'dict_languages': dict_languages,
+                'sorting_form': sorting_form,
+                'number_of_pages': paginator.num_pages,
+                'page': 0,
+                'number_of_entries_per_page': number_of_entries_per_page,
                 'item_forms': item_forms,
                 'selected_entry': None,
                 'entry_save_display': entry_save_display,
                 'entry_copy_display': entry_copy_display,
                 'entry_update_display': entry_update_display,
                 'entry_cancel_display': entry_cancel_display,
+                'search_value': search_value
             })
-            return output
-        else:
-            raise NotImplementedError()
-
-    return render(request, 'dict/entries.html', {
-        'entries': entries,
-        'dict_languages': dict_languages,
-        'sorting_form': sorting_form,
-        'number_of_pages': paginator.num_pages,
-        'page': 1,
-        'number_of_entries_per_page': number_of_entries_per_page,
-        'item_forms': item_forms,
-        'selected_entry': None,
-        'entry_save_display': entry_save_display,
-        'entry_copy_display': entry_copy_display,
-        'entry_update_display': entry_update_display,
-        'entry_cancel_display': entry_cancel_display,
-    })
 
 
 @login_required
@@ -285,7 +282,7 @@ def dictionary(request):
 
     item_forms = [DictItemForm(initial={'language': language}, auto_id=f"{language}_%s") for language in
                   DictLanguage.objects.all()]
-    sorting_form = DictNodesSortingForm(initial={'sorted_by': sorted_by})
+    sorting_form = DictEntrySortingForm(initial={'sorted_by': sorted_by})
     tag_form = TagForm()
     dict_languages = DictLanguage.objects.all()
     dict_nodes = DictNode.objects.all()
