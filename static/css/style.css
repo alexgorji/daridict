@@ -3,7 +3,7 @@ a {
     text-decoration: None;
 }
 
-.entry-form input[type='text']{
+.entry-form input[type='text'] {
     width: 100%;
 }
 
@@ -15,13 +15,18 @@ a {
     /*background: aquamarine;*/
     background-color: rgba(255, 255, 255, 0.9);
     width: 100%;
+    z-index: 10;
+    padding-right: 0.2rem;
+    padding-left: 0.2rem;
+
 }
 
 .autocomplete-items > div:hover {
     background: aquamarine;
     cursor: pointer;
 }
-.autocomplete-active{
+
+.autocomplete-active {
     background: aquamarine;
 }
 
@@ -137,17 +142,17 @@ tr.edit_buttons-tr > td {
 }
 
 
-tr{
+tr {
     background-color: rgba(255, 255, 255, 0.05);
 
 }
 
-tr:nth-child(4n-1){
+tr:nth-child(4n-1) {
     background-color: rgba(0, 0, 0, 0.05);
 }
 
 
-#farsi_value, #dari_value, #farsi_value_autocomplete .autocomplete-item, #dari_value_autocomplete .autocomplete-item{
+#farsi_value, #dari_value, #farsi_value_autocomplete .autocomplete-item, #dari_value_autocomplete .autocomplete-item {
     direction: rtl;
 }
 
@@ -155,12 +160,12 @@ tr:nth-child(4n-1){
     font-size: 14px;
 }
 
-.edit_buttons-tr .btn{
+.edit_buttons-tr .btn {
     background-color: coral;
     margin: 1px;
 }
 
-.top-tr{
+.top-tr {
     /*border: rgba(102, 205, 170, 0.2) solid 1px;*/
     /*background-color: rgba(102, 205, 170, 0.1);*/
     /*    */
@@ -169,26 +174,32 @@ tr:nth-child(4n-1){
     transition: background-color 1s ease, border 1s ease;
 }
 
-.search-button{
+.search-button {
     width: fit-content !important;
     margin-right: 0.2rem;
     height: 30px;
+    line-height: 0;
 }
-.cancel-button{
+
+.cancel-button {
     position: absolute;
     bottom: 0;
     right: 0;
 }
-#entry_form{
-    position: relative;
-}
-.entry-form{
+
+.entry-form {
     width: 100%;
 }
 
-#id_search_form input{
+#id_search_form input {
     width: 100%;
-    margin-bottom: 1rem;
+    /*margin-bottom: 1rem;*/
+    direction: rtl;
+}
+
+#id_search_field_autocomplete {
+    direction: rtl;
+    width: 100%;
 }
 
 @media screen and (min-width: 992px) {
