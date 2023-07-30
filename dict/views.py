@@ -22,6 +22,10 @@ def is_ajax(request):
 
 
 # @login_required
+
+paginator = None
+
+
 def show_and_update_entries(request):
     global sorted_by
     global paginator
