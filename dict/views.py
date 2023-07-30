@@ -74,9 +74,9 @@ def show_and_update_entries(request):
         if not is_ajax(request):
             if search_value != '':
                 queried_entries = DictEntry.objects.all().filter(
-                    Q(item_dari__cleaned_value__icontains=search_value) |
-                    Q(item_farsi__cleaned_value__icontains=search_value) |
-                    Q(item_german__cleaned_value__icontains=search_value)
+                    Q(item_dari__cleaned_value__istartswith=search_value) |
+                    Q(item_farsi__cleaned_value__istartswith=search_value) |
+                    Q(item_german__cleaned_value__istartswith=search_value)
                 ).order_by(f'item_{sorted_by.lower()}__sorting_value')
             else:
                 queried_entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')

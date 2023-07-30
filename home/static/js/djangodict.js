@@ -1,11 +1,12 @@
 let currentFocus = -1;
 
-function autocomplete(inp, language) {
+function autocomplete(inp, language, fieldId) {
     /*inp: text field element for each language */
-    inp.on("input.entry-form", function () {
+    inp.on("input", function () {
         let value = inp.val()
         $.get('', {'language': language, 'autocomplete': value}, function (data) {
-            $('#' + language + '_value_autocomplete').children().replaceWith(data);
+            // $('#' + language + '_value_autocomplete').children().replaceWith(data);
+            $('#'+fieldId).children().replaceWith(data);
             /*make the matching letters bold*/
             /*on click for matched word*/
             $(".autocomplete-item").map(function () {

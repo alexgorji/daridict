@@ -5,18 +5,23 @@
 {% block content %}
     <div class="row gx-0">
         <div class="col-12 col-md-3 left-side-bar">
-            <div>
-                <form id="id_search_form" action="" method="get">
-                        {{ sorting_form.as_p }}
+            <div style="position: relative">
+                <form class="entry-form" id="id_search_form" action="" method="get" autocomplete="off" novalidate="">
+                    {{ sorting_form.as_p }}
                     <div class="d-flex">
-                        <input type="text" name="search" placeholder="SEARCH" autocomplete="off"
+                        <button class="btn search-button bg-light">Search</button>
+                        <input id="id_search_field" type="text" name="search" placeholder="SEARCH" autocomplete="off"
                                value="{{ search_value }}">
-
                     </div>
+
+                    <div id="id_search_field_autocomplete" style="position: absolute" class="autocomplete">
+                        <div></div>
+                    </div>
+                    <p></p>
                 </form>
             </div>
             {% if user.is_authenticated %}
-                <div id="entry_form">
+                <div style="position:relative;">
                     {% include "dict/ajax_entry_form.html" %}
                 </div>
             {% endif %}
@@ -51,8 +56,7 @@
 {% block extra_js %}
     <script>
         toggle_edit_buttons()
-        {#if ({{ number_of_pages }}>1)#}
-        {#{#}
+
         page = 1
         $(document).ready(function () {
             $('#id_sorted_by').change(function () {
@@ -73,8 +77,9 @@
             for (let key in fields) {
                 language = key;
                 field = fields[key];
-                autocomplete(field, language);
+                autocomplete(field, language, language + "_value_autocomplete");
             }
+            autocomplete($('#id_search_field'), null, "id_search_field_autocomplete");
         }
     </script>
 {% endblock %}
