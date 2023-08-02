@@ -144,8 +144,14 @@ function copyClick(entryID) {
     })
 }
 
-function get_and_append_page(page) {
-    return $.get('?page=' + page, function (data) {
+function get_and_append_page(page, get_parameters) {
+    let all_get_parameters = null
+    if (get_parameters){
+        all_get_parameters = get_parameters+'&page=' + page
+    }else{
+        all_get_parameters = '?page=' + page
+    }
+    return $.get(all_get_parameters, function (data) {
         if (data != '') {
             $('#entries').append(data);
         } else {
@@ -154,12 +160,12 @@ function get_and_append_page(page) {
     });
 }
 
-function loopPages(page, number_of_pages) {
-    get_and_append_page(page).done(function (data) {
+function loopPages(page, number_of_pages, get_parameters) {
+    get_and_append_page(page, get_parameters).done(function (data) {
         page += 1
-        console.log('in get_and_append_page done, next page', page)
+        // console.log('in get_and_append_page done, next page', page)
         if (page <= number_of_pages) {
-            loopPages(page, number_of_pages)
+            loopPages(page, number_of_pages, get_parameters)
         }
         toggle_edit_buttons()
     });

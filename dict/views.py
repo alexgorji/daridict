@@ -21,14 +21,8 @@ def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
-# @login_required
-
-paginator = None
-
-
 def show_and_update_entries(request):
     global sorted_by
-    global paginator
     dict_languages = DictLanguage.objects.all()
     item_forms = [
         DictItemForm(initial={'language': language}, auto_id=f"{language.value.lower()}_%s",
@@ -75,16 +69,15 @@ def show_and_update_entries(request):
             sorted_by = new_sorted_by
         sorting_form = DictEntrySortingForm(initial={'sorted_by': sorted_by})
 
-        if not is_ajax(request):
-            if search_value != '':
-                queried_entries = DictEntry.objects.all().filter(
-                    Q(item_dari__cleaned_value__istartswith=search_value) |
-                    Q(item_farsi__cleaned_value__istartswith=search_value) |
-                    Q(item_german__cleaned_value__istartswith=search_value)
-                ).order_by(f'item_{sorted_by.lower()}__sorting_value')
-            else:
-                queried_entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
-            paginator = Paginator(queried_entries, number_of_entries_per_page)
+        if search_value != '':
+            queried_entries = DictEntry.objects.all().filter(
+                Q(item_dari__cleaned_value__istartswith=search_value) |
+                Q(item_farsi__cleaned_value__istartswith=search_value) |
+                Q(item_german__cleaned_value__istartswith=search_value)
+            ).order_by(f'item_{sorted_by.lower()}__sorting_value')
+        else:
+            queried_entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
+        paginator = Paginator(queried_entries, number_of_entries_per_page)
 
         number_of_pages = paginator.num_pages
         if is_ajax(request):
@@ -156,8 +149,6 @@ def show_and_update_entries(request):
                     'entry_cancel_display': entry_cancel_display,
                 })
                 return output
-            else:
-                raise NotImplementedError()
 
         else:
             return render(request, 'dict/entries.html', {

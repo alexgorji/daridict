@@ -62,7 +62,7 @@
             $('#id_sorted_by').change(function () {
                 $("#id_search_form").submit()
             });
-            loopPages(page, {{ number_of_pages }})
+            loopPages(page, {{ number_of_pages }}, get_parameters=window.location.search)
         });
 
         const fields = {
