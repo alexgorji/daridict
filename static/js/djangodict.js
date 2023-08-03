@@ -126,21 +126,21 @@ function toggle_edit_buttons() {
 function editClick(entryID) {
     $.get('', {'entry_id': entryID, 'edit': 'edit'}, function (data) {
         // console.log(data)
-        $('#entry_form').children().replaceWith(data);
+        $('#id-entry-form').children().replaceWith(data);
     });
 }
 
 function cancelClick() {
     console.log('cancelling')
     $.get('', {'cancel': 'cancel'}, function (data) {
-        $('#entry_form').children().replaceWith(data);
+        $('#id-entry-form').children().replaceWith(data);
     })
 }
 
 function copyClick(entryID) {
 
     $.get('', {'entry_id': entryID, 'copy': 'copy'}, function (data) {
-        $('#entry_form').children().replaceWith(data);
+        $('#id-entry-form').children().replaceWith(data);
     })
 }
 

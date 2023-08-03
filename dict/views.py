@@ -244,9 +244,9 @@ class DictLanguageDetailView(LoginRequiredMixin, generic.DetailView):
     model = DictLanguage
 
 
-class TagListView(LoginRequiredMixin, generic.ListView):
+class TagListView(generic.ListView):
     model = Tag
 
 
-class TagDetailView(LoginRequiredMixin, generic.DetailView):
+class TagDetailView(generic.DetailView):
     model = Tag

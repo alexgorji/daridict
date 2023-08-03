@@ -22,7 +22,7 @@
                 </form>
             </div>
             {% if user.is_authenticated %}
-                <div style="position:relative;">
+                <div style="position:relative;" id="id-entry-form" >
                     {% include "dict/ajax_entry_form.html" %}
                 </div>
             {% endif %}
