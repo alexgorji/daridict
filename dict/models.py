@@ -1,16 +1,10 @@
 import json
 
 from django.db import models
-from django.db.models.signals import m2m_changed
 from django.urls import reverse
 from simple_history.models import HistoricalRecords
 
 from dict.model_helpers import remove_redundant_spaces, remove_short_vowels, translate_to_sorting_value
-
-class DictNodeLanguageException(Exception):
-    def __init__(self, *args):
-        message = f"DictNode can only have one item of each language!"
-        super().__init__(message, *args)
 
 
 class DictLanguage(models.Model):
@@ -95,59 +89,18 @@ class DictItem(models.Model):
 
 
 class Tag(models.Model):
-    name = models.fields.CharField(max_length=30)
+    name = models.fields.CharField(max_length=30, unique=True)
 
     def __str__(self):
         return f'tag {self.id}: {self.name}'
 
-    @staticmethod
-    def pk_tag_json():
-        output = {}
-        for tag in Tag.objects.all():
-            output[tag.pk] = [tag.name]
-        return json.dumps(output)
-
-
-class DictNode(models.Model):
-    items = models.ManyToManyField(to=DictItem, blank=True)
-    tags = models.ManyToManyField(to=Tag, blank=True)
-
-    def __str__(self):
-        return f'{self.id}: {" - ".join([item.value for item in self.items.all()])}'
-
-    def get_ordered_items(self):
-        return self.items.all().order_by('language_id')
-
-    def get_language_item(self, language):
-        return self.items.get(language__value=language)
-
-    def edit_items(self, items):
-        for item in self.items.all():
-            if item not in items:
-                self.items.remove(item)
-        for item in items:
-            if item not in self.items.all():
-                self.items.add(item)
-        self.save()
-
-    def edit_tags(self, tags):
-        tags = [Tag.objects.get_or_create(name=tag)[0] for tag in tags]
-        for tag in self.tags.all():
-            if tag not in tags:
-                self.tags.remove(tag)
-        for tag in tags:
-            if tag not in self.tags.all():
-                self.tags.add(tag)
-        self.save()
-
-    def get_tag_names(self):
-        return [tag.name for tag in self.tags.all()]
-
 
 class DictEntry(models.Model):
-    item_dari = models.ForeignKey(to='dict.DictItem', blank=True, on_delete=models.RESTRICT, related_name='entry_dari_item',
+    item_dari = models.ForeignKey(to='dict.DictItem', blank=True, on_delete=models.RESTRICT,
+                                  related_name='entry_dari_item',
                                   null=True)
-    item_farsi = models.ForeignKey(to='dict.DictItem', blank=True, on_delete=models.RESTRICT, related_name='entry_farsi_item',
+    item_farsi = models.ForeignKey(to='dict.DictItem', blank=True, on_delete=models.RESTRICT,
+                                   related_name='entry_farsi_item',
                                    null=True)
     item_german = models.ForeignKey(to='dict.DictItem', blank=True, on_delete=models.RESTRICT,
                                     related_name='entry_german_item',
@@ -156,6 +109,7 @@ class DictEntry(models.Model):
     order_of_items = [f'item_{language.lower()}' for language in order_of_languages]
     tags = models.ManyToManyField(to=Tag, blank=True)
     history = HistoricalRecords()
+
     def __str__(self):
         items = [item.value if item else '___' for item in self.get_ordered_items()]
         return f'{self.id}: {" - ".join(items)}'
@@ -171,14 +125,5 @@ class DictEntry(models.Model):
 
     def get_ordered_item_attributes(self):
         return {language: item.value if item else '' for language, item in
-                zip([DictLanguage.objects.get(value=lang) for lang in self.order_of_languages], self.get_ordered_items())}
-
-
-def items_changed(sender, instance, action, **kwargs):
-    if action in ['post_add', 'post_remove']:
-        languages = [item.language.id for item in instance.items.all()]
-        if len(languages) != len(set(languages)):
-            raise DictNodeLanguageException
-
-
-m2m_changed.connect(items_changed, sender=DictNode.items.through)
+                zip([DictLanguage.objects.get(value=lang) for lang in self.order_of_languages],
+                    self.get_ordered_items())}

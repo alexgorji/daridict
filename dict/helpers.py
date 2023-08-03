@@ -1,20 +1,5 @@
 from .model_helpers import remove_redundant_spaces, remove_short_vowels, translate_to_sorting_value
-from .models import DictItem, DictEntry, DictLanguage, DictNode
-
-
-def delete_not_noded_items():
-    for item in DictItem.objects.all():
-        if not item.dictnode_set.all() and not (
-                item.item_dari.all() or item.item_farsi.all() or item.item_german.all()):
-            item.delete()
-
-
-def check_items():
-    for item in DictItem.objects.all():
-        if not item.dictnode_set.all() and (item.item_dari.all() or item.item_farsi.all() or item.item_german.all()):
-            print(f'item {item} no node but entry')
-        if item.dictnode_set.all() and not (item.item_dari.all() or item.item_farsi.all() or item.item_german.all()):
-            print(f'item {item} no entry but node')
+from .models import DictItem, DictEntry, DictLanguage
 
 
 def delete_all_entries():
@@ -45,21 +30,6 @@ def create_entries(item_dari, item_farsi, item_german):
     return DictEntry.objects.get_or_create(item_dari=item_dari, item_farsi=item_farsi, item_german=item_german)[0]
 
 
-def translate_dict_node_to_dict_entries():
-    for node in DictNode.objects.all():
-        item_dari = None
-        item_farsi = None
-        item_german = None
-        for item in node.items.all():
-            if item.language.value == 'Dari':
-                item_dari = item
-            elif item.language.value == 'Farsi':
-                item_farsi = item
-            else:
-                item_german = item
-        create_entries(item_dari, item_farsi, item_german)
-
-
 def fill_cleaned_values():
     for dict_item in DictItem.objects.all():
         dict_item.cleaned_value = remove_redundant_spaces(dict_item.value)
@@ -77,7 +47,6 @@ def fill_sorting_values():
 
 def remove_empty_items():
     for entry in DictEntry.objects.all():
-        print(entry)
         save = False
         if entry.item_dari and entry.item_dari.value == '':
             entry.item_dari = None

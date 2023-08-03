@@ -1,6 +1,6 @@
 from django import forms
 
-from dict.models import DictItem, DictNode, DictLanguage, Tag
+from dict.models import DictItem, DictLanguage, Tag
 
 
 class DictItemForm(forms.ModelForm):
@@ -26,14 +26,10 @@ class DictItemUpdateForm(forms.ModelForm):
         fields = ['value', 'comment']
 
 
-class DictNodeUpdateForm(forms.ModelForm):
-    class Meta:
-        model = DictNode
-        fields = ['items']
-
-
 class TagForm(forms.Form):
-    tags = forms.CharField(max_length=500)
+    class Meta:
+        model = Tag
+        fields = ['name']
 
 
 class DictEntrySortingForm(forms.Form):
