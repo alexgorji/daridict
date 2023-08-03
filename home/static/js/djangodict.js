@@ -6,7 +6,7 @@ function autocomplete(inp, language, fieldId) {
         let value = inp.val()
         $.get('', {'language': language, 'autocomplete': value}, function (data) {
             // $('#' + language + '_value_autocomplete').children().replaceWith(data);
-            $('#'+fieldId).children().replaceWith(data);
+            $('#' + fieldId).children().replaceWith(data);
             /*make the matching letters bold*/
             /*on click for matched word*/
             $(".autocomplete-item").map(function () {
@@ -18,7 +18,6 @@ function autocomplete(inp, language, fieldId) {
             });
         });
     });
-
     inp.on("keydown", function (e) {
         console.log(e.keyCode)
         const x = document.getElementById(this.id + "_autocomplete");
@@ -41,6 +40,8 @@ function autocomplete(inp, language, fieldId) {
             if (currentFocus > -1) {
                 /*and simulate a click on the "active" item:*/
                 if (items) items[currentFocus].click();
+            } else {
+                $('.search-button').click()
             }
         }
     });
@@ -146,9 +147,9 @@ function copyClick(entryID) {
 
 function get_and_append_page(page, get_parameters) {
     let all_get_parameters = null
-    if (get_parameters){
-        all_get_parameters = get_parameters+'&page=' + page
-    }else{
+    if (get_parameters) {
+        all_get_parameters = get_parameters + '&page=' + page
+    } else {
         all_get_parameters = '?page=' + page
     }
     return $.get(all_get_parameters, function (data) {
