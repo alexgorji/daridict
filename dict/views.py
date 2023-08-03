@@ -118,7 +118,7 @@ def show_and_update_entries(request):
                 if entry_id != '':
                     entry = DictEntry.objects.get(id=entry_id)
                     item_forms = [DictItemForm(initial={'value': value},
-                                               auto_id=f"{language}_%s",
+                                               auto_id=f"{language.value.lower()}_%s",
                                                language=language.value)
                                   for language, value in entry.get_ordered_item_attributes().items()]
                 else:
