@@ -17,6 +17,7 @@ def is_ajax(request):
 
 
 def show_and_update_entries(request):
+    print(request.POST)
     global sorted_by
     dict_languages = DictLanguage.objects.all()
     item_forms = [
