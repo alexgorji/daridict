@@ -42,7 +42,6 @@ def show_and_update_entries(request):
 
             if request.POST.get('entry-delete', None):
                 selected_entry.delete()
-                return redirect('dictionary')
             else:
                 values = request.POST.getlist('value')
                 if len(set(values)) == 1 and "" in set(values):
@@ -56,8 +55,9 @@ def show_and_update_entries(request):
                         selected_entry.item_farsi = items[1]
                         selected_entry.item_german = items[2]
                         selected_entry.save()
-                    elif request.POST.get('entry-copy', None):
+                    else:
                         DictEntry.objects.get_or_create(item_dari=items[0], item_farsi=items[1], item_german=items[2])
+            return redirect('dictionary')
     elif request.method == 'GET':
         search_value = request.GET.get('search', '')
         new_sorted_by = request.GET.get('sorted_by', None)
