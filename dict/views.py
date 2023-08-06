@@ -39,11 +39,13 @@ def show_and_update_entries(request):
             if selected_entry_id:
                 selected_entry = DictEntry.objects.get(id=selected_entry_id)
 
+            # delete entry
             if request.POST.get('entry-delete', None):
                 selected_entry.delete()
-            elif request.POST.get('entry-open', None):
-                return redirect('dict_entry_update', selected_entry_id)
+            # elif request.POST.get('entry-open', None):
+            #     return redirect('dict_entry_update', selected_entry_id)
             else:
+                # update or save entry
                 values = request.POST.getlist('value')
                 if len(set(values)) == 1 and "" in set(values):
                     pass
@@ -51,21 +53,35 @@ def show_and_update_entries(request):
                     items = [None if value == "" else DictItem.objects.get_or_create(value=value, language=language)[0]
                              for
                              value, language in zip(values, dict_languages)]
+                    # update entry
                     if request.POST.get('entry-update', None):
                         selected_entry.item_dari = items[0]
                         selected_entry.item_farsi = items[1]
                         selected_entry.item_german = items[2]
-                        selected_entry.save()
                     else:
-                        DictEntry.objects.get_or_create(item_dari=items[0], item_farsi=items[1], item_german=items[2])
+                        # save entry
+                        selected_entry = DictEntry.objects.get_or_create(item_dari=items[0], item_farsi=items[1],
+                                                                         item_german=items[2])
+                # create or update entry tags
+                tag_names = request.POST['tag_names'].split(',')
+                tags = [Tag.objects.get_or_create(name=tag_name)[0] for tag_name in tag_names]
+                for tag in selected_entry.tags.all():
+                    if tag not in tags:
+                        selected_entry.tags.remove(tag)
+                for tag in tags:
+                    if tag not in selected_entry.tags.all():
+                        selected_entry.tags.add(tag)
+                selected_entry.save()
             return redirect('dictionary')
     elif request.method == 'GET':
-        search_value = request.GET.get('search', '')
+        # get sorted_by and set Sorting Form
         new_sorted_by = request.GET.get('sorted_by', None)
         if new_sorted_by:
             sorted_by = new_sorted_by
         sorting_form = DictEntrySortingForm(initial={'sorted_by': sorted_by})
 
+        # get search value and set entries for paginator
+        search_value = request.GET.get('search', '')
         if search_value != '':
             queried_entries = DictEntry.objects.all().filter(
                 Q(item_dari__cleaned_value__istartswith=search_value) |
@@ -75,8 +91,8 @@ def show_and_update_entries(request):
         else:
             queried_entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
         paginator = Paginator(queried_entries, number_of_entries_per_page)
-
         number_of_pages = paginator.num_pages
+        # AJAX requests
         if is_ajax(request):
             if 'page' in request.GET:
                 page = request.GET.get('page')
@@ -103,8 +119,18 @@ def show_and_update_entries(request):
                                  DictItem.objects.filter(cleaned_value__istartswith=word_beginning)]
                         items = list(dict.fromkeys(items))
                 return render(request, 'dict/ajax_autocomplete.html', {'items': items})
+            elif 'autocompletetags' in request.GET and request.user.is_authenticated:
+                word_beginnings = request.GET['autocompletetags'].split(', ')
+                word_beginning = word_beginnings[-1]
+                exclude = word_beginnings[:-1]
+                items = []
+                if len(word_beginning) > 0:
+                    items = [tag.name for tag in Tag.objects.filter(name__istartswith=word_beginning)]
+                    items = list(set(items).difference(exclude))
+                return render(request, 'dict/ajax_autocomplete.html', {'items': items})
             elif 'entry_id' in request.GET and request.user.is_authenticated:
                 entry_id = request.GET['entry_id']
+                entry = None
                 if 'edit' in request.GET:
                     entry_save_display = 'hide'
                     entry_copy_display = 'hide'
@@ -129,6 +155,7 @@ def show_and_update_entries(request):
                                   for language in DictLanguage.objects.all()]
                 return render(request, 'dict/ajax_entry_form.html',
                               {'selected_entry_id': entry_id,
+                               'entry': entry,
                                'item_forms': item_forms,
                                'entry_save_display': entry_save_display,
                                'entry_copy_display': entry_copy_display,
@@ -137,7 +164,7 @@ def show_and_update_entries(request):
                                }
                               )
             elif 'cancel' in request.GET and request.user.is_authenticated:
-                output = render(request, 'dict/ajax_entry_form.html', {
+                return render(request, 'dict/ajax_entry_form.html', {
                     'item_forms': item_forms,
                     'selected_entry': None,
                     'entry_save_display': entry_save_display,
@@ -145,7 +172,6 @@ def show_and_update_entries(request):
                     'entry_update_display': entry_update_display,
                     'entry_cancel_display': entry_cancel_display,
                 })
-                return output
 
         else:
             return render(request, 'dict/entries.html', {

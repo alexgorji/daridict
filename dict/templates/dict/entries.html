@@ -8,7 +8,7 @@
             <div style="position: relative">
                 <form class="entry-form" id="id_search_form" action="" method="get" autocomplete="off" novalidate="">
                     {{ sorting_form.as_p }}
-{#                    {{ tag_form.as_p }}#}
+                    {#                    {{ tag_form.as_p }}#}
                     <div class="d-flex">
                         <button class="btn search-button bg-light">Search</button>
                         <input id="id_search_field" type="text" name="search" placeholder="SEARCH" autocomplete="off"
@@ -22,7 +22,7 @@
                 </form>
             </div>
             {% if user.is_authenticated %}
-                <div style="position:relative;" id="id-entry-form" >
+                <div style="position:relative;" id="id-entry-form">
                     {% include "dict/ajax_entry_form.html" %}
                 </div>
             {% endif %}
@@ -66,21 +66,9 @@
             loopPages(page, {{ number_of_pages }}, window.location.search)
         });
 
-        const fields = {
-            'german': $("#german_value"),
-            'farsi': $("#farsi_value"),
-            'dari': $("#dari_value"),
-        }
 
         window.onload = function () {
-            let language;
-            let field;
-            for (let key in fields) {
-                language = key;
-                field = fields[key];
-                autocomplete(field, language + "_value_autocomplete", false, language);
-            }
-            autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, null);
+            loadAutocompletions()
         }
     </script>
 {% endblock %}

@@ -1,27 +1,52 @@
 let currentFocus = -1;
 
-function autocomplete(inp, language, fieldId) {
+function autocomplete(inp, autocompleteFieldId, tags = false, language) {
     /*inp: text field element for each language */
-    inp.on("input", function () {
-        let value = inp.val()
-        $.get('', {'language': language, 'autocomplete': value}, function (data) {
-            // $('#' + language + '_value_autocomplete').children().replaceWith(data);
-            $('#'+fieldId).children().replaceWith(data);
-            /*make the matching letters bold*/
-            /*on click for matched word*/
-            $(".autocomplete-item").map(function () {
-                this.innerHTML = '<strong>' + this.innerText.slice(0, value.length) + '</strong>' + this.innerText.slice(value.length);
-                this.addEventListener("click", function (e) {
-                    inp.val(this.innerText)
-                    closeAllLists();
+    if (tags === true) {
+        inp.on("input", function () {
+            let tags_as_string = inp.val()
+            let array_of_tags = tags_as_string.split(', ')
+            $.get('', {'autocompletetags': tags_as_string}, function (data) {
+                $('#' + autocompleteFieldId).children().replaceWith(data);
+                /*make the matching letters bold*/
+                /*on click for matched word*/
+                $(".autocomplete-item").map(function () {
+                    // this.innerHTML = '<strong>' + this.innerText.slice(0, value.length) + '</strong>' + this.innerText.slice(value.length);
+                    this.addEventListener("click", function (e) {
+                        if (array_of_tags.slice(0, -1).length > 0) {
+                            inp.val(array_of_tags.slice(0, -1).toString() + ', ' + this.innerText)
+                        } else {
+                            inp.val(this.innerText)
+                        }
+
+                        closeAllLists();
+                    });
                 });
             });
         });
-    });
-
+    } else {
+        inp.on("input", function () {
+            let value = inp.val()
+            $.get('', {'language': language, 'autocomplete': value}, function (data) {
+                // $('#' + language + '_value_autocomplete').children().replaceWith(data);
+                $('#' + autocompleteFieldId).children().replaceWith(data);
+                /*make the matching letters bold*/
+                /*on click for matched word*/
+                $(".autocomplete-item").map(function () {
+                    this.innerHTML = '<strong>' + this.innerText.slice(0, value.length) + '</strong>' + this.innerText.slice(value.length);
+                    this.addEventListener("click", function (e) {
+                        inp.val(this.innerText)
+                        closeAllLists();
+                    });
+                });
+            });
+        });
+    }
     inp.on("keydown", function (e) {
-        console.log(e.keyCode)
-        const x = document.getElementById(this.id + "_autocomplete");
+        // console.log(e.keyCode)
+        // const x = document.getElementById(this.id + "_autocomplete");
+        const x = document.getElementById(autocompleteFieldId);
+
         if (e.keyCode === 9) {
             closeAllLists();
         } else if (e.keyCode === 40) {
@@ -41,6 +66,8 @@ function autocomplete(inp, language, fieldId) {
             if (currentFocus > -1) {
                 /*and simulate a click on the "active" item:*/
                 if (items) items[currentFocus].click();
+            } else {
+                $('.search-button').click()
             }
         }
     });
@@ -83,10 +110,11 @@ let opened_symbol
 
 function toggle_edit_buttons() {
     $('.edit_toggle').off('click').on('click', function () {
-        // console.log('edit toggled', $(this))
         const target_buttons = $("#" + $(this).attr('data-buttons'));
         const top_tr = $(this).closest('tr')
         const symbol = $(this).children("i").first()
+        // console.log($(this).attr('data-buttons'))
+
         if ($(this).hasClass('opened')) {
             $(symbol).removeClass('up')
             $(symbol).addClass('right')
@@ -125,8 +153,8 @@ function toggle_edit_buttons() {
 
 function editClick(entryID) {
     $.get('', {'entry_id': entryID, 'edit': 'edit'}, function (data) {
-        // console.log(data)
         $('#id-entry-form').children().replaceWith(data);
+        loadAutocompletions();
     });
 }
 
@@ -134,6 +162,8 @@ function cancelClick() {
     console.log('cancelling')
     $.get('', {'cancel': 'cancel'}, function (data) {
         $('#id-entry-form').children().replaceWith(data);
+        loadAutocompletions();
+
     })
 }
 
@@ -141,14 +171,15 @@ function copyClick(entryID) {
 
     $.get('', {'entry_id': entryID, 'copy': 'copy'}, function (data) {
         $('#id-entry-form').children().replaceWith(data);
+        loadAutocompletions();
     })
 }
 
-function get_and_append_page(page, get_parameters) {
+function getAndAppendPage(page, get_parameters) {
     let all_get_parameters = null
-    if (get_parameters){
-        all_get_parameters = get_parameters+'&page=' + page
-    }else{
+    if (get_parameters) {
+        all_get_parameters = get_parameters + '&page=' + page
+    } else {
         all_get_parameters = '?page=' + page
     }
     return $.get(all_get_parameters, function (data) {
@@ -161,7 +192,7 @@ function get_and_append_page(page, get_parameters) {
 }
 
 function loopPages(page, number_of_pages, get_parameters) {
-    get_and_append_page(page, get_parameters).done(function (data) {
+    getAndAppendPage(page, get_parameters).done(function (data) {
         page += 1
         // console.log('in get_and_append_page done, next page', page)
         if (page <= number_of_pages) {
@@ -169,4 +200,23 @@ function loopPages(page, number_of_pages, get_parameters) {
         }
         toggle_edit_buttons()
     });
+}
+
+function loadAutocompletions() {
+    console.log('loadAutocompletsions')
+    let fields = {
+        'german': $("#german_value"),
+        'farsi': $("#farsi_value"),
+        'dari': $("#dari_value"),
+    }
+
+    let language;
+    let field;
+    for (let key in fields) {
+        language = key;
+        field = fields[key];
+        autocomplete(field, language + "_value_autocomplete", false, language);
+    }
+    autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, null);
+    autocomplete($('#id_tag_names'), "id_tag_names_autocomplete", true);
 }

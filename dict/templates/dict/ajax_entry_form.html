@@ -9,7 +9,12 @@
                 <p></p>
             {% endfor %}
         {% endfor %}
-        <input type="text" name="tag" id="id_add_tag" placeholder="Tag(s)">
+        <input type="text" name="tag_names" id="id_tag_names" placeholder="Tag(s)"
+               value="{{ entry.get_tags_as_string }}">
+        <div id="id_tag_names_autocomplete" style="position: absolute" class="autocomplete">
+            <div></div>
+        </div>
+        <p></p>
         <p></p>
         <input type="hidden" name="selected_entry_id" value="{{ selected_entry_id }}">
         <input class="btn bg-light {{ entry_save_display }}" type="submit" name="entry-save" value="Save">

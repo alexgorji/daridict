@@ -6,7 +6,7 @@ function autocomplete(inp, autocompleteFieldId, tags = false, language) {
         inp.on("input", function () {
             let tags_as_string = inp.val()
             let array_of_tags = tags_as_string.split(', ')
-            $.get('', {'autocomplete': tags_as_string}, function (data) {
+            $.get('', {'autocompletetags': tags_as_string}, function (data) {
                 $('#' + autocompleteFieldId).children().replaceWith(data);
                 /*make the matching letters bold*/
                 /*on click for matched word*/
@@ -105,31 +105,6 @@ function autocomplete(inp, autocompleteFieldId, tags = false, language) {
     });
 }
 
-function autocomplete_tags(inp, autocompleteFieldId) {
-    inp.on("input", function () {
-        let tags_as_string = inp.val()
-        let array_of_tags = tags_as_string.split(', ')
-        let last_tag = array_of_tags[array_of_tags.length - 1]
-        $.get('', {'autocomplete': tags_as_string}, function (data) {
-            $('#' + autocompleteFieldId).children().replaceWith(data);
-            /*make the matching letters bold*/
-            /*on click for matched word*/
-            $(".autocomplete-item").map(function () {
-                // this.innerHTML = '<strong>' + this.innerText.slice(0, value.length) + '</strong>' + this.innerText.slice(value.length);
-                this.addEventListener("click", function (e) {
-                    if (array_of_tags.slice(0, -1).length > 0) {
-                        inp.val(array_of_tags.slice(0, -1).toString() + ', ' + this.innerText)
-                    } else {
-                        inp.val(this.innerText)
-                    }
-
-                    closeAllLists();
-                });
-            });
-        });
-    });
-}
-
 let opened_edit_buttons
 let opened_symbol
 
@@ -179,6 +154,7 @@ function toggle_edit_buttons() {
 function editClick(entryID) {
     $.get('', {'entry_id': entryID, 'edit': 'edit'}, function (data) {
         $('#id-entry-form').children().replaceWith(data);
+        loadAutocompletions();
     });
 }
 
@@ -186,6 +162,8 @@ function cancelClick() {
     console.log('cancelling')
     $.get('', {'cancel': 'cancel'}, function (data) {
         $('#id-entry-form').children().replaceWith(data);
+        loadAutocompletions();
+
     })
 }
 
@@ -193,10 +171,11 @@ function copyClick(entryID) {
 
     $.get('', {'entry_id': entryID, 'copy': 'copy'}, function (data) {
         $('#id-entry-form').children().replaceWith(data);
+        loadAutocompletions();
     })
 }
 
-function get_and_append_page(page, get_parameters) {
+function getAndAppendPage(page, get_parameters) {
     let all_get_parameters = null
     if (get_parameters) {
         all_get_parameters = get_parameters + '&page=' + page
@@ -213,7 +192,7 @@ function get_and_append_page(page, get_parameters) {
 }
 
 function loopPages(page, number_of_pages, get_parameters) {
-    get_and_append_page(page, get_parameters).done(function (data) {
+    getAndAppendPage(page, get_parameters).done(function (data) {
         page += 1
         // console.log('in get_and_append_page done, next page', page)
         if (page <= number_of_pages) {
@@ -221,4 +200,23 @@ function loopPages(page, number_of_pages, get_parameters) {
         }
         toggle_edit_buttons()
     });
+}
+
+function loadAutocompletions() {
+    console.log('loadAutocompletsions')
+    let fields = {
+        'german': $("#german_value"),
+        'farsi': $("#farsi_value"),
+        'dari': $("#dari_value"),
+    }
+
+    let language;
+    let field;
+    for (let key in fields) {
+        language = key;
+        field = fields[key];
+        autocomplete(field, language + "_value_autocomplete", false, language);
+    }
+    autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, null);
+    autocomplete($('#id_tag_names'), "id_tag_names_autocomplete", true);
 }
