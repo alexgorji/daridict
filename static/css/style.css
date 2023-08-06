@@ -41,16 +41,16 @@ a {
     padding: 3px;
 }
 
-.arrow-div > button {
+.arrow-div > button, .toggle-button {
     background: transparent;
     border: None;
     padding: 1px 0 8px 3px;
 
 }
 
-.arrow-div {
-    /*padding: 0 !important;*/
-    /*margin: 0 !important;*/
+.toggle-button {
+    padding-bottom: 30px;
+    line-height: 0;
 }
 
 .arrow-td {
@@ -117,7 +117,11 @@ th:nth-child(1), td:nth-child(1) {
 }
 
 th:nth-child(2), td:nth-child(2) {
-    width: 15%;
+    width: 10%;
+}
+
+th:nth-child(3), td:nth-child(3) {
+    width: 10%;
 }
 
 tr.edit_buttons-tr > td > div {
@@ -179,6 +183,19 @@ tr:nth-child(4n-1) {
     height: 30px;
     line-height: 0;
 }
+.tag-button{
+    /*background-color: #6f94c6;*/
+    padding: 0 4px 4px 4px;
+    margin: 0 0 13px 0;
+}
+.tag-button {
+  transition-duration: 0.4s;
+}
+
+.tag-button:hover{
+    background-color: rgba(111, 148, 198, 0.5);
+}
+
 
 .cancel-button {
     position: absolute;
@@ -189,10 +206,12 @@ tr:nth-child(4n-1) {
 .entry-form {
     width: 100%;
 }
-.entry-update-form label{
+
+.entry-update-form label {
     width: 5rem;
 }
-#id_tags_autocomplete{
+
+#id_tags_autocomplete {
     margin-left: 5rem;
 }
 

@@ -17,7 +17,7 @@
         </td>
             <td>
             {% if entry.tags.all %}
-                <button type="button" class="tag-button btn"  data-toggle="popover" title="" data-content="{{ entry.tags.all }}" data-original-title="Popover title">
+                <button type="button" class="tag-button btn"  data-toggle="popover" title="tags:" data-bs-placement="top" data-bs-content="{{ entry.get_tags_as_string }}" data-original-title="Popover title">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-tags"
                          viewBox="0 0 16 16">
