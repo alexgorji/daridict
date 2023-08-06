@@ -1,26 +1,52 @@
 let currentFocus = -1;
 
-function autocomplete(inp, language, fieldId) {
+function autocomplete(inp, autocompleteFieldId, tags = false, language) {
     /*inp: text field element for each language */
-    inp.on("input", function () {
-        let value = inp.val()
-        $.get('', {'language': language, 'autocomplete': value}, function (data) {
-            // $('#' + language + '_value_autocomplete').children().replaceWith(data);
-            $('#' + fieldId).children().replaceWith(data);
-            /*make the matching letters bold*/
-            /*on click for matched word*/
-            $(".autocomplete-item").map(function () {
-                this.innerHTML = '<strong>' + this.innerText.slice(0, value.length) + '</strong>' + this.innerText.slice(value.length);
-                this.addEventListener("click", function (e) {
-                    inp.val(this.innerText)
-                    closeAllLists();
+    if (tags === true) {
+        inp.on("input", function () {
+            let tags_as_string = inp.val()
+            let array_of_tags = tags_as_string.split(', ')
+            $.get('', {'autocomplete': tags_as_string}, function (data) {
+                $('#' + autocompleteFieldId).children().replaceWith(data);
+                /*make the matching letters bold*/
+                /*on click for matched word*/
+                $(".autocomplete-item").map(function () {
+                    // this.innerHTML = '<strong>' + this.innerText.slice(0, value.length) + '</strong>' + this.innerText.slice(value.length);
+                    this.addEventListener("click", function (e) {
+                        if (array_of_tags.slice(0, -1).length > 0) {
+                            inp.val(array_of_tags.slice(0, -1).toString() + ', ' + this.innerText)
+                        } else {
+                            inp.val(this.innerText)
+                        }
+
+                        closeAllLists();
+                    });
                 });
             });
         });
-    });
+    } else {
+        inp.on("input", function () {
+            let value = inp.val()
+            $.get('', {'language': language, 'autocomplete': value}, function (data) {
+                // $('#' + language + '_value_autocomplete').children().replaceWith(data);
+                $('#' + autocompleteFieldId).children().replaceWith(data);
+                /*make the matching letters bold*/
+                /*on click for matched word*/
+                $(".autocomplete-item").map(function () {
+                    this.innerHTML = '<strong>' + this.innerText.slice(0, value.length) + '</strong>' + this.innerText.slice(value.length);
+                    this.addEventListener("click", function (e) {
+                        inp.val(this.innerText)
+                        closeAllLists();
+                    });
+                });
+            });
+        });
+    }
     inp.on("keydown", function (e) {
-        console.log(e.keyCode)
-        const x = document.getElementById(this.id + "_autocomplete");
+        // console.log(e.keyCode)
+        // const x = document.getElementById(this.id + "_autocomplete");
+        const x = document.getElementById(autocompleteFieldId);
+
         if (e.keyCode === 9) {
             closeAllLists();
         } else if (e.keyCode === 40) {
@@ -79,15 +105,41 @@ function autocomplete(inp, language, fieldId) {
     });
 }
 
+function autocomplete_tags(inp, autocompleteFieldId) {
+    inp.on("input", function () {
+        let tags_as_string = inp.val()
+        let array_of_tags = tags_as_string.split(', ')
+        let last_tag = array_of_tags[array_of_tags.length - 1]
+        $.get('', {'autocomplete': tags_as_string}, function (data) {
+            $('#' + autocompleteFieldId).children().replaceWith(data);
+            /*make the matching letters bold*/
+            /*on click for matched word*/
+            $(".autocomplete-item").map(function () {
+                // this.innerHTML = '<strong>' + this.innerText.slice(0, value.length) + '</strong>' + this.innerText.slice(value.length);
+                this.addEventListener("click", function (e) {
+                    if (array_of_tags.slice(0, -1).length > 0) {
+                        inp.val(array_of_tags.slice(0, -1).toString() + ', ' + this.innerText)
+                    } else {
+                        inp.val(this.innerText)
+                    }
+
+                    closeAllLists();
+                });
+            });
+        });
+    });
+}
+
 let opened_edit_buttons
 let opened_symbol
 
 function toggle_edit_buttons() {
     $('.edit_toggle').off('click').on('click', function () {
-        // console.log('edit toggled', $(this))
         const target_buttons = $("#" + $(this).attr('data-buttons'));
         const top_tr = $(this).closest('tr')
         const symbol = $(this).children("i").first()
+        // console.log($(this).attr('data-buttons'))
+
         if ($(this).hasClass('opened')) {
             $(symbol).removeClass('up')
             $(symbol).addClass('right')

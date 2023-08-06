@@ -17,6 +17,7 @@ class DictItemForm(forms.ModelForm):
 
         super().__init__(*args, **kwargs)
         self.fields['value'].widget.attrs['placeholder'] = language
+        self.fields['value'].label = language
 
 
 class DictItemUpdateForm(forms.ModelForm):

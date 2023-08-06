@@ -78,9 +78,9 @@
             for (let key in fields) {
                 language = key;
                 field = fields[key];
-                autocomplete(field, language, language + "_value_autocomplete");
+                autocomplete(field, language + "_value_autocomplete", false, language);
             }
-            autocomplete($('#id_search_field'), null, "id_search_field_autocomplete");
+            autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, null);
         }
     </script>
 {% endblock %}

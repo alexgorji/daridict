@@ -1,5 +1,3 @@
-import json
-
 from django.db import models
 from django.urls import reverse
 from simple_history.models import HistoricalRecords
@@ -51,22 +49,22 @@ class DictItem(models.Model):
     def __str__(self):
         return f"{self.id}: {self.language.value}: {self.value}"
 
-    @staticmethod
-    def get_language_items_json():
-        output = {}
-        for item in DictItem.objects.all().order_by('language', 'value'):
-            key = item.language.value
-            if not output.get(key):
-                output[key] = []
-            output[key].append(item.value)
-        return json.dumps(output)
-
-    @staticmethod
-    def get_pk_items_json():
-        output = {}
-        for item in DictItem.objects.all():
-            output[item.pk] = [item.language.value, item.value]
-        return json.dumps(output)
+    # @staticmethod
+    # def get_language_items_json():
+    #     output = {}
+    #     for item in DictItem.objects.all().order_by('language', 'value'):
+    #         key = item.language.value
+    #         if not output.get(key):
+    #             output[key] = []
+    #         output[key].append(item.value)
+    #     return json.dumps(output)
+    #
+    # @staticmethod
+    # def get_pk_items_json():
+    #     output = {}
+    #     for item in DictItem.objects.all():
+    #         output[item.pk] = [item.language.value, item.value]
+    #     return json.dumps(output)
 
     def get_absolute_url(self):
         return reverse('dict_item', kwargs={'pk': self.pk})
@@ -127,3 +125,9 @@ class DictEntry(models.Model):
         return {language: item.value if item else '' for language, item in
                 zip([DictLanguage.objects.get(value=lang) for lang in self.order_of_languages],
                     self.get_ordered_items())}
+
+    def get_tags_as_string(self):
+        return ",".join([tag.name for tag in self.tags.all()])
+
+    def get_ordered_languages(self):
+        return [DictLanguage.objects.get(value=language) for language in self.order_of_languages]

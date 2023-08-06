@@ -3,15 +3,32 @@
     Entry: {{ entry }}
 {% endblock %}
 {% block content %}
-    <form method="post" novalidate>{% csrf_token %}
-        {% for form in item_forms %}
-            {% for field in form %}
-                <p>{{ field }}</p>
-            {% endfor %}
-        {% endfor %}
-
-        {{ item_forms.as_p }}
-        <input class="btn bg-light" type="submit" name="update" value="Update">
-        <input class="btn bg-light" type="submit" name="delete" onclick="return confirm('Are you sure?')" value="del">
-    </form>
+    <div class="entry-update-form">
+        <p>{{ entry }}</p>
+        <form autocomplete="off" action="" method="POST" novalidate>
+            {% csrf_token %}
+            <div>
+                {% for form in item_forms %}
+                    {{ form.as_p }}
+                {% endfor %}
+                <p></p>
+                <label for="id_entry_tag_names">Tag(s)</label>
+                <input type="text" name="tag_names" id="id_entry_tag_names" placeholder="Tag(s)"
+                       value="{{ entry.get_tags_as_string }}">
+                <div id="id_tags_autocomplete" style="position: absolute" class="autocomplete">
+                    <div></div>
+                </div>
+                <p></p>
+            </div>
+            <input class="btn bg-light" type="submit" name="delete" onclick="return confirm('Are you sure?')"
+                   value="del">
+            <input class="btn bg-light" type="submit" name="update" value="Update">
+            <a class="btn bg-light" href="{% url 'dictionary' %}">Cancel</a>
+        </form>
+    </div>
+{% endblock %}
+{% block extra_js %}
+    <script>
+        autocomplete($('#id_entry_tag_names'), "id_tags_autocomplete", true);
+    </script>
 {% endblock %}

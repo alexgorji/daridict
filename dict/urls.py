@@ -8,4 +8,5 @@ urlpatterns = [
     path('language/<int:pk>/', views.DictLanguageDetailView.as_view(), name='dict_language'),
     path('tags/', views.TagListView.as_view(), name='tag_list'),
     path('tags/<int:pk>/', views.TagDetailView.as_view(), name='tag_detail'),
+    path('entries/<int:pk>/', views.dict_entry_update_view, name='dict_entry_update')
 ]
