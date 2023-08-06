@@ -64,14 +64,18 @@ def show_and_update_entries(request):
                                                                          item_german=items[2])
                 # create or update entry tags
                 tag_names = request.POST['tag_names'].split(',')
+                # remove redundant emtpy strings
+                tag_names = [x for x in tag_names if x and not x.isspace()]
+
                 tags = [Tag.objects.get_or_create(name=tag_name)[0] for tag_name in tag_names]
-                for tag in selected_entry.tags.all():
-                    if tag not in tags:
-                        selected_entry.tags.remove(tag)
-                for tag in tags:
-                    if tag not in selected_entry.tags.all():
-                        selected_entry.tags.add(tag)
-                selected_entry.save()
+                if selected_entry:
+                    for tag in selected_entry.tags.all():
+                        if tag not in tags:
+                            selected_entry.tags.remove(tag)
+                    for tag in tags:
+                        if tag not in selected_entry.tags.all():
+                            selected_entry.tags.add(tag)
+                    selected_entry.save()
             return redirect('dictionary')
     elif request.method == 'GET':
         # get sorted_by and set Sorting Form

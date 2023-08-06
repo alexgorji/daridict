@@ -199,6 +199,9 @@ function loopPages(page, number_of_pages, get_parameters) {
             loopPages(page, number_of_pages, get_parameters)
         }
         toggle_edit_buttons()
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
     });
 }
 
