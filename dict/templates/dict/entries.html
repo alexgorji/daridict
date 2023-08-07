@@ -8,16 +8,22 @@
             <div style="position: relative">
                 <form class="entry-form" id="id_search_form" action="" method="get" autocomplete="off" novalidate="">
                     {{ sorting_form.as_p }}
-                    {#                    {{ tag_form.as_p }}#}
                     <div class="d-flex">
                         <button class="btn search-button bg-light">Search</button>
-                        <input id="id_search_field" type="text" name="search" placeholder="SEARCH" autocomplete="off"
-                               value="{{ search_value }}">
+                        <input id="id_tag_search_field" type="text" name="tag_search" placeholder="TAG"
+                               autocomplete="off"
+                               value="{{ search_tag }}">
                     </div>
-
+                    <div id="id_tag_search_autocomplete" style="position: absolute" class="autocomplete">
+                        <div>bls</div>
+                    </div>
+                    <p></p>
+                    <input id="id_search_field" type="text" name="search" placeholder="ENTRY" autocomplete="off"
+                           value="{{ search_value }}">
                     <div id="id_search_field_autocomplete" style="position: absolute" class="autocomplete">
                         <div></div>
                     </div>
+
                     <p></p>
                 </form>
             </div>
