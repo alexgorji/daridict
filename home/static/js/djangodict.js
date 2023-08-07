@@ -206,7 +206,6 @@ function loopPages(page, number_of_pages, get_parameters) {
 }
 
 function loadAutocompletions() {
-    console.log('loadAutocompletsions')
     let fields = {
         'german': $("#german_value"),
         'farsi': $("#farsi_value"),
