@@ -206,7 +206,6 @@ function loopPages(page, number_of_pages, get_parameters) {
 }
 
 function loadAutocompletions() {
-    console.log('loadAutocompletsions')
     let fields = {
         'german': $("#german_value"),
         'farsi': $("#farsi_value"),
@@ -222,4 +221,5 @@ function loadAutocompletions() {
     }
     autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, null);
     autocomplete($('#id_tag_names'), "id_tag_names_autocomplete", true);
+    autocomplete($('#id_tag_search_field'), "id_tag_search_autocomplete", true);
 }
