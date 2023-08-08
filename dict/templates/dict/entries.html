@@ -10,12 +10,14 @@
                     {{ sorting_form.as_p }}
                     <div class="d-flex">
                         <button class="btn search-button bg-light">Search</button>
-                        <input id="id_tag_search_field" type="text" name="tag_search" placeholder="TAG"
-                               autocomplete="off"
-                               value="{{ search_tag }}">
-                    </div>
-                    <div id="id_tag_search_autocomplete" style="position: absolute" class="autocomplete">
-                        <div>bls</div>
+                        <div class="tag_search_container">
+                            <input id="id_tag_search_field" type="text" name="tags" placeholder="TAG"
+                                   autocomplete="off"
+                                   value="{{ search_tags_value }}">
+                            <div id="id_tag_search_autocomplete" style="position: absolute" class="autocomplete">
+                                <div></div>
+                            </div>
+                        </div>
                     </div>
                     <p></p>
                     <input id="id_search_field" type="text" name="search" placeholder="ENTRY" autocomplete="off"
@@ -23,7 +25,6 @@
                     <div id="id_search_field_autocomplete" style="position: absolute" class="autocomplete">
                         <div></div>
                     </div>
-
                     <p></p>
                 </form>
             </div>

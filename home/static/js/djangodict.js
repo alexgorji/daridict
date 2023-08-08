@@ -221,4 +221,5 @@ function loadAutocompletions() {
     }
     autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, null);
     autocomplete($('#id_tag_names'), "id_tag_names_autocomplete", true);
+    autocomplete($('#id_tag_search_field'), "id_tag_search_autocomplete", true);
 }

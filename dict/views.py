@@ -65,7 +65,7 @@ def show_and_update_entries(request):
                 # create or update entry tags
                 tag_names = request.POST['tag_names'].split(',')
                 # remove redundant emtpy strings
-                tag_names = [x for x in tag_names if x and not x.isspace()]
+                tag_names = [x.strip() for x in tag_names if x and not x.isspace()]
 
                 tags = [Tag.objects.get_or_create(name=tag_name)[0] for tag_name in tag_names]
                 if selected_entry:
@@ -86,14 +86,26 @@ def show_and_update_entries(request):
 
         # get search value and set entries for paginator
         search_value = request.GET.get('search', '')
+        search_tags_value = request.GET.get('tags', '')
         if search_value != '':
-            queried_entries = DictEntry.objects.all().filter(
-                Q(item_dari__cleaned_value__istartswith=search_value) |
-                Q(item_farsi__cleaned_value__istartswith=search_value) |
-                Q(item_german__cleaned_value__istartswith=search_value)
-            ).order_by(f'item_{sorted_by.lower()}__sorting_value')
+            if search_tags_value != '':
+                queried_entries = DictEntry.objects.all().filter(
+                    (Q(item_dari__cleaned_value__istartswith=search_value) |
+                     Q(item_farsi__cleaned_value__istartswith=search_value) |
+                     Q(item_german__cleaned_value__istartswith=search_value)) & Q(
+                        tags__name__in=search_tags_value.split(', '))
+                ).order_by(f'item_{sorted_by.lower()}__sorting_value')
+            else:
+                queried_entries = DictEntry.objects.all().filter(
+                    Q(item_dari__cleaned_value__istartswith=search_value) |
+                    Q(item_farsi__cleaned_value__istartswith=search_value) |
+                    Q(item_german__cleaned_value__istartswith=search_value)
+                ).order_by(f'item_{sorted_by.lower()}__sorting_value')
         else:
-            queried_entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
+            if search_tags_value != '':
+                queried_entries = DictEntry.objects.filter(tags__name__in=search_tags_value.split(', ')).order_by(f'item_{sorted_by.lower()}__sorting_value')
+            else:
+                queried_entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
         paginator = Paginator(queried_entries, number_of_entries_per_page)
         number_of_pages = paginator.num_pages
         # AJAX requests
@@ -191,7 +203,8 @@ def show_and_update_entries(request):
                 'entry_copy_display': entry_copy_display,
                 'entry_update_display': entry_update_display,
                 'entry_cancel_display': entry_cancel_display,
-                'search_value': search_value
+                'search_value': search_value,
+                'search_tags_value': search_tags_value
             })
 
 

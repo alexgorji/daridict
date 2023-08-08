@@ -92,6 +92,10 @@ class Tag(models.Model):
     def __str__(self):
         return f'tag {self.id}: {self.name}'
 
+    def save(self, *args, **kwargs):
+        self.name = self.name.strip()
+        return super().save(*args, **kwargs)
+
 
 class DictEntry(models.Model):
     item_dari = models.ForeignKey(to='dict.DictItem', blank=True, on_delete=models.RESTRICT,
@@ -127,7 +131,7 @@ class DictEntry(models.Model):
                     self.get_ordered_items())}
 
     def get_tags_as_string(self):
-        return ",".join([tag.name for tag in self.tags.all()])
+        return ", ".join([tag.name for tag in self.tags.all().order_by('name')])
 
     def get_ordered_languages(self):
         return [DictLanguage.objects.get(value=language) for language in self.order_of_languages]
