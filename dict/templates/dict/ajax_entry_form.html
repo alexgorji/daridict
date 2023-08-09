@@ -1,5 +1,6 @@
 <div class="d-flex">
-    <form class="entry-form" method="post" novalidate autocomplete="off">{% csrf_token %}
+    <form class="entry-form" method="post" novalidate autocomplete="off">
+        {% csrf_token %}
         {% for form in item_forms %}
             {% for field in form %}
                 {{ field }}
@@ -16,10 +17,13 @@
         </div>
         <p></p>
         <p></p>
-        <input type="hidden" name="selected_entry_id" value="{{ selected_entry_id }}">
-        <input class="btn bg-light {{ entry_save_display }}" type="submit" name="entry-save" value="Save">
-        <input class="btn bg-light {{ entry_copy_display }}" type="submit" name="entry-copy" value="Copy">
-        <input class="btn bg-light {{ entry_update_display }}" type="submit" name="entry-update" value="Update">
+{#        <input type="hidden" name="selected_entry_id" value="{{ selected_entry_id }}">#}
+        <button class="btn bg-light {{ entry_save_display }}" name="entry-save" type="button" data-entry-id="{{ selected_entry_id }}">Save</button>
+        <button class="btn bg-light {{ entry_copy_display }}" name="entry-copy" type="button" data-entry-id="{{ selected_entry_id }}">Copy</button>
+        <button class="btn bg-light {{ entry_update_display }}" name="entry-update" type="button" data-entry-id="{{ selected_entry_id }}">Update</button>
+{#        <input class="btn bg-light {{ entry_save_display }}" type="submit" name="entry-save" value="Save">#}
+{#        <input class="btn bg-light {{ entry_copy_display }}" type="submit" name="entry-copy" value="Copy">#}
+{#        <input class="btn bg-light {{ entry_update_display }}" type="submit" name="entry-update" value="Update">#}
     </form>
     <button class="btn bg-light {{ entry_cancel_display }} cancel-button" onclick="cancelClick()">Cancel</button>
 </div>

@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views import generic
 
-from .forms import DictItemForm, DictItemUpdateForm, DictEntrySortingForm, TagForm
+from .forms import DictItemForm, DictItemUpdateForm, DictEntrySortingForm
 from .model_helpers import remove_redundant_spaces, remove_short_vowels
 from .models import DictItem, DictLanguage, Tag, DictEntry
 from django.core.paginator import Paginator
@@ -42,11 +42,17 @@ def show_and_update_entries(request):
             # delete entry
             if request.POST.get('entry-delete', None):
                 selected_entry.delete()
+                return redirect('dictionary')
             # elif request.POST.get('entry-open', None):
             #     return redirect('dict_entry_update', selected_entry_id)
-            else:
+
+            # AJAX POST requests
+            if is_ajax(request):
                 # update or save entry
+                print('ajax post', request.POST)
                 values = request.POST.getlist('value')
+                print('values', values)
+
                 if len(set(values)) == 1 and "" in set(values):
                     pass
                 else:
@@ -108,7 +114,7 @@ def show_and_update_entries(request):
                 queried_entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
         paginator = Paginator(queried_entries, number_of_entries_per_page)
         number_of_pages = paginator.num_pages
-        # AJAX requests
+        # AJAX GET requests
         if is_ajax(request):
             if 'page' in request.GET:
                 page = request.GET.get('page')

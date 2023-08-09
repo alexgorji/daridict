@@ -155,6 +155,7 @@ function editClick(entryID) {
     $.get('', {'entry_id': entryID, 'edit': 'edit'}, function (data) {
         $('#id-entry-form').children().replaceWith(data);
         loadAutocompletions();
+        saveUpdateButtons()
     });
 }
 
@@ -163,7 +164,7 @@ function cancelClick() {
     $.get('', {'cancel': 'cancel'}, function (data) {
         $('#id-entry-form').children().replaceWith(data);
         loadAutocompletions();
-
+        saveUpdateButtons()
     })
 }
 
@@ -172,6 +173,8 @@ function copyClick(entryID) {
     $.get('', {'entry_id': entryID, 'copy': 'copy'}, function (data) {
         $('#id-entry-form').children().replaceWith(data);
         loadAutocompletions();
+        saveUpdateButtons()
+
     })
 }
 
@@ -222,4 +225,68 @@ function loadAutocompletions() {
     autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, null);
     autocomplete($('#id_tag_names'), "id_tag_names_autocomplete", true);
     autocomplete($('#id_tag_search_field'), "id_tag_search_autocomplete", true);
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function saveUpdateButtons() {
+    const csrftoken = getCookie('csrftoken');
+    console.log('csrftoken', csrftoken)
+    $('button[name = "entry-update"]').on('click', function () {
+        console.log('update clicked', $(this).attr('data-entry-id'))
+        $.post('', {
+            'selected_entry_id': $(this).attr('data-entry-id'),
+            'entry-update': 'yes',
+            'csrfmiddlewaretoken': csrftoken
+        }, function (data) {
+            console.log('dat', data);
+            // $('#id-entry-form').children().replaceWith(data);
+            // loadAutocompletions();
+            // saveUpdateButtons()
+
+        });
+    });
+    // const request = new Request(
+    //     {headers: {'X-CSRFToken': csrftoken}}
+    // );
+    // console.log('request', request)
+    // fetch(request, {});
+    // fetch(request, {
+    //     method: 'POST',
+    //     mode: 'same-origin'  // Do not send CSRF token to another domain.
+    // }).then(function (response) {
+    // //     $('button[name = "entry-save"]').on('click', function () {
+    // //         console.log('save clicked');
+    // //     });
+    //     //handle response
+    // console.log(response);
+    //     // $('button[name = "entry-update"]').on('click', function () {
+    //     //     console.log('update clicked', $(this).attr('data-entry-id'))
+    //     //     $.post('', {'selected_entry_id': $(this).attr('data-entry-id'), 'entry-update': 'yes'}, function (data) {
+    //     //         console.log('dat', data);
+    //     //         // $('#id-entry-form').children().replaceWith(data);
+    //     //         // loadAutocompletions();
+    //     //         // saveUpdateButtons()
+    //     //
+    //     //     });
+    //     // });
+    // //     $('button[name = "entry-copy"]').on('click', function () {
+    // //         console.log('copy clicked')
+    // //     });
+    // });
+
 }

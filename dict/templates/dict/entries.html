@@ -65,19 +65,20 @@
 {% endblock %}
 {% block extra_js %}
     <script>
-        toggle_edit_buttons()
+        toggle_edit_buttons();
 
         page = 1
         $(document).ready(function () {
             $('#id_sorted_by').change(function () {
-                $("#id_search_form").submit()
+                $("#id_search_form").submit();
             });
-            loopPages(page, {{ number_of_pages }}, window.location.search)
+            loopPages(page, {{ number_of_pages }}, window.location.search);
         });
 
 
         window.onload = function () {
-            loadAutocompletions()
+            loadAutocompletions();
+            saveUpdateButtons()
         }
 
     </script>
