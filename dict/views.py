@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import generic
 
@@ -24,7 +25,6 @@ def show_and_update_entries(request):
                      language=language.value)
         for language in dict_languages]
     entry_save_display = 'show'
-    entry_copy_display = 'hide'
     entry_update_display = 'hide'
     entry_cancel_display = 'hide'
     number_of_entries_per_page = 50
@@ -49,11 +49,8 @@ def show_and_update_entries(request):
             # AJAX POST requests
             if is_ajax(request):
                 # update or save entry
-                print('ajax post', request.POST)
-                # values = request.POST.getlist('value')
                 values = request.POST.getlist('value[]')
-                print('values', values)
-
+                entry_is_new = False
                 if len(set(values)) == 1 and "" in set(values):
                     pass
                 else:
@@ -68,8 +65,8 @@ def show_and_update_entries(request):
                         print(selected_entry.get_ordered_items())
                     else:
                         # save entry
-                        selected_entry = DictEntry.objects.get_or_create(item_dari=items[0], item_farsi=items[1],
-                                                                         item_german=items[2])[0]
+                        selected_entry, entry_is_new = DictEntry.objects.get_or_create(item_dari=items[0], item_farsi=items[1],
+                                                                         item_german=items[2])
                 # create or update entry tags
                 tag_names = request.POST['tag_names'].split(',')
                 # remove redundant emtpy strings
@@ -84,7 +81,9 @@ def show_and_update_entries(request):
                         if tag not in selected_entry.tags.all():
                             selected_entry.tags.add(tag)
                     selected_entry.save()
-                if request.POST.get('entry-save', None) or request.POST.get('entry-copy', None) :
+                if request.POST.get('entry-save', None):
+                    if not entry_is_new:
+                        return HttpResponse('')
                     return render(request, 'dict/ajax_new_entry.html',
                                   {'entry': selected_entry}
                                   )
@@ -167,12 +166,10 @@ def show_and_update_entries(request):
                 entry = None
                 if 'edit' in request.GET:
                     entry_save_display = 'hide'
-                    entry_copy_display = 'hide'
                     entry_update_display = 'show'
                     entry_cancel_display = 'show'
                 elif 'copy' in request.GET:
-                    entry_save_display = 'hide'
-                    entry_copy_display = 'show'
+                    entry_save_display = 'show'
                     entry_update_display = 'hide'
                     entry_cancel_display = 'show'
                 else:
@@ -192,7 +189,6 @@ def show_and_update_entries(request):
                                'entry': entry,
                                'item_forms': item_forms,
                                'entry_save_display': entry_save_display,
-                               'entry_copy_display': entry_copy_display,
                                'entry_update_display': entry_update_display,
                                'entry_cancel_display': entry_cancel_display,
                                }
@@ -202,7 +198,6 @@ def show_and_update_entries(request):
                     'item_forms': item_forms,
                     'selected_entry': None,
                     'entry_save_display': entry_save_display,
-                    'entry_copy_display': entry_copy_display,
                     'entry_update_display': entry_update_display,
                     'entry_cancel_display': entry_cancel_display,
                 })
@@ -218,7 +213,6 @@ def show_and_update_entries(request):
                 'item_forms': item_forms,
                 'selected_entry': None,
                 'entry_save_display': entry_save_display,
-                'entry_copy_display': entry_copy_display,
                 'entry_update_display': entry_update_display,
                 'entry_cancel_display': entry_cancel_display,
                 'search_value': search_value,

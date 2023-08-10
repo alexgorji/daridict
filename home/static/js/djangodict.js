@@ -109,7 +109,7 @@ let opened_edit_buttons
 let opened_symbol
 
 function toggle_edit_buttons() {
-    $('.edit_toggle').on('click', function () {
+    $('.edit_toggle').off().on('click', function () {
         const id = $(this).closest('tr').attr('id')
         const target_buttons = $('tr[data-for-entry=' + id + ']').find('div')
         const top_tr = $(this).closest('tr')
@@ -279,21 +279,10 @@ function saveUpdateButtons() {
             'entry-save': 'yes',
             'csrfmiddlewaretoken': csrftoken
         }, function (data) {
-            $('.my-table').find('tbody').prepend(data)
-        });
-    });
-    $('button[name = "entry-copy"]').on('click', function () {
-        const csrftoken = getCookie('csrftoken');
-        const value = [$("#dari_value").val(), $("#farsi_value").val(), $("#german_value").val()]
-        const tag_names = $('#id_tag_names').val()
-        console.log('save clicked', $(this).attr('data-entry-id'))
-        $.post('', {
-            'value': value,
-            'tag_names': tag_names,
-            'entry-save': 'yes',
-            'csrfmiddlewaretoken': csrftoken
-        }, function (data) {
-            $('.my-table').find('tbody').prepend(data)
+            if (data){
+                $('.my-table').find('tbody').prepend(data);
+                toggle_edit_buttons();
+            }
         });
     });
 }
