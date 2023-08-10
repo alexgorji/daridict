@@ -1,4 +1,4 @@
-Closing old edit toggles if a new one is opened (it works previously but not anymore)
+Closing old edit toggles if a new one is opened (it works previously but not anymore) DONE
 
 Replace copy button with save
 Remove all code for copy

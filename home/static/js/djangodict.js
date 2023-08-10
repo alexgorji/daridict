@@ -109,9 +109,9 @@ let opened_edit_buttons
 let opened_symbol
 
 function toggle_edit_buttons() {
-    $('.edit_toggle').off('click').on('click', function () {
+    $('.edit_toggle').on('click', function () {
         const id = $(this).closest('tr').attr('id')
-        const target_buttons = $('tr[data-for-entry='+id+']').find('div')
+        const target_buttons = $('tr[data-for-entry=' + id + ']').find('div')
         const top_tr = $(this).closest('tr')
         const symbol = $(this).children("i").first()
 
@@ -129,24 +129,25 @@ function toggle_edit_buttons() {
             $(symbol).addClass('up')
 
             if (opened_edit_buttons) {
-                target_buttons.show()
+                target_buttons.show(500)
                 top_tr.addClass('top-tr')
                 $(opened_symbol).removeClass('up');
                 $(opened_symbol).addClass('right');
                 $(opened_edit_buttons).removeClass('opened');
-                $("#" + $(opened_edit_buttons).attr('data-buttons')).hide(500);
+                $(opened_edit_buttons).closest('tr').removeClass('top-tr');
+                $('tr[data-for-entry=' + $(opened_edit_buttons).closest('tr').attr('id') + ']').find('div').hide(500)
             } else {
                 target_buttons.show(500)
                 top_tr.addClass('top-tr')
             }
             opened_edit_buttons = this
             opened_symbol = symbol
-            const that = this
-            setTimeout(function () {
-                $(".main-table-wrapper").animate({
-                    scrollTop: $(that).closest('tr').position().top - 55
-                }, 300);
-            }, 500);
+            // const that = this
+            // setTimeout(function () {
+            //     $(".main-table-wrapper").animate({
+            //         scrollTop: $(that).closest('tr').position().top - 55
+            //     }, 300);
+            // }, 500);
         }
     });
 }
@@ -259,11 +260,11 @@ function saveUpdateButtons() {
         }, function (data) {
             // console.log($("#id_entry_"+entry_id).find($('.entry-tags')))
             // $("#id_entry_"+entry_id).replaceWith(data)
-            let td_elements = $("#id_entry_"+entry_id).children()
-            for (let i=2; i<td_elements.length;++i){
+            let td_elements = $("#id_entry_" + entry_id).children()
+            for (let i = 2; i < td_elements.length; ++i) {
                 td_elements[i].remove()
             }
-            $("#id_entry_"+entry_id).append(data)
+            $("#id_entry_" + entry_id).append(data)
 
         });
     });
