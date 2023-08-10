@@ -1,0 +1,42 @@
+<tr id="id_entry_{{ entry.id }}">
+    <td class="arrow-td">
+        {% if user.is_authenticated %}
+            <div class="arrow-div">
+                <button class="edit_toggle">
+                    <i class="arrow right"></i>
+                </button>
+            </div>
+        {% endif %}
+    </td>
+    <td>
+        <p class="latin-font">
+            NEW
+        </p>
+    </td>
+    {% include "dict/ajax_entry_tags_and_items.html" %}
+</tr>
+<tr class="edit_buttons-tr" data-for-entry="id_entry_{{ entry.id }}">
+    <td colspan="5">
+        <div style="display: none">
+            {% if user.is_authenticated %}
+                <div class="d-flex">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" id="delEntryId" name="selected_entry_id" value={{ entry.id }}>
+                        <input type="hidden" name="entry-delete" value="Delete">
+
+                        <input class="btn rounded-pill py-0" type="submit"
+                               onclick="return confirm('Are you sure?')"
+                               value="del">
+                    </form>
+                    <button class="btn rounded-pill py-0" onclick="copyClick({{ entry.id }}, this)">
+                        cp
+                    </button>
+                    <button class="btn rounded-pill py-0"
+                            onclick="editClick({{ entry.id }}, this)"> ed
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    </td>
+</tr>

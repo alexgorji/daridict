@@ -50,7 +50,8 @@ def show_and_update_entries(request):
             if is_ajax(request):
                 # update or save entry
                 print('ajax post', request.POST)
-                values = request.POST.getlist('value')
+                # values = request.POST.getlist('value')
+                values = request.POST.getlist('value[]')
                 print('values', values)
 
                 if len(set(values)) == 1 and "" in set(values):
@@ -64,10 +65,11 @@ def show_and_update_entries(request):
                         selected_entry.item_dari = items[0]
                         selected_entry.item_farsi = items[1]
                         selected_entry.item_german = items[2]
+                        print(selected_entry.get_ordered_items())
                     else:
                         # save entry
                         selected_entry = DictEntry.objects.get_or_create(item_dari=items[0], item_farsi=items[1],
-                                                                         item_german=items[2])
+                                                                         item_german=items[2])[0]
                 # create or update entry tags
                 tag_names = request.POST['tag_names'].split(',')
                 # remove redundant emtpy strings
@@ -82,7 +84,16 @@ def show_and_update_entries(request):
                         if tag not in selected_entry.tags.all():
                             selected_entry.tags.add(tag)
                     selected_entry.save()
-            return redirect('dictionary')
+                if request.POST.get('entry-save', None) or request.POST.get('entry-copy', None) :
+                    return render(request, 'dict/ajax_new_entry.html',
+                                  {'entry': selected_entry}
+                                  )
+                elif request.POST.get('entry-update', None):
+                    return render(request, 'dict/ajax_entry_tags_and_items.html',
+                                  {'entry': selected_entry}
+                                  )
+                else:
+                    print(request.POST)
     elif request.method == 'GET':
         # get sorted_by and set Sorting Form
         new_sorted_by = request.GET.get('sorted_by', None)
@@ -109,7 +120,8 @@ def show_and_update_entries(request):
                 ).order_by(f'item_{sorted_by.lower()}__sorting_value')
         else:
             if search_tags_value != '':
-                queried_entries = DictEntry.objects.filter(tags__name__in=search_tags_value.split(', ')).order_by(f'item_{sorted_by.lower()}__sorting_value')
+                queried_entries = DictEntry.objects.filter(tags__name__in=search_tags_value.split(', ')).order_by(
+                    f'item_{sorted_by.lower()}__sorting_value')
             else:
                 queried_entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
         paginator = Paginator(queried_entries, number_of_entries_per_page)

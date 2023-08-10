@@ -1,0 +1,8 @@
+Closing old edit toggles if a new one is opened (it works previously but not anymore)
+
+Replace copy button with save
+Remove all code for copy
+
+Add entry to top only if a new entry is actually added (not if get_or_create returns false)
+
+edit_toggles of added new entry to top does not work

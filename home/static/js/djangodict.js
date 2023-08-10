@@ -110,10 +110,10 @@ let opened_symbol
 
 function toggle_edit_buttons() {
     $('.edit_toggle').off('click').on('click', function () {
-        const target_buttons = $("#" + $(this).attr('data-buttons'));
+        const id = $(this).closest('tr').attr('id')
+        const target_buttons = $('tr[data-for-entry='+id+']').find('div')
         const top_tr = $(this).closest('tr')
         const symbol = $(this).children("i").first()
-        // console.log($(this).attr('data-buttons'))
 
         if ($(this).hasClass('opened')) {
             $(symbol).removeClass('up')
@@ -244,49 +244,55 @@ function getCookie(name) {
 }
 
 function saveUpdateButtons() {
-    const csrftoken = getCookie('csrftoken');
-    console.log('csrftoken', csrftoken)
     $('button[name = "entry-update"]').on('click', function () {
-        console.log('update clicked', $(this).attr('data-entry-id'))
+        const csrftoken = getCookie('csrftoken');
+        const value = [$("#dari_value").val(), $("#farsi_value").val(), $("#german_value").val()]
+        const tag_names = $('#id_tag_names').val()
+        const entry_id = $(this).attr('data-entry-id')
+        console.log('update clicked', entry_id)
         $.post('', {
-            'selected_entry_id': $(this).attr('data-entry-id'),
+            'value': value,
+            'tag_names': tag_names,
+            'selected_entry_id': entry_id,
             'entry-update': 'yes',
             'csrfmiddlewaretoken': csrftoken
         }, function (data) {
-            console.log('dat', data);
-            // $('#id-entry-form').children().replaceWith(data);
-            // loadAutocompletions();
-            // saveUpdateButtons()
+            // console.log($("#id_entry_"+entry_id).find($('.entry-tags')))
+            // $("#id_entry_"+entry_id).replaceWith(data)
+            let td_elements = $("#id_entry_"+entry_id).children()
+            for (let i=2; i<td_elements.length;++i){
+                td_elements[i].remove()
+            }
+            $("#id_entry_"+entry_id).append(data)
 
         });
     });
-    // const request = new Request(
-    //     {headers: {'X-CSRFToken': csrftoken}}
-    // );
-    // console.log('request', request)
-    // fetch(request, {});
-    // fetch(request, {
-    //     method: 'POST',
-    //     mode: 'same-origin'  // Do not send CSRF token to another domain.
-    // }).then(function (response) {
-    // //     $('button[name = "entry-save"]').on('click', function () {
-    // //         console.log('save clicked');
-    // //     });
-    //     //handle response
-    // console.log(response);
-    //     // $('button[name = "entry-update"]').on('click', function () {
-    //     //     console.log('update clicked', $(this).attr('data-entry-id'))
-    //     //     $.post('', {'selected_entry_id': $(this).attr('data-entry-id'), 'entry-update': 'yes'}, function (data) {
-    //     //         console.log('dat', data);
-    //     //         // $('#id-entry-form').children().replaceWith(data);
-    //     //         // loadAutocompletions();
-    //     //         // saveUpdateButtons()
-    //     //
-    //     //     });
-    //     // });
-    // //     $('button[name = "entry-copy"]').on('click', function () {
-    // //         console.log('copy clicked')
-    // //     });
-    // });
-
+    $('button[name = "entry-save"]').on('click', function () {
+        const csrftoken = getCookie('csrftoken');
+        const value = [$("#dari_value").val(), $("#farsi_value").val(), $("#german_value").val()]
+        const tag_names = $('#id_tag_names').val()
+        console.log('save clicked', $(this).attr('data-entry-id'))
+        $.post('', {
+            'value': value,
+            'tag_names': tag_names,
+            'entry-save': 'yes',
+            'csrfmiddlewaretoken': csrftoken
+        }, function (data) {
+            $('.my-table').find('tbody').prepend(data)
+        });
+    });
+    $('button[name = "entry-copy"]').on('click', function () {
+        const csrftoken = getCookie('csrftoken');
+        const value = [$("#dari_value").val(), $("#farsi_value").val(), $("#german_value").val()]
+        const tag_names = $('#id_tag_names').val()
+        console.log('save clicked', $(this).attr('data-entry-id'))
+        $.post('', {
+            'value': value,
+            'tag_names': tag_names,
+            'entry-save': 'yes',
+            'csrfmiddlewaretoken': csrftoken
+        }, function (data) {
+            $('.my-table').find('tbody').prepend(data)
+        });
+    });
 }
