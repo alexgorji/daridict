@@ -282,6 +282,9 @@ function saveUpdateButtons() {
             if (data){
                 $('.my-table').find('tbody').prepend(data);
                 toggle_edit_buttons();
+                $('.table-wrapper').animate({
+                    scrollTop: 0
+                }, 300)
             }
         });
     });
