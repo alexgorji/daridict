@@ -7,7 +7,7 @@ from django.views import generic
 
 from .forms import DictItemForm, DictItemUpdateForm, DictEntrySortingForm
 from .model_helpers import remove_redundant_spaces, remove_short_vowels
-from .models import DictItem, DictLanguage, Tag, DictEntry
+from .models import DictItem, DictLanguage, Tag, DictEntry, HistoricalDictEntry, HistoricalDictItem
 from django.core.paginator import Paginator
 
 sorted_by = 'Dari'
@@ -65,8 +65,9 @@ def show_and_update_entries(request):
                         print(selected_entry.get_ordered_items())
                     else:
                         # save entry
-                        selected_entry, entry_is_new = DictEntry.objects.get_or_create(item_dari=items[0], item_farsi=items[1],
-                                                                         item_german=items[2])
+                        selected_entry, entry_is_new = DictEntry.objects.get_or_create(item_dari=items[0],
+                                                                                       item_farsi=items[1],
+                                                                                       item_german=items[2])
                 # create or update entry tags
                 tag_names = request.POST['tag_names'].split(',')
                 # remove redundant emtpy strings
@@ -357,12 +358,19 @@ class DictLanguageDetailView(LoginRequiredMixin, generic.DetailView):
 class TagListView(generic.ListView):
     model = Tag
     ordering = 'name'
+
     def post(self, request):
         if request.POST.get('tag-delete'):
             Tag.objects.get(id=request.POST.get('selected-tag-id')).delete()
         return redirect('tag_list')
 
 
-
 class TagDetailView(generic.DetailView):
     model = Tag
+
+
+def show_history(request):
+    # items_history = HistoricalDictItem.objects.all()
+    entries_history = HistoricalDictEntry.objects.all()
+    return render(request, 'dict/history.html',
+                  context={'entries_history': entries_history})

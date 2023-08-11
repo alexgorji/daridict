@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}
+    History
+{% endblock %}
+{% block content %}
+    <table>
+        <tbody>
+        <tr>
+            <th>
+                date
+            </th>
+            <th>
+                user
+            </th>
+            <th>
+                object
+            </th>
+            <th>
+                type
+            </th>
+        </tr>
+        {% for history in entries_history %}
+            <tr>
+                <td>
+                    {{ history.history_date }}
+                </td>
+                <td>
+                    {{ history.history_user }}
+                </td>
+                <td>
+                    {{ history.history_object }}
+                </td>
+                <td>
+                    {{ history.get_history_type_display }}
+                </td>
+            </tr>
+{#            <div>{{ history }}</div>#}
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

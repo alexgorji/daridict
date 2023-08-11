@@ -49,23 +49,6 @@ class DictItem(models.Model):
     def __str__(self):
         return f"{self.id}: {self.language.value}: {self.value}"
 
-    # @staticmethod
-    # def get_language_items_json():
-    #     output = {}
-    #     for item in DictItem.objects.all().order_by('language', 'value'):
-    #         key = item.language.value
-    #         if not output.get(key):
-    #             output[key] = []
-    #         output[key].append(item.value)
-    #     return json.dumps(output)
-    #
-    # @staticmethod
-    # def get_pk_items_json():
-    #     output = {}
-    #     for item in DictItem.objects.all():
-    #         output[item.pk] = [item.language.value, item.value]
-    #     return json.dumps(output)
-
     def get_absolute_url(self):
         return reverse('dict_item', kwargs={'pk': self.pk})
 
