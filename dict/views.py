@@ -19,7 +19,7 @@ def is_ajax(request):
 
 def show_and_update_entries(request):
     global sorted_by
-    dict_languages = DictLanguage.objects.all()
+    dict_languages = [DictLanguage.objects.get(value=language) for language in DictEntry.order_of_languages]
     item_forms = [
         DictItemForm(initial={'language': language}, auto_id=f"{language.value.lower()}_%s",
                      language=language.value)
@@ -59,15 +59,27 @@ def show_and_update_entries(request):
                              value, language in zip(values, dict_languages)]
                     # update entry
                     if request.POST.get('entry-update', None):
-                        selected_entry.item_dari = items[0]
-                        selected_entry.item_farsi = items[1]
-                        selected_entry.item_german = items[2]
+                        for item, dict_language in zip(items, dict_languages):
+                            setattr(selected_entry, f'item_{dict_language.value.lower}', item)
                         selected_entry.save()
                     else:
                         # save entry
-                        selected_entry, entry_is_new = DictEntry.objects.get_or_create(item_dari=items[0],
-                                                                                       item_farsi=items[1],
-                                                                                       item_german=items[2])
+                        for item, dict_language in zip(items, dict_languages):
+                            if dict_language.value == 'Dari':
+                                item_dari = item
+                            elif dict_language.value == 'Farsi':
+                                item_farsi = item
+                            elif dict_language.value == 'German':
+                                item_german = item
+                            else:
+                                raise NotImplementedError
+                        # item_dari = items[DictEntry.order_of_languages.index('Dari')]
+                        # item_farsi = items[DictEntry.order_of_languages.index('Farsi')]
+                        # item_german = items[DictEntry.order_of_languages.index('German')]
+
+                        selected_entry, entry_is_new = DictEntry.objects.get_or_create(item_dari=item_dari,
+                                                                                       item_farsi=item_farsi,
+                                                                                       item_german=item_german)
                 # create or update entry tags
                 tag_names = request.POST['tag_names'].split(',')
                 # remove redundant emtpy strings
