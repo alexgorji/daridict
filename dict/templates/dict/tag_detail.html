@@ -4,9 +4,9 @@
 {% endblock %}
 {% block content %}
     <p>Tag: <strong>{{ tag.name }}</strong></p>
-    {% for dictnode in tag.dictnode_set.all %}
+    {% for dictentry in tag.dictentry_set.all %}
         <div class="d-flex">
-            <p><a href="{% url 'dict_node_update' dictnode.pk %}">{{ dictnode }}</a></p>
+            <p><a href="{% url 'dict_entry_update' dictentry.pk %}">{{ dictentry }}</a></p>
         </div>
     {% endfor %}
 {% endblock %}

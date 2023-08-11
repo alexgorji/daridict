@@ -179,6 +179,11 @@ tr:nth-child(4n-1) {
     margin: 1px;
 }
 
+.edit-button{
+    background-color: coral;
+    margin: 1px;
+}
+
 .top-tr {
     /*border: rgba(102, 205, 170, 0.2) solid 1px;*/
     /*background-color: rgba(102, 205, 170, 0.1);*/

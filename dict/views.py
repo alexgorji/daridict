@@ -43,8 +43,8 @@ def show_and_update_entries(request):
             if request.POST.get('entry-delete', None):
                 selected_entry.delete()
                 return redirect('dictionary')
-            # elif request.POST.get('entry-open', None):
-            #     return redirect('dict_entry_update', selected_entry_id)
+            elif request.POST.get('entry-open', None):
+                return redirect('dict_entry_update', selected_entry_id)
 
             # AJAX POST requests
             if is_ajax(request):
@@ -356,6 +356,12 @@ class DictLanguageDetailView(LoginRequiredMixin, generic.DetailView):
 
 class TagListView(generic.ListView):
     model = Tag
+    ordering = 'name'
+    def post(self, request):
+        if request.POST.get('tag-delete'):
+            Tag.objects.get(id=request.POST.get('selected-tag-id')).delete()
+        return redirect('tag_list')
+
 
 
 class TagDetailView(generic.DetailView):
