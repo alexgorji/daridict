@@ -54,11 +54,15 @@ function autocomplete(inp, autocompleteFieldId, tags = false, language) {
             currentFocus++;
             /*and and make the current item more visible:*/
             addActive(x);
+            const position = currentFocus * 24;
+            $('.autocomplete-active').closest('.autocomplete').scrollTop(position)
         } else if (e.keyCode === 38) {
             /*If the arrow UP key is pressed, decrease the currentFocus variable:*/
             currentFocus--;
             /*and and make the current item more visible:*/
             addActive(x);
+            const position = currentFocus * 24;
+            $('.autocomplete-active').closest('.autocomplete').scrollTop(position)
         } else if (e.keyCode === 13) {
             /*If the ENTER key is pressed, prevent the form from being submitted,*/
             e.preventDefault();
@@ -279,7 +283,7 @@ function saveUpdateButtons() {
             'entry-save': 'yes',
             'csrfmiddlewaretoken': csrftoken
         }, function (data) {
-            if (data){
+            if (data) {
                 $('.my-table').find('tbody').prepend(data);
                 toggle_edit_buttons();
                 $('.table-wrapper').animate({
