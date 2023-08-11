@@ -90,7 +90,8 @@ class DictEntry(models.Model):
     item_german = models.ForeignKey(to='dict.DictItem', blank=True, on_delete=models.RESTRICT,
                                     related_name='entry_german_item',
                                     null=True)
-    order_of_languages = ['Dari', 'Farsi', 'German']
+    # order_of_languages = ['Dari', 'Farsi', 'German']
+    order_of_languages = ['German', 'Farsi', 'Dari']
     order_of_items = [f'item_{language.lower()}' for language in order_of_languages]
     tags = models.ManyToManyField(to=Tag, blank=True)
     history = HistoricalRecords()

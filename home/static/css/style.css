@@ -110,9 +110,9 @@ a {
     z-index: 2;
 }
 
-.my-items-table {
-    text-align: center;
-}
+/*.my-items-table th{*/
+/*    text-align: center;*/
+/*}*/
 
 .my-table {
     table-layout: fixed;
