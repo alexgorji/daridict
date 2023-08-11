@@ -274,66 +274,6 @@ def dict_entry_update_view(request, pk):
     return render(request, 'dict/dictentry_form.html', context)
 
 
-# @login_required
-# def dict_entry_update_view(request, pk):
-#     entry = DictEntry.objects.get(pk=pk)
-#
-#     def get_language_value(language):
-#         for item in entry.get_ordered_items():
-#             if item and item.language == language:
-#                 return item.value
-#         return ""
-#
-#     item_forms = [
-#         DictItemForm(initial={'language': language, 'value': get_language_value(language)}, auto_id=f"{language}_%s",
-#                      language=language.value)
-#         for language in DictLanguage.objects.all()]
-#
-#     # tags_form = TagForm(initial={'tags': ", ".join(entry.get_tag_names())})
-#
-#     context = {
-#         'entry': entry,
-#         'item_forms': item_forms,
-#         # 'tags_form': tags_form
-#     }
-#
-#     if request.method == 'POST':
-#         delete_me = request.POST.get('delete', None)
-#         save_me = request.POST.get('save', None)
-#         update_me = request.POST.get('update', None)
-#         # tags = list(set(request.POST.get('tags', None).split(', ')))
-#         if delete_me:
-#             entry.delete()
-#             return redirect('dictionary')
-#         elif save_me or update_me:
-#             values = request.POST.getlist('value')
-#             if len(set(values)) == 1 and "" in set(values):
-#                 pass
-#             else:
-#                 items = []
-#                 languages = DictLanguage.objects.all()
-#                 for language, value in zip(languages, values):
-#                     items.append(DictItem.objects.get_or_create(language=language, value=value)[0])
-#                 if items:
-#                     entry.edit_items(items)
-#             return redirect('dictionary')
-#
-#     return render(request, 'dict/dictentry_form.html', context)
-
-#
-# class DictEntryUpdateView(LoginRequiredMixin, generic.UpdateView):
-#     model = DictEntry
-#     fields = ['item_dari', 'item_farsi', 'item_german']
-#
-#     def post(self, request, *args, **kwargs):
-#         delete_me = request.POST.get('delete')
-#         if delete_me:
-#             self.get_object().delete()
-#             return redirect('dictionary')
-#
-#         return super().post(request, *args, **kwargs)
-
-
 class DictItemDetailView(LoginRequiredMixin, generic.DetailView):
     model = DictItem
 
@@ -353,6 +293,12 @@ class DictItemUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 class DictLanguageDetailView(LoginRequiredMixin, generic.DetailView):
     model = DictLanguage
+
+    def post(self, request, pk):
+        if request.POST.get('item-delete'):
+            DictItem.objects.get(id=request.POST.get('selected-item-id')).delete()
+        return redirect('dict_language', pk)
+
 
 
 class TagListView(generic.ListView):
