@@ -14,7 +14,7 @@
     {#    {% endfor %}#}
     {% for entry in dictitem.get_entries %}
         <div class="d-flex">
-            <p><a href="">{{ entry }}</a></p>
+            <p><a href="{% url 'dict_entry_update' entry.pk%}">{{ entry }}</a></p>
         </div>
     {% endfor %}
 {% endblock %}
