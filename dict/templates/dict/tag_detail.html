@@ -6,7 +6,13 @@
     <p>Tag: <strong>{{ tag.name }}</strong></p>
     {% for dictentry in tag.dictentry_set.all %}
         <div class="d-flex">
-            <p><a href="{% url 'dict_entry_update' dictentry.pk %}">{{ dictentry }}</a></p>
+            <p>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dict_entry_update' dictentry.pk %}">{{ dictentry }}</a>
+                {% else %}
+                    {{ dictentry.simple_string }}
+                {% endif %}
+            </p>
         </div>
     {% endfor %}
 {% endblock %}

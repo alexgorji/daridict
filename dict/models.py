@@ -100,6 +100,11 @@ class DictEntry(models.Model):
         items = [item.value if item else '___' for item in self.get_ordered_items()]
         return f'{self.id}: {" - ".join(items)}'
 
+    @property
+    def simple_string(self):
+        items = [item.value if item else '___' for item in self.get_ordered_items()]
+        return " - ".join(items)
+
     def edit_items(self, items):
         items = [item if item != '' else None for item in items]
         for self_item, item in zip(self.order_of_items, items):

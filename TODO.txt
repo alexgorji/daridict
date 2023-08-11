@@ -1,3 +1,13 @@
+change order of languages (s. branch)
+
+add comment button for item (popover)
+
+remove counting for not authenticated user (styling will get messy ...)
+
+history for tags and items
+
+
+
 Closing old edit toggles if a new one is opened (it works previously but not anymore) DONE
 
 Replace copy button with save DONE
@@ -6,3 +16,4 @@ Remove all code for copy DONE
 Add entry to top only if a new entry is actually added (not if get_or_create returns false) DONE
 
 edit_toggles of added new entry to top does not work DONE
+
