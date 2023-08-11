@@ -3,11 +3,14 @@
     History
 {% endblock %}
 {% block content %}
-    <table>
+    <table class="my-table">
         <tbody>
         <tr>
             <th>
                 date
+            </th>
+            <th>
+                time
             </th>
             <th>
                 user
@@ -16,25 +19,34 @@
                 object
             </th>
             <th>
+
+            </th>
+            <th>
                 type
             </th>
         </tr>
         {% for history in entries_history %}
             <tr>
                 <td>
-                    {{ history.history_date }}
+                    {{ history.history_date|date:"Y m d"}}
+                </td>
+                <td>
+                    {{ history.history_date|date:"G:i"}}
                 </td>
                 <td>
                     {{ history.history_user }}
                 </td>
                 <td>
-                    {{ history.history_object }}
+                    <a href="{% url 'admin:dict_dictentry_history' history.history_object.id %}">{{ history.history_object }}</a>
+                </td>
+                <td>
+                    <a href="{% url 'dict_entry_update' history.history_object.id%}">open</a>
                 </td>
                 <td>
                     {{ history.get_history_type_display }}
                 </td>
             </tr>
-{#            <div>{{ history }}</div>#}
+            {#            <div>{{ history }}</div>#}
         {% endfor %}
         </tbody>
     </table>

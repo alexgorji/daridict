@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
+from django.db.models import Q, RestrictedError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import generic
@@ -62,7 +62,7 @@ def show_and_update_entries(request):
                         selected_entry.item_dari = items[0]
                         selected_entry.item_farsi = items[1]
                         selected_entry.item_german = items[2]
-                        print(selected_entry.get_ordered_items())
+                        selected_entry.save()
                     else:
                         # save entry
                         selected_entry, entry_is_new = DictEntry.objects.get_or_create(item_dari=items[0],
@@ -74,7 +74,7 @@ def show_and_update_entries(request):
                 tag_names = [x.strip() for x in tag_names if x and not x.isspace()]
 
                 tags = [Tag.objects.get_or_create(name=tag_name)[0] for tag_name in tag_names]
-                if selected_entry:
+                if selected_entry and tag_names != [tag.name for tag in selected_entry.tags.all()]:
                     for tag in selected_entry.tags.all():
                         if tag not in tags:
                             selected_entry.tags.remove(tag)
@@ -235,8 +235,9 @@ def dict_entry_update_view(request, pk):
     }
 
     if request.method == 'POST':
-        if request.POST.get('entry-delete', None):
+        if request.POST.get('delete', None):
             entry.delete()
+            return redirect('dictionary')
         else:
             values = request.POST.getlist('value')
             if len(set(values)) == 1 and "" in set(values):
@@ -296,7 +297,10 @@ class DictLanguageDetailView(LoginRequiredMixin, generic.DetailView):
 
     def post(self, request, pk):
         if request.POST.get('item-delete'):
-            DictItem.objects.get(id=request.POST.get('selected-item-id')).delete()
+            try:
+                DictItem.objects.get(id=request.POST.get('selected-item-id')).delete()
+            except RestrictedError as err:
+                print(err)
         return redirect('dict_language', pk)
 
 

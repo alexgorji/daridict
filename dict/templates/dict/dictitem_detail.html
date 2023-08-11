@@ -6,12 +6,8 @@
     <p>Item: <strong>{{ dictitem.value }}</strong> <a href="{% url 'dict_item_update' dictitem.pk %}">Edit</a></p>
     <p>Language: <a href="{% url 'dict_language' dictitem.language.pk %}">{{ dictitem.language }}</a></p>
     <p>Comment:
-    <div {% if dictitem.language.direction == 'RTL' %} dir="rtl" {% endif %}>{{ dictitem.comment }}</div></p>
-    {#    {% for dictnode in dictitem.dictnode_set.all %}#}
-    {#        <div class="d-flex">#}
-    {#            <p><a href="{% url 'dict_node_update' dictnode.pk %}">{{ dictnode }}</a></p>#}
-    {#        </div>#}
-    {#    {% endfor %}#}
+        <span {% if dictitem.language.direction == 'RTL' %} dir="rtl" {% endif %}>{{ dictitem.comment }}</span>
+    </p>
     {% for entry in dictitem.get_entries %}
         <div class="d-flex">
             <p><a href="{% url 'dict_entry_update' entry.pk%}">{{ entry }}</a></p>
