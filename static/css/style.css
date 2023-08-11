@@ -1,23 +1,47 @@
-
+/* general */
 a {
     text-decoration: None;
 }
 
-.entry-form input[type='text'] {
-    width: 100%;
+
+.hide {
+    display: none !important;
 }
+
+.left-side-bar {
+    margin-top: 1rem;
+    background-color: mediumaquamarine;
+    padding: 1rem 1rem 0.25rem 1rem;
+}
+
+
+/* nav */
 
 .my_log_nav {
     margin-left: 0;
 }
 
-.autocomplete{
-    /*background: aquamarine;*/
+/* entry form */
+.entry-form input[type='text'] {
+    width: 100%;
+}
+
+/* autocomplete*/
+
+.autocomplete {
     background-color: rgba(255, 255, 255, 1);
     width: fit-content;
     z-index: 10;
     padding-right: 0.2rem;
     padding-left: 0.2rem;
+
+}
+
+#farsi_value_autocomplete, #dari_value_autocomplete {
+    right: 0;
+    overflow: scroll;
+    max-height: 200px;
+
 }
 
 .autocomplete-items > div:hover {
@@ -26,14 +50,11 @@ a {
 }
 
 .autocomplete-active {
-    background: aquamarine;
+    background: rgba(127, 255, 212, 0.5);
 }
 
-.hide {
-    display: none !important;
-}
-
-
+/** items table **/
+/* edit toggle*/
 .arrow {
     border: solid black;
     border-width: 0 3px 3px 0;
@@ -48,13 +69,13 @@ a {
 
 }
 
+.arrow-td {
+    padding: 0 !important;
+}
+
 .toggle-button {
     padding-bottom: 30px;
     line-height: 0;
-}
-
-.arrow-td {
-    padding: 0 !important;
 }
 
 .right {
@@ -68,17 +89,11 @@ a {
 }
 
 
+/* table */
 .table-wrapper {
     height: calc(100vh - 200px);
     margin-top: 1rem;
     scrollbar-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
-}
-
-.left-side-bar {
-    margin-top: 1rem;
-    background-color: mediumaquamarine;
-    padding: 1rem 1rem 0.25rem 1rem;
-    /*min-width: 300px;*/
 }
 
 .my-table td, .my-table th {
@@ -86,9 +101,8 @@ a {
 }
 
 
-th {
+.my-table th {
     vertical-align: bottom;
-    text-align: center;
     background-color: #d9dade;
     position: -webkit-sticky;
     position: sticky;
@@ -96,48 +110,20 @@ th {
     z-index: 2;
 }
 
-table {
+.my-items-table {
+    text-align: center;
+}
+
+.my-table {
     table-layout: fixed;
-}
-
-th, td {
-    width: 28%;
-}
-
-th > div, td > div {
-    overflow-y: scroll;
-}
-
-th:nth-child(1) > div, td:nth-child(1), th:nth-child(2) > div, td:nth-child(2) > div {
-    overflow-y: visible;
-}
-
-th:nth-child(1), td:nth-child(1) {
-    width: 5%
-}
-
-th:nth-child(2), td:nth-child(2) {
-    width: 10%;
-}
-
-th:nth-child(3), td:nth-child(3) {
-    width: 10%;
-}
-
-tr.edit_buttons-tr > td > div {
-    padding: 0.25em 0 0.5em 0.5em;
-}
-
-tr.edit_buttons-tr > td {
-    padding: 0;
-}
-
-.my-table a {
-    color: dimgray;
 }
 
 .my-table {
     width: 100%;
+}
+
+.my-table a {
+    color: dimgray;
 }
 
 .my-table a:hover {
@@ -145,15 +131,49 @@ tr.edit_buttons-tr > td {
 }
 
 
-tr {
+.my-table tr {
     background-color: rgba(255, 255, 255, 0.05);
 
 }
 
-tr:nth-child(4n-1) {
+.my-items-table tr.edit_buttons-tr > td {
+    padding: 0;
+}
+
+.my-items-table tr.edit_buttons-tr > td > div {
+    padding: 0.25em 0 0.5em 0.5em;
+}
+
+
+.my-items-table tr:nth-child(4n-1) {
     background-color: rgba(0, 0, 0, 0.05);
 }
 
+.my-items-table th, .my-items-table td {
+    width: 28%;
+}
+
+
+/*.my-table th > div, .my-table td > div {*/
+/*    overflow-y: scroll;*/
+/*}*/
+
+
+.my-items-table th:nth-child(1) > div, .my-items-table td:nth-child(1), .my-items-table th:nth-child(2) > div, .my-items-table td:nth-child(2) > div {
+    overflow-y: visible;
+}
+
+.my-items-table th:nth-child(1), .my-items-table td:nth-child(1) {
+    width: 5%
+}
+
+.my-items-table th:nth-child(2), .my-items-table td:nth-child(2) {
+    width: 10%;
+}
+
+.my-items-table th:nth-child(3), .my-items-table td:nth-child(3) {
+    width: 10%;
+}
 
 #farsi_value, #dari_value, #farsi_value_autocomplete .autocomplete-item, #dari_value_autocomplete .autocomplete-item {
     direction: rtl;
@@ -164,6 +184,11 @@ tr:nth-child(4n-1) {
 }
 
 .edit_buttons-tr .btn {
+    background-color: coral;
+    margin: 1px;
+}
+
+.edit-button {
     background-color: coral;
     margin: 1px;
 }
@@ -224,11 +249,11 @@ tr:nth-child(4n-1) {
     width: 100%;
 }
 
-#id_tag_search_field{
+#id_tag_search_field {
     direction: ltr !important;
 }
 
-.tag_search_container{
+.tag_search_container {
     width: 100%;
 }
 

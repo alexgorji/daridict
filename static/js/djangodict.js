@@ -54,11 +54,15 @@ function autocomplete(inp, autocompleteFieldId, tags = false, language) {
             currentFocus++;
             /*and and make the current item more visible:*/
             addActive(x);
+            const position = currentFocus * 24;
+            $('.autocomplete-active').closest('.autocomplete').scrollTop(position)
         } else if (e.keyCode === 38) {
             /*If the arrow UP key is pressed, decrease the currentFocus variable:*/
             currentFocus--;
             /*and and make the current item more visible:*/
             addActive(x);
+            const position = currentFocus * 24;
+            $('.autocomplete-active').closest('.autocomplete').scrollTop(position)
         } else if (e.keyCode === 13) {
             /*If the ENTER key is pressed, prevent the form from being submitted,*/
             e.preventDefault();
@@ -109,11 +113,11 @@ let opened_edit_buttons
 let opened_symbol
 
 function toggle_edit_buttons() {
-    $('.edit_toggle').off('click').on('click', function () {
-        const target_buttons = $("#" + $(this).attr('data-buttons'));
+    $('.edit_toggle').off().on('click', function () {
+        const id = $(this).closest('tr').attr('id')
+        const target_buttons = $('tr[data-for-entry=' + id + ']').find('div')
         const top_tr = $(this).closest('tr')
         const symbol = $(this).children("i").first()
-        // console.log($(this).attr('data-buttons'))
 
         if ($(this).hasClass('opened')) {
             $(symbol).removeClass('up')
@@ -129,24 +133,25 @@ function toggle_edit_buttons() {
             $(symbol).addClass('up')
 
             if (opened_edit_buttons) {
-                target_buttons.show()
+                target_buttons.show(500)
                 top_tr.addClass('top-tr')
                 $(opened_symbol).removeClass('up');
                 $(opened_symbol).addClass('right');
                 $(opened_edit_buttons).removeClass('opened');
-                $("#" + $(opened_edit_buttons).attr('data-buttons')).hide(500);
+                $(opened_edit_buttons).closest('tr').removeClass('top-tr');
+                $('tr[data-for-entry=' + $(opened_edit_buttons).closest('tr').attr('id') + ']').find('div').hide(500)
             } else {
                 target_buttons.show(500)
                 top_tr.addClass('top-tr')
             }
             opened_edit_buttons = this
             opened_symbol = symbol
-            const that = this
-            setTimeout(function () {
-                $(".main-table-wrapper").animate({
-                    scrollTop: $(that).closest('tr').position().top - 55
-                }, 300);
-            }, 500);
+            // const that = this
+            // setTimeout(function () {
+            //     $(".main-table-wrapper").animate({
+            //         scrollTop: $(that).closest('tr').position().top - 55
+            //     }, 300);
+            // }, 500);
         }
     });
 }
@@ -155,6 +160,7 @@ function editClick(entryID) {
     $.get('', {'entry_id': entryID, 'edit': 'edit'}, function (data) {
         $('#id-entry-form').children().replaceWith(data);
         loadAutocompletions();
+        saveUpdateButtons()
     });
 }
 
@@ -163,7 +169,7 @@ function cancelClick() {
     $.get('', {'cancel': 'cancel'}, function (data) {
         $('#id-entry-form').children().replaceWith(data);
         loadAutocompletions();
-
+        saveUpdateButtons()
     })
 }
 
@@ -172,6 +178,8 @@ function copyClick(entryID) {
     $.get('', {'entry_id': entryID, 'copy': 'copy'}, function (data) {
         $('#id-entry-form').children().replaceWith(data);
         loadAutocompletions();
+        saveUpdateButtons()
+
     })
 }
 
@@ -222,4 +230,66 @@ function loadAutocompletions() {
     autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, null);
     autocomplete($('#id_tag_names'), "id_tag_names_autocomplete", true);
     autocomplete($('#id_tag_search_field'), "id_tag_search_autocomplete", true);
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function saveUpdateButtons() {
+    $('button[name = "entry-update"]').on('click', function () {
+        const csrftoken = getCookie('csrftoken');
+        const value = [$("#dari_value").val(), $("#farsi_value").val(), $("#german_value").val()]
+        const tag_names = $('#id_tag_names').val()
+        const entry_id = $(this).attr('data-entry-id')
+        console.log('update clicked', entry_id)
+        $.post('', {
+            'value': value,
+            'tag_names': tag_names,
+            'selected_entry_id': entry_id,
+            'entry-update': 'yes',
+            'csrfmiddlewaretoken': csrftoken
+        }, function (data) {
+            // console.log($("#id_entry_"+entry_id).find($('.entry-tags')))
+            // $("#id_entry_"+entry_id).replaceWith(data)
+            let td_elements = $("#id_entry_" + entry_id).children()
+            for (let i = 2; i < td_elements.length; ++i) {
+                td_elements[i].remove()
+            }
+            $("#id_entry_" + entry_id).append(data)
+
+        });
+    });
+    $('button[name = "entry-save"]').on('click', function () {
+        const csrftoken = getCookie('csrftoken');
+        const value = [$("#dari_value").val(), $("#farsi_value").val(), $("#german_value").val()]
+        const tag_names = $('#id_tag_names').val()
+        console.log('save clicked', $(this).attr('data-entry-id'))
+        $.post('', {
+            'value': value,
+            'tag_names': tag_names,
+            'entry-save': 'yes',
+            'csrfmiddlewaretoken': csrftoken
+        }, function (data) {
+            if (data) {
+                $('.my-table').find('tbody').prepend(data);
+                toggle_edit_buttons();
+                $('.table-wrapper').animate({
+                    scrollTop: 0
+                }, 300)
+            }
+        });
+    });
 }
