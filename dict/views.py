@@ -223,10 +223,10 @@ def show_and_update_entries(request):
 @login_required
 def dict_entry_update_view(request, pk):
     entry = DictEntry.objects.get(pk=pk)
-    item_forms = [
-        DictItemForm(initial={'language': item.language, 'value': item.value}, auto_id=f"{item.language}_%s",
-                     language=item.language.value)
-        for item in entry.get_ordered_items()]
+    item_forms = [DictItemForm(initial={'value': value},
+                               auto_id=f"{language.value.lower()}_%s",
+                               language=language.value)
+                  for language, value in entry.get_ordered_item_attributes().items()]
 
     context = {
         'entry': entry,
