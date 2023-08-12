@@ -215,9 +215,9 @@ function loopPages(page, number_of_pages, get_parameters) {
 
 function loadAutocompletions() {
     let fields = {
-        'german': $("#german_value"),
-        'farsi': $("#farsi_value"),
-        'dari': $("#dari_value"),
+        'german': $("#id_german-value"),
+        'farsi': $("#id_farsi-value"),
+        'dari': $("#id_dari-value"),
     }
 
     let language;
@@ -251,7 +251,7 @@ function getCookie(name) {
 function saveUpdateButtons() {
     $('button[name = "entry-update"]').on('click', function () {
         const csrftoken = getCookie('csrftoken');
-        const value = [$("#dari_value").val(), $("#farsi_value").val(), $("#german_value").val()]
+        const value = [$("#id_dari-value").val(), $("#id_farsi-value").val(), $("#id_german-value").val()]
         const tag_names = $('#id_tag_names').val()
         const entry_id = $(this).attr('data-entry-id')
         console.log('update clicked', entry_id)
@@ -274,7 +274,7 @@ function saveUpdateButtons() {
     });
     $('button[name = "entry-save"]').on('click', function () {
         const csrftoken = getCookie('csrftoken');
-        const value = [$("#dari_value").val(), $("#farsi_value").val(), $("#german_value").val()]
+        const value = [$("#id_dari-value").val(), $("#id_farsi-value").val(), $("#id_german-value").val()]
         const tag_names = $('#id_tag_names').val()
         console.log('save clicked', $(this).attr('data-entry-id'))
         $.post('', {
