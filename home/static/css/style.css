@@ -37,7 +37,7 @@ a {
 
 }
 
-#farsi_value_autocomplete, #dari_value_autocomplete {
+#id_farsi-value_autocomplete, #id_dari-value_autocomplete {
     right: 0;
     overflow: scroll;
     max-height: 200px;
@@ -110,9 +110,9 @@ a {
     z-index: 2;
 }
 
-.my-items-table {
-    text-align: center;
-}
+/*.my-items-table th{*/
+/*    text-align: center;*/
+/*}*/
 
 .my-table {
     table-layout: fixed;
@@ -175,7 +175,7 @@ a {
     width: 10%;
 }
 
-#farsi_value, #dari_value, #farsi_value_autocomplete .autocomplete-item, #dari_value_autocomplete .autocomplete-item {
+#id_farsi-value, #id_dari-value, #id_farsi-value_autocomplete .autocomplete-item, #id_dari-value_autocomplete .autocomplete-item {
     direction: rtl;
 }
 

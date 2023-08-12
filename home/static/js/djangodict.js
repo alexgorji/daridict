@@ -215,9 +215,9 @@ function loopPages(page, number_of_pages, get_parameters) {
 
 function loadAutocompletions() {
     let fields = {
-        'german': $("#german_value"),
-        'farsi': $("#farsi_value"),
-        'dari': $("#dari_value"),
+        'german': $("#id_german-value"),
+        'farsi': $("#id_farsi-value"),
+        'dari': $("#id_dari-value"),
     }
 
     let language;
@@ -225,7 +225,7 @@ function loadAutocompletions() {
     for (let key in fields) {
         language = key;
         field = fields[key];
-        autocomplete(field, language + "_value_autocomplete", false, language);
+        autocomplete(field, "id_" + language + "-value_autocomplete", false, language);
     }
     autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, null);
     autocomplete($('#id_tag_names'), "id_tag_names_autocomplete", true);
@@ -248,15 +248,29 @@ function getCookie(name) {
     return cookieValue;
 }
 
+function convertFormToJSON(form) {
+    const array = $(form).serializeArray(); // Encodes the set of form elements as an array of names and values.
+    const json = {};
+    $.each(array, function () {
+        json[this.name] = this.value || "";
+    });
+    return json;
+}
+
+
 function saveUpdateButtons() {
     $('button[name = "entry-update"]').on('click', function () {
         const csrftoken = getCookie('csrftoken');
-        const value = [$("#dari_value").val(), $("#farsi_value").val(), $("#german_value").val()]
+        const dari_value = $("#id_dari-value").val()
+        const farsi_value = $("#id_farsi-value").val()
+        const german_value = $("#id_german-value").val()
         const tag_names = $('#id_tag_names').val()
         const entry_id = $(this).attr('data-entry-id')
         console.log('update clicked', entry_id)
         $.post('', {
-            'value': value,
+            'dari_value': dari_value,
+            'farsi_value': farsi_value,
+            'german_value': german_value,
             'tag_names': tag_names,
             'selected_entry_id': entry_id,
             'entry-update': 'yes',
@@ -274,11 +288,15 @@ function saveUpdateButtons() {
     });
     $('button[name = "entry-save"]').on('click', function () {
         const csrftoken = getCookie('csrftoken');
-        const value = [$("#dari_value").val(), $("#farsi_value").val(), $("#german_value").val()]
+        const dari_value = $("#id_dari-value").val()
+        const farsi_value = $("#id_farsi-value").val()
+        const german_value = $("#id_german-value").val()
         const tag_names = $('#id_tag_names').val()
         console.log('save clicked', $(this).attr('data-entry-id'))
         $.post('', {
-            'value': value,
+            'dari_value': dari_value,
+            'farsi_value': farsi_value,
+            'german_value': german_value,
             'tag_names': tag_names,
             'entry-save': 'yes',
             'csrfmiddlewaretoken': csrftoken

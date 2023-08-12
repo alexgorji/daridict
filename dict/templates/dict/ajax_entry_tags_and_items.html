@@ -15,8 +15,7 @@
     <td>
         <div>
             {% if dict_item %}
-                <p {% if dict_item.language.direction == 'RTL' %} dir="rtl"{% else %}
-                                                                  class="latin-font"{% endif %}>
+                <p {% if dict_item.language.direction == 'RTL' %} dir="rtl"{% else %} class="latin-font"{% endif %}>
                     {% if user.is_authenticated %}<a href="{% url 'dict_item' dict_item.pk %}">{% endif %}
                     {{ dict_item.value }}{% if dict_item.comment != "" and user.is_authenticated %}*{% endif %}
                     {% if user.is_authenticated %}</a>{% endif %}

@@ -19,10 +19,10 @@ def is_ajax(request):
 
 def show_and_update_entries(request):
     global sorted_by
-    dict_languages = DictLanguage.objects.all()
+    dict_languages = [DictLanguage.objects.get(value=language) for language in DictEntry.order_of_languages]
     item_forms = [
-        DictItemForm(initial={'language': language}, auto_id=f"{language.value.lower()}_%s",
-                     language=language.value)
+        DictItemForm(initial={'language': language},
+                     language=language.value, prefix=language.value.lower())
         for language in dict_languages]
     entry_save_display = 'show'
     entry_update_display = 'hide'
@@ -30,8 +30,11 @@ def show_and_update_entries(request):
     number_of_entries_per_page = 50
 
     if request.method == 'POST':
+        def get_post(parameter):
+            return request.POST.get(parameter)
+
         if request.user.is_authenticated:
-            selected_entry_id = request.POST.get('selected_entry_id')
+            selected_entry_id = get_post('selected_entry_id')
             selected_entry = None
             if selected_entry_id == "":
                 selected_entry_id = None
@@ -40,17 +43,18 @@ def show_and_update_entries(request):
                 selected_entry = DictEntry.objects.get(id=selected_entry_id)
 
             # delete entry
-            if request.POST.get('entry-delete', None):
+            if get_post('entry-delete'):
                 selected_entry.delete()
                 return redirect('dictionary')
-            elif request.POST.get('entry-open', None):
+            elif get_post('entry-open'):
                 return redirect('dict_entry_update', selected_entry_id)
 
             # AJAX POST requests
             if is_ajax(request):
                 # update or save entry
-                values = request.POST.getlist('value[]')
                 entry_is_new = False
+                values = [get_post(f'{language.lower()}_value') for language in DictEntry.order_of_languages]
+                print(values)
                 if len(set(values)) == 1 and "" in set(values):
                     pass
                 else:
@@ -59,15 +63,27 @@ def show_and_update_entries(request):
                              value, language in zip(values, dict_languages)]
                     # update entry
                     if request.POST.get('entry-update', None):
-                        selected_entry.item_dari = items[0]
-                        selected_entry.item_farsi = items[1]
-                        selected_entry.item_german = items[2]
+                        for item, dict_language in zip(items, dict_languages):
+                            setattr(selected_entry, f'item_{dict_language.value.lower}', item)
                         selected_entry.save()
                     else:
                         # save entry
-                        selected_entry, entry_is_new = DictEntry.objects.get_or_create(item_dari=items[0],
-                                                                                       item_farsi=items[1],
-                                                                                       item_german=items[2])
+                        for item, dict_language in zip(items, dict_languages):
+                            if dict_language.value == 'Dari':
+                                item_dari = item
+                            elif dict_language.value == 'Farsi':
+                                item_farsi = item
+                            elif dict_language.value == 'German':
+                                item_german = item
+                            else:
+                                raise NotImplementedError
+                        # item_dari = items[DictEntry.order_of_languages.index('Dari')]
+                        # item_farsi = items[DictEntry.order_of_languages.index('Farsi')]
+                        # item_german = items[DictEntry.order_of_languages.index('German')]
+
+                        selected_entry, entry_is_new = DictEntry.objects.get_or_create(item_dari=item_dari,
+                                                                                       item_farsi=item_farsi,
+                                                                                       item_german=item_german)
                 # create or update entry tags
                 tag_names = request.POST['tag_names'].split(',')
                 # remove redundant emtpy strings
@@ -178,13 +194,20 @@ def show_and_update_entries(request):
                 if entry_id != '':
                     entry = DictEntry.objects.get(id=entry_id)
                     item_forms = [DictItemForm(initial={'value': value},
-                                               auto_id=f"{language.value.lower()}_%s",
+                                               prefix=language.value.lower(),
                                                language=language.value)
                                   for language, value in entry.get_ordered_item_attributes().items()]
+
                 else:
-                    item_forms = [DictItemForm(auto_id=f"{language}_%s",
-                                               language=language.value)
-                                  for language in DictLanguage.objects.all()]
+                    pass
+                    # item_forms = [DictItemForm(auto_id=f"{language}_%s",
+                    #                            language=language.value)
+                    #               for language in DictLanguage.objects.all()]
+                    # item_forms = [
+                    #     DictItemForm(initial={'language': language},
+                    #                  language=language.value, prefix=language.value.lower())
+                    #     for language in dict_languages]
+
                 return render(request, 'dict/ajax_entry_form.html',
                               {'selected_entry_id': entry_id,
                                'entry': entry,
@@ -302,7 +325,6 @@ class DictLanguageDetailView(LoginRequiredMixin, generic.DetailView):
             except RestrictedError as err:
                 print(err)
         return redirect('dict_language', pk)
-
 
 
 class TagListView(generic.ListView):
