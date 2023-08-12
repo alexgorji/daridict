@@ -2,6 +2,8 @@ change order of languages (s. branch)
 
 add comment button for item (popover)
 
+add open to new entry
+
 remove counting for not authenticated user (styling will get messy ...)
 
 history for tags and items
