@@ -50,6 +50,7 @@ def show_and_update_entries(request):
             if is_ajax(request):
                 # update or save entry
                 values = request.POST.getlist('value[]')
+                print('values', values)
                 entry_is_new = False
                 if len(set(values)) == 1 and "" in set(values):
                     pass
