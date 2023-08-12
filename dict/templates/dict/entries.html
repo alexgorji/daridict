@@ -35,16 +35,16 @@
             {% endif %}
         </div>
         <div class="col-12 col-md-9 table-wrapper overflow-scroll">
-            <table class="my-table my-items-table">
+            <table class="my-table my-items-table {% if user.is_authenticated %} admin {% else %} not-admin {% endif %}">
                 <thead>
                 <tr>
                     <!-- edit header -->
-                    <th>
-                    </th>
-                    <th>
-                    </th>
-                    <th>
-                    </th>
+                    {% if user.is_authenticated %}
+                        <th>
+                        </th>
+                        <th>
+                        </th>
+                    {% endif %}
                     <!-- language headers -->
                     {% for dict_language in dict_languages %}
                         <th>
@@ -57,6 +57,8 @@
                             </p>
                         </th>
                     {% endfor %}
+                    <th>
+                    </th>
                 </tr>
                 </thead>
 

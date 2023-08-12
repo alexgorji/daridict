@@ -110,9 +110,6 @@ a {
     z-index: 2;
 }
 
-/*.my-items-table th{*/
-/*    text-align: center;*/
-/*}*/
 
 .my-table {
     table-layout: fixed;
@@ -149,31 +146,37 @@ a {
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-.my-items-table th, .my-items-table td {
+.admin th, .admin td {
     width: 28%;
 }
 
-
-/*.my-table th > div, .my-table td > div {*/
-/*    overflow-y: scroll;*/
+/*.my-items-table th:nth-child(1) > div, .my-items-table td:nth-child(1), .my-items-table th:nth-child(2) > div, .my-items-table td:nth-child(2) > div {*/
+/*    overflow-y: visible;*/
 /*}*/
-
-
-.my-items-table th:nth-child(1) > div, .my-items-table td:nth-child(1), .my-items-table th:nth-child(2) > div, .my-items-table td:nth-child(2) > div {
-    overflow-y: visible;
+.my-items-table th > div, .my-items-table td > div{
+    overflow-x: scroll;
 }
 
-.my-items-table th:nth-child(1), .my-items-table td:nth-child(1) {
+.admin th:nth-child(1), .admin td:nth-child(1) {
     width: 5%
 }
 
-.my-items-table th:nth-child(2), .my-items-table td:nth-child(2) {
+.admin th:nth-child(2), .admin td:nth-child(2) {
     width: 10%;
 }
 
-.my-items-table th:nth-child(3), .my-items-table td:nth-child(3) {
+.admin th:nth-child(6), .admin td:nth-child(6) {
     width: 10%;
 }
+
+.not-admin th, .not-admin td {
+    width: 30%;
+}
+
+.not-admin th:nth-child(4), .not-admin td:nth-child(4) {
+    width: 10%;
+}
+
 
 #id_farsi-value, #id_dari-value, #id_farsi-value_autocomplete .autocomplete-item, #id_dari-value_autocomplete .autocomplete-item {
     direction: rtl;

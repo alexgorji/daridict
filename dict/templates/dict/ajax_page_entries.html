@@ -1,6 +1,7 @@
 {% load calculationtags %}
 {% for entry in entries %}
     <tr id="id_entry_{{ entry.id }}">
+        {% if user.is_authenticated %}
         <td class="arrow-td">
             {% if user.is_authenticated %}
                 <div class="arrow-div">
@@ -14,37 +15,9 @@
             <p class="latin-font">
                 {{ page | add:-1 | multiply:number_of_entries_per_page | add:forloop.counter}}</p>
         </td>
+        {% endif%}
         {% include "dict/ajax_entry_tags_and_items.html" %}
     </tr>
-    <tr class="edit_buttons-tr" data-for-entry="id_entry_{{ entry.id }}">
-        <td colspan="5">
-            <div style="display: none">
-                {% if user.is_authenticated %}
-                    <div class="d-flex">
-                        <form action="" method="POST">
-                            {% csrf_token %}
-                            <input type="hidden" id="delEntryId" name="selected_entry_id" value={{ entry.id }}>
-                            <input type="hidden" name="entry-delete" value="Delete">
-
-                            <input class="btn rounded-pill py-0" type="submit"
-                                   onclick="return confirm('Are you sure?')"
-                                   value="del">
-                        </form>
-                        <form action="" method="POST">
-                            {% csrf_token %}
-                            <input type="hidden" name="selected_entry_id" value="{{ entry.id }}">
-                            <input class="btn rounded-pill py-0" type="submit" name="entry-open" value="open">
-                        </form>
-                        <button class="btn rounded-pill py-0" onclick="copyClick({{ entry.id }}, this)">
-                            cp
-                        </button>
-                        <button class="btn rounded-pill py-0"
-                                onclick="editClick({{ entry.id }}, this)"> ed
-                        </button>
-                    </div>
-                {% endif %}
-            </div>
-        </td>
-    </tr>
+    {% include "dict/ajax_edit_toggles.html" %}
 
 {% endfor %}
