@@ -1,12 +1,11 @@
 add comment button for item (popover)
 
-remove counting for not authenticated user (styling will get messy ...)
 
 history for tags and items
 
 current selected language must be saved in the session
 
-
+How many characters can an item have? some entries are truncated
 
 Closing old edit toggles if a new one is opened (it works previously but not anymore) DONE
 
@@ -20,3 +19,5 @@ edit_toggles of added new entry to top does not work DONE
 change order of languages (s. branch) DONE
 
 add open to new entry DONE
+
+remove counting for not authenticated user (styling will get messy ...) DONE
