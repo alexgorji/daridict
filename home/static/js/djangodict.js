@@ -283,7 +283,7 @@ function saveUpdateButtons() {
                 td_elements[i].remove()
             }
             $("#id_entry_" + entry_id).append(data)
-
+            $("#id_entry_" + entry_id).find($('[data-toggle="popover"]')).popover()
         });
     });
     $('button[name = "entry-save"]').on('click', function () {

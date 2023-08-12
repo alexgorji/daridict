@@ -54,7 +54,6 @@ def show_and_update_entries(request):
                 # update or save entry
                 entry_is_new = False
                 values = [get_post(f'{language.lower()}_value') for language in DictEntry.order_of_languages]
-                print(values)
                 if len(set(values)) == 1 and "" in set(values):
                     pass
                 else:
