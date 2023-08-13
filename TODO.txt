@@ -1,4 +1,3 @@
-comment for dari and farsi rtl / comment popover too??
 current selected language must be saved in the session
 
 
@@ -29,3 +28,4 @@ history for tags and items (DONE)
 simple history removed due to problems with deleted DictItems when accessing DictEntry history. Maybe using HistoricForeignKey can be a solution? (DONE problem was  DictEntry.__str__)
 
 add comment button for item (popover) DONE
+comment for dari and farsi rtl / comment popover too?? DONE (workaournd)

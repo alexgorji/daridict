@@ -281,6 +281,10 @@ a {
     width: 100%;
 }
 
+[data-popper-placement=left] .popover-body{
+    direction: rtl;
+}
+
 @media screen and (min-width: 992px) {
     .table-wrapper {
         height: calc(100vh - 100px);
