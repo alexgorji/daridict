@@ -65,7 +65,7 @@ def show_and_update_entries(request):
                     # update entry
                     if request.POST.get('entry-update', None):
                         for item, dict_language in zip(items, dict_languages):
-                            setattr(selected_entry, f'item_{dict_language.value.lower}', item)
+                            setattr(selected_entry, f'item_{dict_language.value.lower()}', item)
                         selected_entry.save()
                     else:
                         # save entry
@@ -78,10 +78,6 @@ def show_and_update_entries(request):
                                 item_german = item
                             else:
                                 raise NotImplementedError
-                        # item_dari = items[DictEntry.order_of_languages.index('Dari')]
-                        # item_farsi = items[DictEntry.order_of_languages.index('Farsi')]
-                        # item_german = items[DictEntry.order_of_languages.index('German')]
-
                         selected_entry, entry_is_new = DictEntry.objects.get_or_create(item_dari=item_dari,
                                                                                        item_farsi=item_farsi,
                                                                                        item_german=item_german)
@@ -201,13 +197,6 @@ def show_and_update_entries(request):
 
                 else:
                     pass
-                    # item_forms = [DictItemForm(auto_id=f"{language}_%s",
-                    #                            language=language.value)
-                    #               for language in DictLanguage.objects.all()]
-                    # item_forms = [
-                    #     DictItemForm(initial={'language': language},
-                    #                  language=language.value, prefix=language.value.lower())
-                    #     for language in dict_languages]
 
                 return render(request, 'dict/ajax_entry_form.html',
                               {'selected_entry_id': entry_id,
