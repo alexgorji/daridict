@@ -182,9 +182,9 @@ a {
     direction: rtl;
 }
 
-.latin-font {
-    font-size: 14px;
-}
+/*.latin-font {*/
+/*    font-size: 14px;*/
+/*}*/
 
 .edit_buttons-tr .btn {
     background-color: coral;
@@ -279,6 +279,10 @@ a {
 #id_search_field_autocomplete {
     direction: rtl;
     width: 100%;
+}
+
+[data-popper-placement=left] .popover-body{
+    direction: rtl;
 }
 
 @media screen and (min-width: 992px) {

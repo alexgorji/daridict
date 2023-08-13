@@ -182,9 +182,9 @@ a {
     direction: rtl;
 }
 
-.latin-font {
-    font-size: 14px;
-}
+/*.latin-font {*/
+/*    font-size: 14px;*/
+/*}*/
 
 .edit_buttons-tr .btn {
     background-color: coral;

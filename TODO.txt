@@ -1,4 +1,4 @@
-current selected language must be saved in the session
+add @font-face
 
 
 
@@ -29,3 +29,5 @@ simple history removed due to problems with deleted DictItems when accessing Dic
 
 add comment button for item (popover) DONE
 comment for dari and farsi rtl / comment popover too?? DONE (workaournd)
+
+current selected language must be saved in the session DONE
