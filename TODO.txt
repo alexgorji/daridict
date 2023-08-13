@@ -1,11 +1,12 @@
 add comment button for item (popover)
 
-
 history for tags and items
 
 current selected language must be saved in the session
 
 How many characters can an item have? some entries are truncated
+
+
 
 Closing old edit toggles if a new one is opened (it works previously but not anymore) DONE
 
