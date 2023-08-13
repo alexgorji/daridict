@@ -5,9 +5,17 @@
                 <p {% if dict_item.language.direction == 'RTL' %} dir="rtl"{% else %} class="latin-font"{% endif %}>
                     {% if user.is_authenticated %}
                         <a href="{% url 'dict_item' dict_item.pk %}">
-                            {{ dict_item.value }}{% if dict_item.comment != "" %}*{% endif %}</a>
+                            {{ dict_item.value }}</a>
                     {% else %}
                         {{ dict_item.value }}
+                    {% endif %}
+                    {% if dict_item.comment != "" %}
+                        <sup>
+                            <button type="button" class="comment-button btn" data-toggle="popover" title="comment:"
+                                    data-bs-placement="top"
+                                    data-bs-content="{{ dict_item.comment }}" data-bs-trigger="hover focus">cmt
+                            </button>
+                        </sup>
                     {% endif %}
                 </p>
             {% else %}
@@ -19,7 +27,7 @@
 <td>
     {% if entry.tags.all %}
         <button type="button" class="tag-button btn" data-toggle="popover" title="tags:" data-bs-placement="top"
-                data-bs-content="{{ entry.get_tags_as_string }}" data-original-title="Popover title">
+                data-bs-content="{{ entry.get_tags_as_string }}" data-bs-trigger="hover focus">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                  class="bi bi-tags"
                  viewBox="0 0 16 16">

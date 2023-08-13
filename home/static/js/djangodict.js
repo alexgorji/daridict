@@ -209,6 +209,7 @@ function loopPages(page, number_of_pages, get_parameters) {
         toggle_edit_buttons()
         $(function () {
             $('.tag-button').popover()
+            $('.comment-button').popover()
         })
     });
 }
