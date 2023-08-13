@@ -11,7 +11,7 @@ from .models import DictItem, DictLanguage, Tag, DictEntry
 
 from django.core.paginator import Paginator
 
-sorted_by = 'Dari'
+default_sorted_by = 'Dari'
 
 
 def is_ajax(request):
@@ -19,7 +19,6 @@ def is_ajax(request):
 
 
 def show_and_update_entries(request):
-    global sorted_by
     dict_languages = [DictLanguage.objects.get(value=language) for language in DictEntry.order_of_languages]
     item_forms = [
         DictItemForm(initial={'language': language},
@@ -108,9 +107,11 @@ def show_and_update_entries(request):
                     print(request.POST)
     elif request.method == 'GET':
         # get sorted_by and set Sorting Form
-        new_sorted_by = request.GET.get('sorted_by', None)
-        if new_sorted_by:
-            sorted_by = new_sorted_by
+        sorted_by = request.GET.get('sorted_by', None)
+        if not sorted_by:
+            sorted_by = request.session.get('sorted_by', default_sorted_by)
+        else:
+            request.session['sorted_by'] = sorted_by
         sorting_form = DictEntrySortingForm(initial={'sorted_by': sorted_by})
 
         # get search value and set entries for paginator
