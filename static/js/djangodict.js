@@ -225,7 +225,7 @@ function loadAutocompletions() {
     for (let key in fields) {
         language = key;
         field = fields[key];
-        autocomplete(field, language + "_value_autocomplete", false, language);
+        autocomplete(field, "id_" + language + "-value_autocomplete", false, language);
     }
     autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, null);
     autocomplete($('#id_tag_names'), "id_tag_names_autocomplete", true);
@@ -248,15 +248,29 @@ function getCookie(name) {
     return cookieValue;
 }
 
+function convertFormToJSON(form) {
+    const array = $(form).serializeArray(); // Encodes the set of form elements as an array of names and values.
+    const json = {};
+    $.each(array, function () {
+        json[this.name] = this.value || "";
+    });
+    return json;
+}
+
+
 function saveUpdateButtons() {
     $('button[name = "entry-update"]').on('click', function () {
         const csrftoken = getCookie('csrftoken');
-        const value = [$("#id_dari-value").val(), $("#id_farsi-value").val(), $("#id_german-value").val()]
+        const dari_value = $("#id_dari-value").val()
+        const farsi_value = $("#id_farsi-value").val()
+        const german_value = $("#id_german-value").val()
         const tag_names = $('#id_tag_names').val()
         const entry_id = $(this).attr('data-entry-id')
         console.log('update clicked', entry_id)
         $.post('', {
-            'value': value,
+            'dari_value': dari_value,
+            'farsi_value': farsi_value,
+            'german_value': german_value,
             'tag_names': tag_names,
             'selected_entry_id': entry_id,
             'entry-update': 'yes',
@@ -269,16 +283,20 @@ function saveUpdateButtons() {
                 td_elements[i].remove()
             }
             $("#id_entry_" + entry_id).append(data)
-
+            $("#id_entry_" + entry_id).find($('[data-toggle="popover"]')).popover()
         });
     });
     $('button[name = "entry-save"]').on('click', function () {
         const csrftoken = getCookie('csrftoken');
-        const value = [$("#id_dari-value").val(), $("#id_farsi-value").val(), $("#id_german-value").val()]
+        const dari_value = $("#id_dari-value").val()
+        const farsi_value = $("#id_farsi-value").val()
+        const german_value = $("#id_german-value").val()
         const tag_names = $('#id_tag_names').val()
         console.log('save clicked', $(this).attr('data-entry-id'))
         $.post('', {
-            'value': value,
+            'dari_value': dari_value,
+            'farsi_value': farsi_value,
+            'german_value': german_value,
             'tag_names': tag_names,
             'entry-save': 'yes',
             'csrfmiddlewaretoken': csrftoken

@@ -7,8 +7,6 @@ current selected language must be saved in the session
 
 How many characters can an item have? some entries are truncated
 
-autocomplete search tags for not admin users does not work
-
 
 
 Closing old edit toggles if a new one is opened (it works previously but not anymore) DONE
@@ -25,3 +23,6 @@ change order of languages (s. branch) DONE
 add open to new entry DONE
 
 remove counting for not authenticated user (styling will get messy ...) DONE
+
+
+autocomplete search tags for not admin users does not work DONE
