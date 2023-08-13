@@ -1,4 +1,4 @@
-add @font-face
+add @font-face for farsi
 
 
 
@@ -31,3 +31,5 @@ add comment button for item (popover) DONE
 comment for dari and farsi rtl / comment popover too?? DONE (workaournd)
 
 current selected language must be saved in the session DONE
+
+edit enter >> update or save (it works if other input than search is selected.)

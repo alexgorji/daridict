@@ -71,7 +71,12 @@ function autocomplete(inp, autocompleteFieldId, tags = false, language) {
                 /*and simulate a click on the "active" item:*/
                 if (items) items[currentFocus].click();
             } else {
-                $('.search-button').click()
+                if ($(this)[0].id === 'id_tag_search_field' || $(this)[0].id === 'id_search_field') {
+                    $('.search-button').click()
+                }else{
+                    $('button.show[name="entry-update"]').click()
+                    $('button.show[name="entry-save"]').click()
+                }
             }
         }
     });
