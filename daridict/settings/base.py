@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 INSTALLED_APPS = [
     'home',
     'dict',
-    # 'simple_history',
+    'simple_history',
 
     'django.contrib.admin',
     'django.contrib.auth',

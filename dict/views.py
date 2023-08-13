@@ -7,7 +7,6 @@ from django.views import generic
 
 from .forms import DictItemForm, DictItemUpdateForm, DictEntrySortingForm
 from .model_helpers import remove_redundant_spaces, remove_short_vowels
-# from .models import DictItem, DictLanguage, Tag, DictEntry, HistoricalDictEntry, HistoricalDictItem
 from .models import DictItem, DictLanguage, Tag, DictEntry
 
 from django.core.paginator import Paginator
@@ -331,26 +330,7 @@ class TagDetailView(generic.DetailView):
     model = Tag
 
 
-# def show_history(request):
-#     # items_history = HistoricalDictItem.objects.all()
-#     entries_history = []
-#     HistoricalDictEntry.objects.all()
-#     for entry in HistoricalDictEntry.objects.all():
-#         try:
-#             print(entry)
-#             entries_history.append(entry)
-#         except DictItem.DoesNotExist as err:
-#             print(entry.id, err)
-#             entries_history.append(entry.id)
-#
-#     # for entry in HistoricalDictEntry.objects.all():
-#     #     try:
-#     #         entries_history.append(entry)
-#     #     except Exception as err:
-#     #         print(err)
-#     #     try:
-#     #         entries_history.append(entry)
-#     #     except ObjectDoesNotExist:
-#     #         print(entry)
-#     return render(request, 'dict/history.html',
-#                   context={'entries_history': entries_history})
+def show_history(request):
+    entries_history = DictEntry.history.all()
+    return render(request, 'dict/history.html',
+                  context={'entries_history': entries_history})

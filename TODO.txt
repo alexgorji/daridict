@@ -1,11 +1,6 @@
 add comment button for item (popover)
 
-history for tags and items
-simple history removed due to problems with deleted DictItems when accessing DictEntry history. Maybe using HistoricForeignKey can be a solution?
-
 current selected language must be saved in the session
-
-How many characters can an item have? some entries are truncated
 
 
 
@@ -26,3 +21,10 @@ remove counting for not authenticated user (styling will get messy ...) DONE
 
 
 autocomplete search tags for not admin users does not work DONE
+
+
+How many characters can an item have? some entries are truncated (250: not a problem)
+
+
+history for tags and items (DONE)
+simple history removed due to problems with deleted DictItems when accessing DictEntry history. Maybe using HistoricForeignKey can be a solution? (DONE problem was  DictEntry.__str__)

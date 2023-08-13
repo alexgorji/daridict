@@ -1,13 +1,13 @@
 from django.db import models
 from django.urls import reverse
-# from simple_history.models import HistoricalRecords
+from simple_history.models import HistoricalRecords
 
 from dict.model_helpers import remove_redundant_spaces, remove_short_vowels, translate_to_sorting_value
 
 
 class DictLanguage(models.Model):
     value = models.CharField(max_length=20, blank=False, unique=True)
-    # history = HistoricalRecords()
+    history = HistoricalRecords()
     LTR = 'LTR'
     RTL = 'RTL'
     SOPHOMORE = 'SO'
@@ -38,7 +38,7 @@ class DictItem(models.Model):
     cleaned_value = models.CharField(max_length=250, blank=False)
     sorting_value = models.CharField(max_length=250, blank=False)
     comment = models.TextField(blank=True)
-    # history = HistoricalRecords()
+    history = HistoricalRecords()
 
     class Meta:
         constraints = [
@@ -71,7 +71,7 @@ class DictItem(models.Model):
 
 class Tag(models.Model):
     name = models.fields.CharField(max_length=30, unique=True)
-
+    history = HistoricalRecords()
     def __str__(self):
         return f'tag {self.id}: {self.name}'
 
@@ -94,11 +94,14 @@ class DictEntry(models.Model):
     order_of_languages = ['German', 'Farsi', 'Dari']
     order_of_items = [f'item_{language.lower()}' for language in order_of_languages]
     tags = models.ManyToManyField(to=Tag, blank=True)
-    # history = HistoricalRecords()
+    history = HistoricalRecords(m2m_fields=[tags])
 
     def __str__(self):
-        items = [item.value if item else '___' for item in self.get_ordered_items()]
-        return f'{self.id}: {" - ".join(items)}'
+        try:
+            items = [item.value if item else '___' for item in self.get_ordered_items()]
+            return f'{self.id}: {" - ".join(items)}'
+        except DictItem.DoesNotExist:
+            return f'{self.id}: item(s) deleted'
 
     @property
     def simple_string(self):
