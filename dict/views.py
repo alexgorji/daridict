@@ -170,7 +170,7 @@ def show_and_update_entries(request):
                                  DictItem.objects.filter(cleaned_value__istartswith=word_beginning)]
                         items = list(dict.fromkeys(items))
                 return render(request, 'dict/ajax_autocomplete.html', {'items': items})
-            elif 'autocompletetags' in request.GET and request.user.is_authenticated:
+            elif 'autocompletetags' in request.GET:
                 word_beginnings = request.GET['autocompletetags'].split(', ')
                 word_beginning = word_beginnings[-1]
                 exclude = word_beginnings[:-1]

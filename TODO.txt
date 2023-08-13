@@ -1,10 +1,13 @@
 add comment button for item (popover)
 
 history for tags and items
+simple history removed due to problems with deleted DictItems when accessing DictEntry history. Maybe using HistoricForeignKey can be a solution?
 
 current selected language must be saved in the session
 
 How many characters can an item have? some entries are truncated
+
+autocomplete search tags for not admin users does not work
 
 
 
