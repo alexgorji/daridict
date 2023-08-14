@@ -125,5 +125,7 @@ class DictEntry(models.Model):
     def get_tags_as_string(self):
         return ", ".join([tag.name for tag in self.tags.all().order_by('name')])
 
-    def get_ordered_languages(self):
-        return [DictLanguage.objects.get(value=language) for language in self.order_of_languages]
+
+    @staticmethod
+    def get_ordered_languages():
+        return [DictLanguage.objects.get(value=language) for language in DictEntry.order_of_languages]
