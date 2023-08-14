@@ -1,5 +1,3 @@
-rtl for ---
-
 Add @font-face for farsi
 
 What happens if two admins edit the same model simultaneously?
@@ -8,6 +6,7 @@ Item change form for farsi and dari RTL
 
 Add Blog to each entry for all logged in users. New group blog user.
 
+load first page on backend
 
 
 Closing old edit toggles if a new one is opened (it works previously but not anymore) DONE
@@ -41,3 +40,5 @@ comment for dari and farsi rtl / comment popover too?? DONE (workaournd)
 current selected language must be saved in the session DONE
 
 edit enter >> update or save (it works if other input than search is selected.)
+
+rtl for --- DONE
