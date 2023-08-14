@@ -170,10 +170,8 @@ def show_and_update_entries(request):
                 word_beginnings = request.GET['autocompletetags'].split(', ')
                 word_beginning = word_beginnings[-1]
                 exclude = word_beginnings[:-1]
-                items = []
-                if len(word_beginning) > 0:
-                    items = [tag.name for tag in Tag.objects.filter(name__istartswith=word_beginning)]
-                    items = list(set(items).difference(exclude))
+                items = [tag.name for tag in
+                         Tag.objects.filter(name__istartswith=word_beginning).exclude(name__in=exclude)]
                 return render(request, 'dict/ajax_autocomplete.html', {'items': items})
             elif 'entry_id' in request.GET and request.user.is_authenticated:
                 entry_id = request.GET['entry_id']

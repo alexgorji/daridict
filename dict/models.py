@@ -72,6 +72,10 @@ class DictItem(models.Model):
 class Tag(models.Model):
     name = models.fields.CharField(max_length=30, unique=True)
     history = HistoricalRecords()
+
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return f'tag {self.id}: {self.name}'
 

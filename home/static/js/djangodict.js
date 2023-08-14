@@ -3,7 +3,7 @@ let currentFocus = -1;
 function autocomplete(inp, autocompleteFieldId, tags = false, language) {
     /*inp: text field element for each language */
     if (tags === true) {
-        inp.on("input", function () {
+        inp.on("input click", function () {
             let tags_as_string = inp.val()
             let array_of_tags = tags_as_string.split(', ')
             $.get('', {'autocompletetags': tags_as_string}, function (data) {
@@ -24,6 +24,7 @@ function autocomplete(inp, autocompleteFieldId, tags = false, language) {
                 });
             });
         });
+
     } else {
         inp.on("input", function () {
             let value = inp.val()
@@ -73,7 +74,7 @@ function autocomplete(inp, autocompleteFieldId, tags = false, language) {
             } else {
                 if ($(this)[0].id === 'id_tag_search_field' || $(this)[0].id === 'id_search_field') {
                     $('.search-button').click()
-                }else{
+                } else {
                     $('button.show[name="entry-update"]').click()
                     $('button.show[name="entry-save"]').click()
                 }
@@ -282,8 +283,6 @@ function saveUpdateButtons() {
             'entry-update': 'yes',
             'csrfmiddlewaretoken': csrftoken
         }, function (data) {
-            // console.log($("#id_entry_"+entry_id).find($('.entry-tags')))
-            // $("#id_entry_"+entry_id).replaceWith(data)
             let td_elements = $("#id_entry_" + entry_id).children()
             for (let i = 2; i < td_elements.length; ++i) {
                 td_elements[i].remove()
