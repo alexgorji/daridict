@@ -1,15 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q, RestrictedError, ObjectDoesNotExist
+from django.core.paginator import Paginator
+from django.db.models import Q, RestrictedError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import generic
 
-from .forms import DictItemForm, DictItemUpdateForm, DictEntrySortingForm
+from .forms import DictItemForm, DictItemUpdateForm, DictEntrySortingForm, DictEntryApprovedForm
 from .model_helpers import remove_redundant_spaces, remove_short_vowels
 from .models import DictItem, DictLanguage, Tag, DictEntry
-
-from django.core.paginator import Paginator
 
 default_sorted_by = 'Dari'
 
@@ -46,6 +45,7 @@ def show_and_update_entries(request):
             if get_post('entry-delete'):
                 selected_entry.delete()
                 return redirect('dictionary')
+
             elif get_post('entry-open'):
                 return redirect('dict_entry_update', selected_entry_id)
 
@@ -141,6 +141,7 @@ def show_and_update_entries(request):
         number_of_pages = paginator.num_pages
         # AJAX GET requests
         if is_ajax(request):
+            print('bla', request.GET)
             if 'page' in request.GET:
                 page = request.GET.get('page')
                 entries = paginator.page(page)
@@ -175,17 +176,6 @@ def show_and_update_entries(request):
                 return render(request, 'dict/ajax_autocomplete.html', {'items': items})
             elif 'entry_id' in request.GET and request.user.is_authenticated:
                 entry_id = request.GET['entry_id']
-                entry = None
-                if 'edit' in request.GET:
-                    entry_save_display = 'hide'
-                    entry_update_display = 'show'
-                    entry_cancel_display = 'show'
-                elif 'copy' in request.GET:
-                    entry_save_display = 'show'
-                    entry_update_display = 'hide'
-                    entry_cancel_display = 'show'
-                else:
-                    pass
                 if entry_id != '':
                     entry = DictEntry.objects.get(id=entry_id)
                     item_forms = [DictItemForm(initial={'value': value},
@@ -194,8 +184,22 @@ def show_and_update_entries(request):
                                   for language, value in entry.get_ordered_item_attributes().items()]
 
                 else:
-                    pass
+                    raise AttributeError
 
+                if 'approved' in request.GET:
+                    entry.approved = False if entry.approved else True
+                    entry.save()
+                    return render(request, 'dict/ajax_entry_approved_button.html', {'entry': entry})
+                elif 'edit' in request.GET:
+                    entry_save_display = 'hide'
+                    entry_update_display = 'show'
+                    entry_cancel_display = 'show'
+                elif 'copy' in request.GET:
+                    entry_save_display = 'show'
+                    entry_update_display = 'hide'
+                    entry_cancel_display = 'show'
+                else:
+                    raise AttributeError
                 return render(request, 'dict/ajax_entry_form.html',
                               {'selected_entry_id': entry_id,
                                'entry': entry,
@@ -213,7 +217,6 @@ def show_and_update_entries(request):
                     'entry_update_display': entry_update_display,
                     'entry_cancel_display': entry_cancel_display,
                 })
-
         else:
             return render(request, 'dict/entries.html', {
                 'entries': None,
@@ -243,12 +246,11 @@ def dict_entry_update_view(request, pk):
     context = {
         'entry': entry,
         'item_forms': item_forms,
+        'approved_form': DictEntryApprovedForm(initial={"approved": entry.approved})
     }
-
     if request.method == 'POST':
         if request.POST.get('delete', None):
             entry.delete()
-            return redirect('dictionary')
         else:
             values = request.POST.getlist('value')
             if len(set(values)) == 1 and "" in set(values):
@@ -268,9 +270,9 @@ def dict_entry_update_view(request, pk):
             for tag in tags:
                 if tag not in entry.tags.all():
                     entry.tags.add(tag)
-
+            entry.approved = True if request.POST.get('approved') else False
             entry.save()
-        # return redirect('dictionary')
+        return redirect('dictionary')
     elif request.method == 'GET':
         if is_ajax(request):
             if 'autocomplete' in request.GET:
@@ -283,7 +285,8 @@ def dict_entry_update_view(request, pk):
                     items = list(set(items).difference(exclude))
                 return render(request, 'dict/ajax_autocomplete.html', {'items': items})
 
-    return render(request, 'dict/dictentry_form.html', context)
+        else:
+            return render(request, 'dict/dictentry_form.html', context)
 
 
 class DictItemDetailView(LoginRequiredMixin, generic.DetailView):

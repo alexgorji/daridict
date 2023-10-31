@@ -146,16 +146,17 @@ a {
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-.admin th, .admin td {
-    width: 28%;
-}
-
 /*.my-items-table th:nth-child(1) > div, .my-items-table td:nth-child(1), .my-items-table th:nth-child(2) > div, .my-items-table td:nth-child(2) > div {*/
 /*    overflow-y: visible;*/
 /*}*/
 .my-items-table th > div, .my-items-table td > div {
     overflow-x: scroll;
 }
+
+.admin th, .admin td {
+    width: 25%;
+}
+
 
 .admin th:nth-child(1), .admin td:nth-child(1) {
     width: 5%
@@ -168,13 +169,19 @@ a {
 .admin th:nth-child(6), .admin td:nth-child(6) {
     width: 10%;
 }
+.admin th:nth-child(7), .admin td:nth-child(7) {
+    width: 9%;
+}
 
 .not-admin th, .not-admin td {
-    width: 30%;
+    width: 27%;
 }
 
 .not-admin th:nth-child(4), .not-admin td:nth-child(4) {
     width: 10%;
+}
+.not-admin th:nth-child(5), .not-admin td:nth-child(5) {
+    width: 9%;
 }
 
 

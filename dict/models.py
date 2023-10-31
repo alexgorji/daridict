@@ -94,10 +94,10 @@ class DictEntry(models.Model):
     item_german = models.ForeignKey(to='dict.DictItem', blank=True, on_delete=models.RESTRICT,
                                     related_name='entry_german_item',
                                     null=True)
-    # order_of_languages = ['Dari', 'Farsi', 'German']
     order_of_languages = ['German', 'Farsi', 'Dari']
     order_of_items = [f'item_{language.lower()}' for language in order_of_languages]
     tags = models.ManyToManyField(to=Tag, blank=True)
+    approved = models.BooleanField(default=False)
     history = HistoricalRecords(m2m_fields=[tags])
 
     def __str__(self):
@@ -126,8 +126,8 @@ class DictEntry(models.Model):
                 zip([DictLanguage.objects.get(value=lang) for lang in self.order_of_languages],
                     self.get_ordered_items())}
 
-    def get_tags_as_string(self):
-        return ", ".join([tag.name for tag in self.tags.all().order_by('name')])
+    def get_tags_as_string(self) -> str:
+        return ' ' + ", ".join([tag.name for tag in self.tags.all().order_by('name')])
 
 
     @staticmethod

@@ -11,10 +11,15 @@
                 {% for form in item_forms %}
                     {{ form.as_p }}
                 {% endfor %}
-                <p></p>
-                <label for="id_entry_tag_names">Tag(s)</label>
-                <input type="text" name="tag_names" id="id_entry_tag_names" placeholder="Tag(s)"
-                       value="{{ entry.get_tags_as_string }}">
+                <p>
+                    {{ approved_form }}
+                </p>
+
+                <p>
+                    <label for="id_entry_tag_names">Tag(s)</label>
+                    <input type="text" name="tag_names" id="id_entry_tag_names" placeholder="Tag(s)"
+                           value="{{ entry.get_tags_as_string }}">
+                </p>
                 <div id="id_tags_autocomplete" style="position: absolute" class="autocomplete">
                     <div></div>
                 </div>
@@ -28,9 +33,9 @@
     </div>
 {% endblock %}
 {% block extra_js %}
-{#    <script>#}
-{#        autocomplete($('#id_entry_tag_names'), "id_tags_autocomplete", true);#}
-{#    </script>#}
-{#        autocomplete($('#id_tag_names'), "id_tag_names_autocomplete", true);#}
+    {#    <script>#}
+    {#        autocomplete($('#id_entry_tag_names'), "id_tags_autocomplete", true);#}
+    {#    </script>#}
+    {#        autocomplete($('#id_tag_names'), "id_tag_names_autocomplete", true);#}
 
 {% endblock %}

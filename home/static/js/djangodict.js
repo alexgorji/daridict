@@ -170,6 +170,17 @@ function editClick(entryID) {
     });
 }
 
+function approvedClick(entryID) {
+    button_td = $('#id-entry-' + entryID + '-approved-button')
+    console.log('approving')
+    button_td.children([$(":first-child")]).popover('dispose')
+    $.get('', {'entry_id': entryID, 'approved': 'approved'}, function (data) {
+        button_td.children().replaceWith(data);
+        button_td.children([$(":first-child")]).popover('show')
+    });
+}
+
+
 function cancelClick() {
     console.log('cancelling')
     $.get('', {'cancel': 'cancel'}, function (data) {
