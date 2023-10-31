@@ -1,6 +1,6 @@
 let currentFocus = -1;
 
-function autocomplete(inp, autocompleteFieldId, tags = false, language) {
+function autocomplete(inp, autocompleteFieldId, tags = false, sources = false, language) {
     /*inp: text field element for each language */
     if (tags === true) {
         inp.on("input click", function () {
@@ -24,7 +24,27 @@ function autocomplete(inp, autocompleteFieldId, tags = false, language) {
                 });
             });
         });
-
+    } else if (sources === true) {
+        inp.on("input click", function () {
+            let sources_as_string = inp.val()
+            let array_of_sources = sources_as_string.split(', ')
+            $.get('', {'autocompletesources': sources_as_string}, function (data) {
+                $('#' + autocompleteFieldId).children().replaceWith(data);
+                /*make the matching letters bold*/
+                /*on click for matched word*/
+                $(".autocomplete-item").map(function () {
+                    // this.innerHTML = '<strong>' + this.innerText.slice(0, value.length) + '</strong>' + this.innerText.slice(value.length);
+                    this.addEventListener("click", function (e) {
+                        if (array_of_sources.slice(0, -1).length > 0) {
+                            inp.val(array_of_sources.slice(0, -1).toString() + ', ' + this.innerText)
+                        } else {
+                            inp.val(this.innerText)
+                        }
+                        closeAllLists();
+                    });
+                });
+            });
+        });
     } else {
         inp.on("input", function () {
             let value = inp.val()
@@ -152,12 +172,6 @@ function toggle_edit_buttons() {
             }
             opened_edit_buttons = this
             opened_symbol = symbol
-            // const that = this
-            // setTimeout(function () {
-            //     $(".main-table-wrapper").animate({
-            //         scrollTop: $(that).closest('tr').position().top - 55
-            //     }, 300);
-            // }, 500);
         }
     });
 }
@@ -245,9 +259,10 @@ function loadAutocompletions() {
         field = fields[key];
         autocomplete(field, "id_" + language + "-value_autocomplete", false, language);
     }
-    autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, null);
+    autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, false, null);
     autocomplete($('#id_tag_names'), "id_tag_names_autocomplete", true);
     autocomplete($('#id_tag_search_field'), "id_tag_search_autocomplete", true);
+    autocomplete($('#id_source_names'), "id_source_names_autocomplete", false, true);
 }
 
 function getCookie(name) {
@@ -266,16 +281,6 @@ function getCookie(name) {
     return cookieValue;
 }
 
-function convertFormToJSON(form) {
-    const array = $(form).serializeArray(); // Encodes the set of form elements as an array of names and values.
-    const json = {};
-    $.each(array, function () {
-        json[this.name] = this.value || "";
-    });
-    return json;
-}
-
-
 function saveUpdateButtons() {
     $('button[name = "entry-update"]').on('click', function () {
         const csrftoken = getCookie('csrftoken');
@@ -283,6 +288,7 @@ function saveUpdateButtons() {
         const farsi_value = $("#id_farsi-value").val()
         const german_value = $("#id_german-value").val()
         const tag_names = $('#id_tag_names').val()
+        const source_names = $('#id_source_names').val()
         const entry_id = $(this).attr('data-entry-id')
         console.log('update clicked', entry_id)
         $.post('', {
@@ -290,6 +296,7 @@ function saveUpdateButtons() {
             'farsi_value': farsi_value,
             'german_value': german_value,
             'tag_names': tag_names,
+            'source_names': source_names,
             'selected_entry_id': entry_id,
             'entry-update': 'yes',
             'csrfmiddlewaretoken': csrftoken
@@ -308,12 +315,14 @@ function saveUpdateButtons() {
         const farsi_value = $("#id_farsi-value").val()
         const german_value = $("#id_german-value").val()
         const tag_names = $('#id_tag_names').val()
+        const source_names = $('#id_source_names').val()
         console.log('save clicked', $(this).attr('data-entry-id'))
         $.post('', {
             'dari_value': dari_value,
             'farsi_value': farsi_value,
             'german_value': german_value,
             'tag_names': tag_names,
+            'source_names': source_names,
             'entry-save': 'yes',
             'csrfmiddlewaretoken': csrftoken
         }, function (data) {

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}
+    Sources
+{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <p><a href="{% url 'source_create' %}">Add source</a></p>
+    {% endif %}
+    {% for object in object_list %}
+        <div>
+            <p>{% if user.is_authenticated %}
+                <a href="{% url 'admin:dict_dictsource_change' object.id %}">admin</a>
+            {% endif %}
+                {{ object.name }}
+                {% if object.url %}
+                    <br/>
+                    <a target="_blank" href="{{ object.url }}">{{ object.url }}</a>
+                {% endif %}
+            </p>
+        </div>
+    {% endfor %}
+{% endblock %}

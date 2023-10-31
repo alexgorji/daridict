@@ -1,6 +1,6 @@
 from django import forms
 
-from dict.models import DictItem, DictLanguage, Tag, DictEntry
+from dict.models import DictItem, DictLanguage, Tag, DictEntry, DictSource
 
 
 class DictItemForm(forms.ModelForm):
@@ -36,8 +36,3 @@ class DictEntrySortingForm(forms.Form):
     CHOICES = [(language.value, language.value) for language in DictLanguage.objects.all()]
     sorted_by = forms.ChoiceField(choices=CHOICES)
 
-
-class DictEntryApprovedForm(forms.ModelForm):
-    class Meta:
-        model = DictEntry
-        fields = ['approved']

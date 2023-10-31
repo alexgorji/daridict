@@ -1,5 +1,5 @@
 <button type="button" class="tag-button btn" data-toggle="popover" data-bs-placement="top"
-        data-bs-content="{% if entry.approved %}approved{% else %}not approved{% endif %}"
+        data-bs-content="{{ entry.get_approved }}"
         data-bs-trigger="hover focus" {% if user.is_authenticated %}onclick="approvedClick({{ entry.id }}, this)"{% endif %}>
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
          fill="{% if entry.approved %}currentColor{% else %}#D3D3D3{% endif %}"

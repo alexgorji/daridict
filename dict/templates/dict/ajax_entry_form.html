@@ -10,15 +10,21 @@
                 <p></p>
             {% endfor %}
         {% endfor %}
-        <input type="text" name="tag_names" id="id_tag_names" placeholder="Tag(s)"
-               value="{{ entry.get_tags_as_string }}">
+        <input type="text" name="tag_names" id="id_tag_names" placeholder="Tag(s)" value="{{ entry.get_tags_as_string }}">
         <div id="id_tag_names_autocomplete" style="position: absolute" class="autocomplete">
             <div></div>
         </div>
         <p></p>
+        <input type="text" name="source_names" id="id_source_names" placeholder="Source(s)" value="{{ entry.get_sources_as_string }}">
+        <div id="id_source_names_autocomplete" style="position: absolute" class="autocomplete">
+            <div></div>
+        </div>
+
         <p></p>
         <button class="btn bg-light {{ entry_save_display }}" name="entry-save" type="button">Save</button>
-        <button class="btn bg-light {{ entry_update_display }}" name="entry-update" type="button" data-entry-id="{{ selected_entry_id }}">Update</button>
+        <button class="btn bg-light {{ entry_update_display }}" name="entry-update" type="button"
+                data-entry-id="{{ selected_entry_id }}">Update
+        </button>
     </form>
     <button class="btn bg-light {{ entry_cancel_display }} cancel-button" onclick="cancelClick()">Cancel</button>
 </div>

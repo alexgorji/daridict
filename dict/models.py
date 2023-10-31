@@ -84,6 +84,18 @@ class Tag(models.Model):
         return super().save(*args, **kwargs)
 
 
+class DictSource(models.Model):
+    name = models.CharField(max_length=1000, unique=True)
+    url = models.URLField(max_length=300, blank=True)
+    history = HistoricalRecords()
+
+    def get_absolute_url(self):
+        return reverse('source_list')
+
+    def __str__(self):
+        return self.name
+
+
 class DictEntry(models.Model):
     item_dari = models.ForeignKey(to='dict.DictItem', blank=True, on_delete=models.RESTRICT,
                                   related_name='entry_dari_item',
@@ -97,8 +109,9 @@ class DictEntry(models.Model):
     order_of_languages = ['German', 'Farsi', 'Dari']
     order_of_items = [f'item_{language.lower()}' for language in order_of_languages]
     tags = models.ManyToManyField(to=Tag, blank=True)
+    sources = models.ManyToManyField(to=DictSource, blank=True)
     approved = models.BooleanField(default=False)
-    history = HistoricalRecords(m2m_fields=[tags])
+    history = HistoricalRecords(m2m_fields=[tags, sources])
 
     def __str__(self):
         try:
@@ -118,6 +131,14 @@ class DictEntry(models.Model):
             setattr(self, self_item, item)
         self.save()
 
+    def get_approved(self):
+        if self.approved:
+            if self.sources.all():
+                return 'approved: ' + self.get_sources_as_string()
+            return 'approved'
+        else:
+            return 'not approved'
+
     def get_ordered_items(self):
         return [getattr(self, item) for item in self.order_of_items]
 
@@ -126,9 +147,11 @@ class DictEntry(models.Model):
                 zip([DictLanguage.objects.get(value=lang) for lang in self.order_of_languages],
                     self.get_ordered_items())}
 
-    def get_tags_as_string(self) -> str:
-        return ' ' + ", ".join([tag.name for tag in self.tags.all().order_by('name')])
+    def get_sources_as_string(self) -> str:
+        return ', '.join([source.name for source in self.sources.all().order_by('name')])
 
+    def get_tags_as_string(self) -> str:
+        return ", ".join([tag.name for tag in self.tags.all().order_by('name')])
 
     @staticmethod
     def get_ordered_languages():

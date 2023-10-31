@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}
+    Source: {{ dictsource }}
+{% endblock %}
+{% block content %}
+    <div class="entry-update-form">
+        <p>{{ dictsource }}</p>
+        <form autocomplete="off" action="" method="POST" novalidate>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+{% endblock %}
