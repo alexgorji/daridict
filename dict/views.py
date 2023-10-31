@@ -45,8 +45,8 @@ def show_and_update_entries(request):
                 selected_entry.delete()
                 return redirect('dictionary')
 
-            elif get_post('entry-open'):
-                return redirect('dict_entry_update', selected_entry_id)
+            # elif get_post('entry-open'):
+            #     return redirect('dict_entry_update', selected_entry_id)
 
             # AJAX POST requests
             if is_ajax(request):
