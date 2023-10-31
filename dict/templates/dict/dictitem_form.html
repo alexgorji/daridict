@@ -7,5 +7,6 @@
         {{ form.as_p }}
         <input class="btn bg-light" type="submit" name="update" value="Update">
         <input class="btn bg-light" type="submit" name="delete" onclick="return confirm('Are you sure?')" value="del">
+        <a href="{% url 'dict_item' dictitem.pk %}" class="btn bg-light">Cancel<a>
     </form>
 {% endblock %}
