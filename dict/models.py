@@ -134,10 +134,10 @@ class DictEntry(models.Model):
     def get_approved(self):
         if self.approved:
             if self.sources.all():
-                return 'approved: ' + self.get_sources_as_string()
-            return 'approved'
+                return 'verified: ' + self.get_sources_as_string()
+            return 'verified'
         else:
-            return 'not approved'
+            return 'not verified'
 
     def get_ordered_items(self):
         return [getattr(self, item) for item in self.order_of_items]

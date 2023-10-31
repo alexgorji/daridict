@@ -40,7 +40,7 @@
                     <a href="{% url 'admin:dict_dictentry_history' history.history_object.id %}">{{ history.history_object }}</a>
                 </td>
                 <td>
-                    <a href="{% url 'dict_entry_update' history.history_object.id %}">open</a>
+                    <a href="{% url 'admin:dict_dictentry_change' history.history_object.id %}">admin</a>
                 </td>
                 <td>
                     {{ history.get_history_type_display }}
