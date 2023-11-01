@@ -3,7 +3,8 @@
     Item: {{ dictitem }}
 {% endblock %}
 {% block content %}
-    <p>Item: <strong>{{ dictitem.value }}</strong> <a href="{% url 'dict_item_update' dictitem.pk %}">Edit</a></p>
+    {{ dictitem }}
+    <p>Item: <strong>{{ dictitem.value }}</strong> <a href="{% url 'dict_item_update' dictitem.pk %}">Edit</a> <a href="{% url 'admin:dict_dictitem_change' dictitem.pk %}">Admin</a></p>
     <p>Language: <a href="{% url 'dict_language' dictitem.language.pk %}">{{ dictitem.language }}</a></p>
     <p>Comment:
         <span {% if dictitem.language.direction == 'RTL' %} dir="rtl" {% endif %}>{{ dictitem.comment }}</span>

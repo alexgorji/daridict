@@ -320,7 +320,7 @@ def show_and_delete_history(request):
             elif type_ == 'Tag':
                 HistoricalTag.objects.get(pk=history_pk).delete()
             else:
-                raise TypeError(f'historct type {type_} does not exist.')
+                raise TypeError(f'history object type {type_} does not exist.')
 
     histories = sorted(
         chain(DictEntry.history.all(), DictItem.history.all(), Tag.history.all(), DictSource.history.all(),

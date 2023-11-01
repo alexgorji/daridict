@@ -11,8 +11,10 @@ class AdminLinkMixin:
 
     def get_change_admin_link(self):
         return reverse(f'admin:{self._meta.app_label}_{self._meta.model_name}_change', args=(self.pk,))
+
     def get_history_admin_link(self):
         return self.get_change_admin_link().replace('change', 'history')
+
 
 class DictLanguage(models.Model, AdminLinkMixin):
     value = models.CharField(max_length=20, blank=False, unique=True)
