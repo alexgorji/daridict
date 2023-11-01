@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load utils %}
 {% block title %}
     History
 {% endblock %}
@@ -16,6 +17,9 @@
                 user
             </th>
             <th>
+                class
+            </th>
+            <th>
                 object
             </th>
             <th>
@@ -23,6 +27,9 @@
             </th>
             <th>
                 type
+            </th>
+            <th>
+
             </th>
         </tr>
         {% for history in histories %}
@@ -37,13 +44,24 @@
                     {{ history.history_user }}
                 </td>
                 <td>
-                    <a href="{{ history.history_object.get_history_admin_link }}">{{ history.history_object }}</a>
+                    {{ history.history_object | to_class_name }}
+                </td>
+                <td>
+                    <a href="{{ history.revert_url }}">{{ history.history_object }}</a>
                 </td>
                 <td>
                     <a href="{% url 'admin:dict_dictentry_change' history.history_object.id %}">admin</a>
                 </td>
                 <td>
                     {{ history.get_history_type_display }}
+                </td>
+                <td>
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="history_pk" value={{ history.pk }}>
+                        <input type="hidden" name="history_object_type" value={{ history.history_object | to_class_name }}>
+                        <input type="submit" value="del" name="delete_history" onclick="return confirm('Are you sure?')">
+                    </form>
                 </td>
             </tr>
         {% endfor %}

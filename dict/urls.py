@@ -8,7 +8,7 @@ urlpatterns = [
     path('language/<int:pk>/', views.DictLanguageDetailView.as_view(), name='dict_language'),
     path('tags/', views.TagListView.as_view(), name='tag_list'),
     path('tags/<int:pk>/', views.TagDetailView.as_view(), name='tag_detail'),
-    path('history', views.show_history, name='history'),
+    path('history', views.show_and_delete_history, name='history'),
     path('sources', views.SourceListView.as_view(), name='source_list'),
     path('sources/create', views.SourceCreateView.as_view(), name='source_create')
 ]

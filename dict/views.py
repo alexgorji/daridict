@@ -9,7 +9,8 @@ from django.views import generic
 
 from .forms import DictItemForm, DictItemUpdateForm, DictEntrySortingForm
 from .model_helpers import remove_redundant_spaces, remove_short_vowels
-from .models import DictItem, DictLanguage, Tag, DictEntry, DictSource
+from .models import DictItem, DictLanguage, Tag, DictEntry, DictSource, HistoricalDictItem, HistoricalDictEntry, \
+    HistoricalDictLanguage, HistoricalDictSource, HistoricalTag
 
 default_sorted_by = 'Dari'
 
@@ -303,9 +304,27 @@ class TagDetailView(generic.DetailView):
     model = Tag
 
 
-def show_history(request):
+def show_and_delete_history(request):
+    if request.POST:
+        if 'delete_history' in request.POST:
+            type_ = request.POST['history_object_type']
+            history_pk = request.POST['history_pk']
+            if type_ == 'DictItem':
+                HistoricalDictItem.objects.get(pk=history_pk).delete()
+            elif type_ == 'DictEntry':
+                HistoricalDictEntry.objects.get(pk=history_pk).delete()
+            elif type_ == 'DictLanguage':
+                HistoricalDictLanguage.objects.get(pk=history_pk).delete()
+            elif type_ == 'DictSource':
+                HistoricalDictSource.objects.get(pk=history_pk).delete()
+            elif type_ == 'Tag':
+                HistoricalTag.objects.get(pk=history_pk).delete()
+            else:
+                raise TypeError(f'historct type {type_} does not exist.')
+
     histories = sorted(
-        chain(DictEntry.history.all(), DictItem.history.all(), Tag.history.all(), DictSource.history.all(), DictLanguage.history.all()),
+        chain(DictEntry.history.all(), DictItem.history.all(), Tag.history.all(), DictSource.history.all(),
+              DictLanguage.history.all()),
         key=lambda obj: obj.history_date, reverse=True)
     return render(request, 'dict/history.html',
                   context={'histories': histories})
