@@ -154,7 +154,7 @@ a {
 }
 
 .admin th, .admin td {
-    width: 25%;
+    width: 22%;
 }
 
 
@@ -163,13 +163,16 @@ a {
 }
 
 .admin th:nth-child(2), .admin td:nth-child(2) {
-    width: 10%;
+    width: 7%;
+}
+.admin th:nth-child(3), .admin td:nth-child(3) {
+    width: 7%;
 }
 
-.admin th:nth-child(6), .admin td:nth-child(6) {
+.admin th:nth-child(7), .admin td:nth-child(7) {
     width: 10%;
 }
-.admin th:nth-child(7), .admin td:nth-child(7) {
+.admin th:nth-child(8), .admin td:nth-child(8) {
     width: 9%;
 }
 

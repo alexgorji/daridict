@@ -15,7 +15,6 @@
                     <form action="" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="selected_entry_id" value="{{ entry.id }}">
-{#                        <input class="btn rounded-pill py-0" type="submit" name="entry-open" value="open">#}
                         <a href="{% url 'admin:dict_dictentry_change' entry.id %}" class="btn rounded-pill py-0">admin</a>
                     </form>
                     <button class="btn rounded-pill py-0" onclick="copyClick({{ entry.id }}, this)">

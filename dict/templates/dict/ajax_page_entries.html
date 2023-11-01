@@ -2,20 +2,21 @@
 {% for entry in entries %}
     <tr id="id_entry_{{ entry.id }}">
         {% if user.is_authenticated %}
-        <td class="arrow-td">
-            {% if user.is_authenticated %}
-                <div class="arrow-div">
-                    <button class="edit_toggle">
-                        <i class="arrow right"></i>
-                    </button>
-                </div>
-            {% endif %}
-        </td>
-        <td>
-            <p class="latin-font">
-                {{ page | add:-1 | multiply:number_of_entries_per_page | add:forloop.counter}}</p>
-        </td>
-        {% endif%}
+            <td class="arrow-td">
+                {% if user.is_authenticated %}
+                    <div class="arrow-div">
+                        <button class="edit_toggle">
+                            <i class="arrow right"></i>
+                        </button>
+                    </div>
+                {% endif %}
+            </td>
+            <td>
+                <p class="latin-font">
+                    {{ page | add:-1 | multiply:number_of_entries_per_page | add:forloop.counter}}</p>
+            </td>
+            <td><p><a class="btn btn-secondary rounded-pill py-0 text-white" href="{% url 'admin:dict_dictentry_history' entry.id %}">his</a></p></td>
+        {% endif %}
         {% include "dict/ajax_entry_tags_and_items.html" %}
     </tr>
     {% include "dict/ajax_edit_toggles.html" %}

@@ -18,7 +18,6 @@ function autocomplete(inp, autocompleteFieldId, tags = false, sources = false, l
                         } else {
                             inp.val(this.innerText)
                         }
-
                         closeAllLists();
                     });
                 });
