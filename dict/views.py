@@ -45,13 +45,11 @@ def show_and_update_entries(request):
                 selected_entry.delete()
                 return redirect('dictionary')
 
-            # elif get_post('entry-open'):
-            #     return redirect('dict_entry_update', selected_entry_id)
-
             # AJAX POST requests
             if is_ajax(request):
                 # update or save entry
                 entry_is_new = False
+                entry_is_changed = False
                 values = [get_post(f'{language.lower()}_value') for language in DictEntry.order_of_languages]
                 if len(set(values)) == 1 and "" in set(values):
                     pass
@@ -62,8 +60,9 @@ def show_and_update_entries(request):
                     # update entry
                     if request.POST.get('entry-update', None):
                         for item, dict_language in zip(items, dict_languages):
-                            setattr(selected_entry, f'item_{dict_language.value.lower()}', item)
-                        selected_entry.save()
+                            if getattr(selected_entry, f'item_{dict_language.value.lower()}') != item:
+                                setattr(selected_entry, f'item_{dict_language.value.lower()}', item)
+                                entry_is_changed = True
                     else:
                         # save entry
                         for item, dict_language in zip(items, dict_languages):
@@ -92,7 +91,7 @@ def show_and_update_entries(request):
                     for tag in tags:
                         if tag not in selected_entry.tags.all():
                             selected_entry.tags.add(tag)
-                    selected_entry.save()
+                    entry_is_changed = True
 
                 # update entry sources
                 source_names = request.POST['source_names'].split(',')
@@ -106,8 +105,11 @@ def show_and_update_entries(request):
                     for source in sources:
                         if source not in selected_entry.sources.all():
                             selected_entry.sources.add(source)
-                    selected_entry.save()
 
+                    entry_is_changed = True
+
+                if entry_is_changed or entry_is_new:
+                    selected_entry.save()
                 if request.POST.get('entry-save', None):
                     if not entry_is_new:
                         return HttpResponse('')

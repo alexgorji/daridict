@@ -301,7 +301,7 @@ function saveUpdateButtons() {
             'csrfmiddlewaretoken': csrftoken
         }, function (data) {
             let td_elements = $("#id_entry_" + entry_id).children()
-            for (let i = 2; i < td_elements.length; ++i) {
+            for (let i = 3; i < td_elements.length; ++i) {
                 td_elements[i].remove()
             }
             $("#id_entry_" + entry_id).append(data)
