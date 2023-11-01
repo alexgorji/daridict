@@ -15,7 +15,7 @@
                 <p class="latin-font">
                     {{ page | add:-1 | multiply:number_of_entries_per_page | add:forloop.counter}}</p>
             </td>
-            <td><p><a class="btn btn-secondary rounded-pill py-0 text-white" href="{% url 'admin:dict_dictentry_history' entry.id %}">his</a></p></td>
+            <td><p><a class='history-button' href="{% url 'admin:dict_dictentry_history' entry.id %}">h</a></p></td>
         {% endif %}
         {% include "dict/ajax_entry_tags_and_items.html" %}
     </tr>

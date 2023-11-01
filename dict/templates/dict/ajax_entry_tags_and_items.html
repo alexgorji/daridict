@@ -1,9 +1,9 @@
 {% load languagetags %}
 {% for dict_item in entry.get_ordered_items %}
-    <td>
+    <td class="px-2">
         <div>
             {% if dict_item %}
-                <p {% if dict_item.language.direction == 'RTL' %} dir="rtl"{% else %} class="latin-font"{% endif %}>
+                <p {% if dict_item.language.direction == 'RTL' %} dir="rtl"{% else %} class="latin-font" {% endif %}>
                     {% if user.is_authenticated %}
                         <a href="{% url 'dict_item' dict_item.pk %}">
                             {{ dict_item.value }}</a>
