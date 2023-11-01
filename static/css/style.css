@@ -336,11 +336,16 @@ a {
         display: none;
     }
 
-      .collapse.dont-collapse-lm {
+    .collapse.dont-collapse-lm {
         display: block;
         height: auto !important;
         visibility: visible;
-      }
+    }
+
+    .latin-font {
+        font-size: 16px;
+    }
+
 }
 
 
