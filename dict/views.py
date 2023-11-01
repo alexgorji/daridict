@@ -1,3 +1,5 @@
+from itertools import chain
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q, RestrictedError
@@ -302,9 +304,11 @@ class TagDetailView(generic.DetailView):
 
 
 def show_history(request):
-    entries_history = DictEntry.history.all()
+    histories = sorted(
+        chain(DictEntry.history.all(), DictItem.history.all(), Tag.history.all(), DictSource.history.all(), DictLanguage.history.all()),
+        key=lambda obj: obj.history_date, reverse=True)
     return render(request, 'dict/history.html',
-                  context={'entries_history': entries_history})
+                  context={'histories': histories})
 
 
 class SourceListView(generic.ListView):

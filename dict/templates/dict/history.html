@@ -25,7 +25,7 @@
                 type
             </th>
         </tr>
-        {% for history in entries_history %}
+        {% for history in histories %}
             <tr>
                 <td>
                     {{ history.history_date|date:"Y m d"}}
@@ -37,7 +37,7 @@
                     {{ history.history_user }}
                 </td>
                 <td>
-                    <a href="{% url 'admin:dict_dictentry_history' history.history_object.id %}">{{ history.history_object }}</a>
+                    <a href="{{ history.history_object.get_history_admin_link }}">{{ history.history_object }}</a>
                 </td>
                 <td>
                     <a href="{% url 'admin:dict_dictentry_change' history.history_object.id %}">admin</a>

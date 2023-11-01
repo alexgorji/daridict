@@ -5,7 +5,16 @@ from simple_history.models import HistoricalRecords
 from dict.model_helpers import remove_redundant_spaces, remove_short_vowels, translate_to_sorting_value
 
 
-class DictLanguage(models.Model):
+class AdminLinkMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def get_change_admin_link(self):
+        return reverse(f'admin:{self._meta.app_label}_{self._meta.model_name}_change', args=(self.pk,))
+    def get_history_admin_link(self):
+        return self.get_change_admin_link().replace('change', 'history')
+
+class DictLanguage(models.Model, AdminLinkMixin):
     value = models.CharField(max_length=20, blank=False, unique=True)
     history = HistoricalRecords()
     LTR = 'LTR'
@@ -32,7 +41,7 @@ class DictLanguage(models.Model):
         ordering = ['id']
 
 
-class DictItem(models.Model):
+class DictItem(models.Model, AdminLinkMixin):
     language = models.ForeignKey(to=DictLanguage, on_delete=models.RESTRICT)
     value = models.CharField(max_length=250, blank=False)
     cleaned_value = models.CharField(max_length=250, blank=False)
@@ -69,7 +78,7 @@ class DictItem(models.Model):
         super().save(*args, **kwargs)
 
 
-class Tag(models.Model):
+class Tag(models.Model, AdminLinkMixin):
     name = models.fields.CharField(max_length=30, unique=True)
     history = HistoricalRecords()
 
@@ -84,7 +93,7 @@ class Tag(models.Model):
         return super().save(*args, **kwargs)
 
 
-class DictSource(models.Model):
+class DictSource(models.Model, AdminLinkMixin):
     name = models.CharField(max_length=1000, unique=True)
     url = models.URLField(max_length=300, blank=True)
     history = HistoricalRecords()
@@ -96,7 +105,7 @@ class DictSource(models.Model):
         return self.name
 
 
-class DictEntry(models.Model):
+class DictEntry(models.Model, AdminLinkMixin):
     item_dari = models.ForeignKey(to='dict.DictItem', blank=True, on_delete=models.RESTRICT,
                                   related_name='entry_dari_item',
                                   null=True)
