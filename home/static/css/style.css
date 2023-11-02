@@ -112,7 +112,7 @@ a {
 
 /* table */
 .table-wrapper {
-    height: calc(100vh - 200px);
+    /*height: calc(100vh - 200px);*/
     margin-top: 1rem;
     scrollbar-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
 }
@@ -320,9 +320,6 @@ a {
 }
 
 @media screen and (min-width: 992px) {
-    .table-wrapper {
-        height: calc(100vh - 100px);
-    }
 
     .main-wrapper {
         display: flex;
@@ -330,6 +327,17 @@ a {
 
     .my_input_fields {
         display: block !important;
+    }
+
+    .latin-font {
+        font-size: 16px;
+    }
+
+}
+
+@media screen and (min-width: 768px) {
+    .table-wrapper {
+        height: calc(100vh - 100px);
     }
 
     .sidebar-toggler {
@@ -340,10 +348,6 @@ a {
         display: block;
         height: auto !important;
         visibility: visible;
-    }
-
-    .latin-font {
-        font-size: 16px;
     }
 
 }
