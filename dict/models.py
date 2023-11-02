@@ -16,7 +16,18 @@ class AdminLinkMixin:
         return self.get_change_admin_link().replace('change', 'history')
 
 
-class DictLanguage(models.Model, AdminLinkMixin):
+class PrintSaveMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def save(
+            self, **kwargs
+    ):
+        print(f'saving object: {self}')
+        return super().save(**kwargs)
+
+
+class DictLanguage(PrintSaveMixin, models.Model, AdminLinkMixin):
     value = models.CharField(max_length=20, blank=False, unique=True)
     history = HistoricalRecords()
     LTR = 'LTR'
@@ -43,7 +54,7 @@ class DictLanguage(models.Model, AdminLinkMixin):
         ordering = ['id']
 
 
-class DictItem(models.Model, AdminLinkMixin):
+class DictItem(PrintSaveMixin, models.Model, AdminLinkMixin):
     language = models.ForeignKey(to=DictLanguage, on_delete=models.RESTRICT)
     value = models.CharField(max_length=250, blank=False)
     cleaned_value = models.CharField(max_length=250, blank=False)
@@ -80,7 +91,7 @@ class DictItem(models.Model, AdminLinkMixin):
         super().save(*args, **kwargs)
 
 
-class Tag(models.Model, AdminLinkMixin):
+class Tag(PrintSaveMixin, models.Model, AdminLinkMixin):
     name = models.fields.CharField(max_length=30, unique=True)
     history = HistoricalRecords()
 
@@ -95,7 +106,7 @@ class Tag(models.Model, AdminLinkMixin):
         return super().save(*args, **kwargs)
 
 
-class DictSource(models.Model, AdminLinkMixin):
+class DictSource(PrintSaveMixin, models.Model, AdminLinkMixin):
     name = models.CharField(max_length=1000, unique=True)
     url = models.URLField(max_length=300, blank=True)
     history = HistoricalRecords()
@@ -107,7 +118,7 @@ class DictSource(models.Model, AdminLinkMixin):
         return self.name
 
 
-class DictEntry(models.Model, AdminLinkMixin):
+class DictEntry(PrintSaveMixin, models.Model, AdminLinkMixin):
     item_dari = models.ForeignKey(to='dict.DictItem', blank=True, on_delete=models.RESTRICT,
                                   related_name='entry_dari_item',
                                   null=True)
@@ -122,7 +133,7 @@ class DictEntry(models.Model, AdminLinkMixin):
     tags = models.ManyToManyField(to=Tag, blank=True)
     sources = models.ManyToManyField(to=DictSource, blank=True)
     approved = models.BooleanField(default=False)
-    history = HistoricalRecords(m2m_fields=[tags, sources])
+    history = HistoricalRecords(m2m_fields=(tags, sources))
 
     def __str__(self):
         try:
