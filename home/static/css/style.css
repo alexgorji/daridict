@@ -341,22 +341,24 @@ a {
 .close-icon:after {
     content: "X";
     display: block;
-    width: 15px;
-    height: 15px;
+    width: 1.4rem;
+    height: 1.4rem;
     position: absolute;
-    background-color: rgba(133, 143, 143, 0.7);
+    background-color: rgba(133, 143, 143, 0.59);
     z-index: 1;
     /*bottom: 0;*/
-    /*top: -6px;*/
+    top: -0.6rem;
     padding-left: 1px;
-    padding-bottom: 17px;
+    padding-right: 1px;
+    padding-bottom: 1.5rem;
+    /*padding-top: -1rem;*/
 
     margin: auto;
     border-radius: 50%;
     text-align: center;
     color: white;
     font-weight: normal;
-    font-size: 12px;
+    font-size: 16px;
     box-shadow: 0 0 2px mediumaquamarine;
     cursor: pointer;
 }
@@ -397,10 +399,11 @@ a {
     }
 
     .close-icon:after {
-        bottom: 0;
-        top: -6px;
-        padding-left: 1px;
-        padding-bottom: 17px;
+        /*bottom: 0;*/
+        /*top: -6px;*/
+        /*top: -0.5rem;*/
+        /*padding-left: 1px;*/
+        /*padding-bottom: 17px;*/
     }
 
 
