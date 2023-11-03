@@ -16,7 +16,7 @@
                     <div class="d-flex">
                         <button class="btn search-button bg-light">Search</button>
                         <div class="tag_search_container">
-                            <input id="id_tag_search_field" type="text" name="tags" placeholder="TAG"
+                            <input id="id_tag_search_field" type="search" name="tags" placeholder="TAG"
                                    autocomplete="off"
                                    value="{{ search_tags_value }}">
                             <div id="id_tag_search_autocomplete" style="position: absolute" class="autocomplete">
@@ -25,11 +25,13 @@
                         </div>
                     </div>
                     <p></p>
-                    <input id="id_search_field" type="text" name="search" placeholder="ENTRY" autocomplete="off"
-                           value="{{ search_value }}">
+                    <input id="id_search_field" type="text" name="search" required placeholder="ENTRY" autocomplete="off"
+                           value="{{ search_value }}" class="search-box">
+                    <button id="id_search_close_icon" class="close-icon" type="reset"></button>
                     <div id="id_search_field_autocomplete" style="position: absolute" class="autocomplete">
                         <div></div>
                     </div>
+
                     <p></p>
                 </form>
             </div>
