@@ -11,7 +11,6 @@ function autocomplete(inp, autocompleteFieldId, tags = false, sources = false, l
                 /*make the matching letters bold*/
                 /*on click for matched word*/
                 $(".autocomplete-item").map(function () {
-                    // this.innerHTML = '<strong>' + this.innerText.slice(0, value.length) + '</strong>' + this.innerText.slice(value.length);
                     this.addEventListener("click", function (e) {
                         if (array_of_tags.slice(0, -1).length > 0) {
                             inp.val(array_of_tags.slice(0, -1).toString() + ', ' + this.innerText)
@@ -32,7 +31,6 @@ function autocomplete(inp, autocompleteFieldId, tags = false, sources = false, l
                 /*make the matching letters bold*/
                 /*on click for matched word*/
                 $(".autocomplete-item").map(function () {
-                    // this.innerHTML = '<strong>' + this.innerText.slice(0, value.length) + '</strong>' + this.innerText.slice(value.length);
                     this.addEventListener("click", function (e) {
                         if (array_of_sources.slice(0, -1).length > 0) {
                             inp.val(array_of_sources.slice(0, -1).toString() + ', ' + this.innerText)
@@ -48,7 +46,6 @@ function autocomplete(inp, autocompleteFieldId, tags = false, sources = false, l
         inp.on("input", function () {
             let value = inp.val()
             $.get('', {'language': language, 'autocomplete': value}, function (data) {
-                // $('#' + language + '_value_autocomplete').children().replaceWith(data);
                 $('#' + autocompleteFieldId).children().replaceWith(data);
                 /*make the matching letters bold*/
                 /*on click for matched word*/
