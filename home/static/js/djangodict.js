@@ -44,7 +44,13 @@ function autocomplete(inp, autocompleteFieldId, tags = false, sources = false, l
         });
     } else {
         inp.on("input", function () {
+            let button = document.getElementById('id_search_close_icon')
             let value = inp.val()
+            if (value.length > 0) {
+                button.style.display = 'inline-block'
+            } else {
+                button.style.display = 'none'
+            }
             $.get('', {'language': language, 'autocomplete': value}, function (data) {
                 $('#' + autocompleteFieldId).children().replaceWith(data);
                 /*make the matching letters bold*/
@@ -129,6 +135,12 @@ function autocomplete(inp, autocompleteFieldId, tags = false, sources = false, l
     document.addEventListener("click", function () {
         closeAllLists();
     });
+}
+
+function searchCleanClick() {
+    let button = document.getElementById('id_search_close_icon')
+    button.style.display = 'none'
+    window.location.href = window.location.href.replace(/search=.*/, 'search=');
 }
 
 let opened_edit_buttons
