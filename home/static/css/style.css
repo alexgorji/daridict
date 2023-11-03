@@ -346,8 +346,8 @@ a {
     position: absolute;
     background-color: rgba(133, 143, 143, 0.7);
     z-index: 1;
-    bottom: 0;
-    top: -6px;
+    /*bottom: 0;*/
+    /*top: -6px;*/
     padding-left: 1px;
     padding-bottom: 17px;
 
@@ -395,6 +395,14 @@ a {
         height: auto !important;
         visibility: visible;
     }
+
+    .close-icon:after {
+        bottom: 0;
+        top: -6px;
+        padding-left: 1px;
+        padding-bottom: 17px;
+    }
+
 
 }
 
