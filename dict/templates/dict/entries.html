@@ -25,9 +25,12 @@
                         </div>
                     </div>
                     <p></p>
-                    <input id="id_search_field" type="text" name="search" required placeholder="ENTRY" autocomplete="off"
-                           value="{{ search_value }}" class="search-box">
-                    <button id="id_search_close_icon" class="close-icon" type="reset"></button>
+                    <div class="search-wrapper">
+                        <input id="id_search_field" type="text" name="search" required placeholder="ENTRY"
+                               autocomplete="off"
+                               value="{{ search_value }}" class="search-box">
+                        <button id="id_search_close_icon" class="close-icon" type="reset"></button>
+                    </div>
                     <div id="id_search_field_autocomplete" style="position: absolute" class="autocomplete">
                         <div></div>
                     </div>
