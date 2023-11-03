@@ -135,8 +135,10 @@ def show_and_update_entries(request):
         sorting_form = DictEntrySortingForm(initial={'sorted_by': sorted_by})
 
         # get search value and set entries for paginator
-        search_value = request.GET.get('search', '')
+
         search_tags_value = request.GET.get('tags', '')
+        search_value = request.GET.get('search', '')
+
         if search_value != '':
             if search_tags_value != '':
                 queried_entries = DictEntry.objects.all().filter(
