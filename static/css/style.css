@@ -22,8 +22,19 @@ a {
 }
 
 /* entry form */
-.entry-form input[type='text'] {
+.search-form input[type='text'] {
     width: 100%;
+}
+
+input {
+    border-radius: .25rem;
+    border: 1px solid transparent;
+    height: 1.7rem;
+}
+
+input:focus {
+    outline: none !important;
+    border: 1px solid forestgreen;
 }
 
 /* autocomplete*/
@@ -70,10 +81,6 @@ a {
 
 }
 
-/*.sidebar-toggler {*/
-/*    display: none;*/
-/*}*/
-
 .arrow-td {
     padding: 0 !important;
 }
@@ -88,11 +95,6 @@ a {
     -webkit-transform: rotate(-45deg);
     transition-duration: 0.5s;
 }
-
-/*.up {*/
-/*    transform: rotate(-135deg);*/
-/*    -webkit-transform: rotate(-135deg);*/
-/*}*/
 
 .up {
     transform: rotate(45deg);
@@ -167,9 +169,7 @@ a {
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-/*.my-items-table th:nth-child(1) > div, .my-items-table td:nth-child(1), .my-items-table th:nth-child(2) > div, .my-items-table td:nth-child(2) > div {*/
-/*    overflow-y: visible;*/
-/*}*/
+
 .my-items-table th > div, .my-items-table td > div {
     overflow-x: scroll;
 }
@@ -231,9 +231,6 @@ a {
 }
 
 .top-tr {
-    /*border: rgba(102, 205, 170, 0.2) solid 1px;*/
-    /*background-color: rgba(102, 205, 170, 0.1);*/
-    /*    */
     border: rgba(255, 127, 80, 0.2) solid 1px;
     background-color: rgba(255, 127, 80, 0.1);
     transition: background-color 1s ease, border 1s ease;
@@ -242,12 +239,11 @@ a {
 .search-button {
     width: fit-content !important;
     margin-right: 0.2rem;
-    height: 30px;
     line-height: 0;
+    height: 1.7rem;
 }
 
 .tag-button {
-    /*background-color: #6f94c6;*/
     padding: 0 4px 4px 4px;
     margin: 0 0 13px 0;
     transition-duration: 0.4s;
@@ -277,18 +273,8 @@ a {
     right: 0;
 }
 
-.entry-form {
-    width: 100%;
-}
-
 .entry-update-form label {
     width: 5rem;
-}
-
-#id_search_form input {
-    width: 100%;
-    /*margin-bottom: 1rem;*/
-    direction: rtl;
 }
 
 #id_tags_autocomplete {
@@ -300,71 +286,73 @@ a {
     direction: ltr !important;
 }
 
+[data-popper-placement=left] .popover-body {
+    direction: rtl;
+}
+
+/* search */
 .tag_search_container {
+    width: 100%;
+}
+
+
+.tag-search-container {
+    width: 100%;
+}
+
+.item-search-container {
+    width: 100%;
+    position: relative;
+}
+
+.search-form {
     width: 100%;
 }
 
 #id_search_form input {
     width: 100%;
-    /*margin-bottom: 1rem;*/
     direction: rtl;
 }
 
 #id_search_field_autocomplete {
     direction: rtl;
-    width: 100%;
-}
-
-[data-popper-placement=left] .popover-body {
-    direction: rtl;
-}
-
-.search-wrapper {
-    height: 30px;
-}
-
-
-.search-box {
     position: absolute;
+    right: 0;
+}
+
+#id_search_field:valid ~ .close-icon {
+    display: inline-block;
+}
+
+#id_search_language {
+    height: 1.7rem;
+    background-color: #f8f9fa;
+    margin-right: 0.2rem;
+    border-radius: .25rem;
+    border: 1px solid transparent;
+    width: fit-content !important;
+    line-height: 0;
+}
+
+#id_search_close_icon {
+    margin-left: 0.2rem;
+    margin-top: 0.1rem;
 }
 
 .close-icon {
-    position: relative;
+    position: absolute;
     border: 1px solid transparent;
-    background-color: transparent;
-    display: inline-block;
+    background-color: rgba(133, 143, 143, 0.25);
     vertical-align: middle;
     outline: 0;
     cursor: pointer;
-}
-
-.close-icon:after {
-    content: "X";
-    display: block;
-    width: 1.4rem;
-    height: 1.4rem;
-    position: absolute;
-    background-color: rgba(133, 143, 143, 0.59);
-    z-index: 1;
-    /*bottom: 0;*/
-    top: -0.6rem;
-    padding-left: 1px;
-    padding-right: 1px;
-    padding-bottom: 1.5rem;
-    /*padding-top: -1rem;*/
-
-    margin: auto;
     border-radius: 50%;
-    text-align: center;
-    color: white;
-    font-weight: normal;
-    font-size: 16px;
-    box-shadow: 0 0 2px mediumaquamarine;
-    cursor: pointer;
-}
-
-.search-box:not(:valid) ~ .close-icon {
+    left: 0;
+    padding: 0;
+    width: 1.4rem;
     display: none;
+    color: ghostwhite;
+    font-size: 15px;
 }
 
 @media screen and (min-width: 992px) {
@@ -397,16 +385,6 @@ a {
         height: auto !important;
         visibility: visible;
     }
-
-    .close-icon:after {
-        /*bottom: 0;*/
-        /*top: -6px;*/
-        /*top: -0.5rem;*/
-        /*padding-left: 1px;*/
-        /*padding-bottom: 17px;*/
-    }
-
-
 }
 
 

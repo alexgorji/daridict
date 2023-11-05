@@ -44,13 +44,16 @@ function autocomplete(inp, autocompleteFieldId, tags = false, sources = false, l
         });
     } else {
         inp.on("input", function () {
-            let button = document.getElementById('id_search_close_icon')
             let value = inp.val()
-            if (value.length > 0) {
-                button.style.display = 'inline-block'
-            } else {
-                button.style.display = 'none'
+            if (this.id === "id_search_field") {
+                let button = document.getElementById('id_search_close_icon')
+                if (value.length > 0) {
+                    button.style.display = 'inline-block'
+                } else {
+                    button.style.display = 'none'
+                }
             }
+
             $.get('', {'language': language, 'autocomplete': value}, function (data) {
                 $('#' + autocompleteFieldId).children().replaceWith(data);
                 /*make the matching letters bold*/
@@ -267,7 +270,8 @@ function loadAutocompletions() {
         field = fields[key];
         autocomplete(field, "id_" + language + "-value_autocomplete", false, language);
     }
-    autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, false, null);
+    language = $('#id_search_language').val().toLowerCase()
+    autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, false, language);
     autocomplete($('#id_tag_names'), "id_tag_names_autocomplete", true);
     autocomplete($('#id_tag_search_field'), "id_tag_search_autocomplete", true);
     autocomplete($('#id_source_names'), "id_source_names_autocomplete", false, true);

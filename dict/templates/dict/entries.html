@@ -9,35 +9,37 @@
                     href="#sideBar" role="button"
                     aria-expanded="false" aria-controls="sideBar"></button>
         </div>
-        <div id="sideBar" class="col-12 col-md-3 left-side-bar collapse dont-collapse-lm">
-            <div style="position: relative">
-                <form class="entry-form" id="id_search_form" action="" method="get" autocomplete="off" novalidate="">
-                    {{ sorting_form.as_p }}
-                    <div class="d-flex">
-                        <button class="btn search-button bg-light">Search</button>
-                        <div class="tag_search_container">
-                            <input id="id_tag_search_field" type="search" name="tags" placeholder="TAG"
-                                   autocomplete="off"
-                                   value="{{ search_tags_value }}">
-                            <div id="id_tag_search_autocomplete" style="position: absolute" class="autocomplete">
-                                <div></div>
-                            </div>
+        <div id="sideBar" class="col-12 col-md-3 collapse show left-side-bar dont-collapse-lm ">
+            <form class="search-form" id="id_search_form" action="" method="get" autocomplete="off" novalidate="">
+                {{ sorting_form.as_p }}
+                <div class="d-flex">
+                    <button class="btn search-button bg-light">Search</button>
+                    <div class="tag-search-container">
+                        <input id="id_tag_search_field" type="search" name="tags" placeholder="TAG"
+                               autocomplete="off"
+                               value="{{ search_tags_value }}">
+                        <div id="id_tag_search_autocomplete" style="position: absolute" class="autocomplete">
+                            <div></div>
                         </div>
                     </div>
-                    <p></p>
-                    <div class="search-wrapper">
+                </div>
+                <p></p>
+                <div class="d-flex">
+                    {{ search_language_form.as_p }}
+
+                    <div class="item-search-container">
                         <input id="id_search_field" type="text" name="search" required placeholder="ENTRY"
                                autocomplete="off"
-                               value="{{ search_value }}" class="search-box">
-                        <button id="id_search_close_icon" onclick="searchCleanClick()" type="button" class="close-icon"></button>
+                               value="{{ search_value }}">
+                        <button id="id_search_close_icon" onclick="searchCleanClick()" type="button"
+                                class="close-icon">X
+                        </button>
+                        <div id="id_search_field_autocomplete" class="autocomplete">
+                            <div></div>
+                        </div>
                     </div>
-                    <div id="id_search_field_autocomplete" style="position: absolute" class="autocomplete">
-                        <div></div>
-                    </div>
-
-                    <p></p>
-                </form>
-            </div>
+                </div>
+            </form>
             {% if user.is_authenticated %}
                 <div style="position:relative;" id="id-entry-form">
                     {% include "dict/ajax_entry_form.html" %}

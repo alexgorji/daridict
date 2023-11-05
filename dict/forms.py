@@ -36,3 +36,7 @@ class DictEntrySortingForm(forms.Form):
     CHOICES = [(language.value, language.value) for language in DictLanguage.objects.all()]
     sorted_by = forms.ChoiceField(choices=CHOICES)
 
+
+class DictSearchLanguageForm(forms.Form):
+    CHOICES = [(language.value, language.abbreviation) for language in DictLanguage.objects.all()]
+    search_language = forms.ChoiceField(label="", choices=CHOICES)
