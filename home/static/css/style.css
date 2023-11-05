@@ -22,7 +22,7 @@ a {
 }
 
 /* entry form */
-.entry-form input[type='text'] {
+.search-form input[type='text'] {
     width: 100%;
 }
 
@@ -273,10 +273,6 @@ input:focus {
     right: 0;
 }
 
-.entry-form {
-    width: 100%;
-}
-
 .entry-update-form label {
     width: 5rem;
 }
@@ -290,7 +286,26 @@ input:focus {
     direction: ltr !important;
 }
 
+[data-popper-placement=left] .popover-body {
+    direction: rtl;
+}
+
+/* search */
 .tag_search_container {
+    width: 100%;
+}
+
+
+.tag-search-container {
+    width: 100%;
+}
+
+.item-search-container {
+    width: 100%;
+    position: relative;
+}
+
+.search-form {
     width: 100%;
 }
 
@@ -303,65 +318,11 @@ input:focus {
     direction: rtl;
 }
 
-[data-popper-placement=left] .popover-body {
-    direction: rtl;
-}
-
-.search-box {
-    position: absolute;
-    right: 0;
-    left: 3.2rem;
-}
-
-.search {
-    position: relative;
-}
-
-.close-icon {
-    position: relative;
-    border: 1px solid transparent;
-    background-color: transparent;
+#id_search_field:valid ~ .close-icon {
     display: inline-block;
-    vertical-align: middle;
-    outline: 0;
-    cursor: pointer;
 }
 
-.close-icon:after {
-    content: "X";
-    display: block;
-    width: 1.4rem;
-    height: auto;
-    /*position: absolute;*/
-    background-color: rgba(133, 143, 143, 0.36);
-    z-index: 1;
-    /*bottom: 0;*/
-    /*top: -0.6rem;*/
-    padding-left: 1px;
-    padding-right: 1px;
-    /*padding-bottom: 1.5rem;*/
-    /*padding-top: -1rem;*/
-
-    /*margin: auto;*/
-    margin-left: 0.2rem;
-    border-radius: 50%;
-    text-align: center;
-    color: white;
-    font-weight: normal;
-    font-size: 16px;
-    /*box-shadow: 0 0 2px mediumaquamarine;*/
-    cursor: pointer;
-}
-
-.search_container {
-    width: 100%;
-}
-
-.search-box:not(:valid) ~ .close-icon {
-    display: none;
-}
-
-.search-language {
+.item-search-language {
     height: 1.7rem;
     background-color: #f8f9fa;
     margin-right: 0.2rem;
@@ -369,6 +330,27 @@ input:focus {
     border: 1px solid transparent;
     width: fit-content !important;
     line-height: 0;
+}
+
+#id_search_close_icon {
+    margin-left: 0.2rem;
+    margin-top: 0.1rem;
+}
+
+.close-icon {
+    position: absolute;
+    border: 1px solid transparent;
+    background-color: rgba(133, 143, 143, 0.25);
+    vertical-align: middle;
+    outline: 0;
+    cursor: pointer;
+    border-radius: 50%;
+    left: 0;
+    padding: 0;
+    width: 1.4rem;
+    display: none;
+    color: ghostwhite;
+    font-size: 15px;
 }
 
 @media screen and (min-width: 992px) {

@@ -1,5 +1,5 @@
 <div class="d-flex">
-    <form class="entry-form" method="post" novalidate autocomplete="off">
+    <form class="search-form" method="post" novalidate autocomplete="off">
         {% csrf_token %}
         {% for form in item_forms %}
             {% for field in form %}
