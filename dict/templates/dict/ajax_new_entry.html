@@ -13,8 +13,7 @@
             NEW
         </p>
     </td>
-    <td><p><a class="btn btn-secondary rounded-pill py-0 text-white"
-              href="{% url 'admin:dict_dictentry_history' entry.id %}" target="_blank">his</a></p></td>
+    <td><p><a class='history-button' href="{% url 'admin:dict_dictentry_history' entry.id %}">h</a></p></td>
 
     {% include "dict/ajax_entry_tags_and_items.html" %}
 </tr>

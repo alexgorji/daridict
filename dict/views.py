@@ -3,7 +3,7 @@ from itertools import chain
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q, RestrictedError
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from django.views import generic
 
@@ -136,12 +136,11 @@ def show_and_update_entries(request):
         sorting_form = DictEntrySortingForm(initial={'sorted_by': sorted_by})
 
         # get search language and set Sorting Form
-        search_language = request.GET.get('search_language', default_search_language)
-        # if not search_language:
-        #     search_language = request.session.get('search_language', default_search_language)
-        # else:
-        #     request.session['sorted_by'] = sorted_by
-        search_language_form = DictSearchLanguageForm(initial={'search_language': search_language})
+        search_language = request.session.get('search_language', None)
+        if not search_language:
+            search_language = request.GET.get('search_language', default_search_language)
+        request.session['search_language'] = search_language
+        search_language_form = DictSearchLanguageForm(initial={'search_language':search_language})
         # get search value and set entries for paginator
 
         search_tags_value = request.GET.get('tags', '')
@@ -371,3 +370,9 @@ class SourceListView(generic.ListView):
 class SourceCreateView(generic.CreateView):
     model = DictSource
     fields = '__all__'
+
+def update_session(request):
+    if not is_ajax(request) or not request.method=='POST':
+        return HttpResponseNotAllowed(['POST'])
+    request.session['search_language'] = request.POST['search_language']
+    return HttpResponse('ok')

@@ -10,5 +10,6 @@ urlpatterns = [
     path('tags/<int:pk>/', views.TagDetailView.as_view(), name='tag_detail'),
     path('history', views.show_and_delete_history, name='history'),
     path('sources', views.SourceListView.as_view(), name='source_list'),
-    path('sources/create', views.SourceCreateView.as_view(), name='source_create')
+    path('sources/create', views.SourceCreateView.as_view(), name='source_create'),
+    path('update_session', views.update_session, name='update_session')
 ]
