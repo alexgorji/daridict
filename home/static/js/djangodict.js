@@ -44,13 +44,16 @@ function autocomplete(inp, autocompleteFieldId, tags = false, sources = false, l
         });
     } else {
         inp.on("input", function () {
-            let button = document.getElementById('id_search_close_icon')
             let value = inp.val()
-            if (value.length > 0) {
-                button.style.display = 'inline-block'
-            } else {
-                button.style.display = 'none'
+            if (this.id === "id_search_field") {
+                let button = document.getElementById('id_search_close_icon')
+                if (value.length > 0) {
+                    button.style.display = 'inline-block'
+                } else {
+                    button.style.display = 'none'
+                }
             }
+
             $.get('', {'language': language, 'autocomplete': value}, function (data) {
                 $('#' + autocompleteFieldId).children().replaceWith(data);
                 /*make the matching letters bold*/

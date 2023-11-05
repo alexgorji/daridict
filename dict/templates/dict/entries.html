@@ -10,12 +10,12 @@
                     aria-expanded="false" aria-controls="sideBar"></button>
         </div>
         <div id="sideBar" class="col-12 col-md-3 left-side-bar collapse dont-collapse-lm">
-            <div style="position: relative">
+            <div class="search">
                 <form class="entry-form" id="id_search_form" action="" method="get" autocomplete="off" novalidate="">
                     {{ sorting_form.as_p }}
                     <div class="d-flex">
                         <button class="btn search-button bg-light">Search</button>
-                        <div class="tag_search_container">
+                        <div class="search_container">
                             <input id="id_tag_search_field" type="search" name="tags" placeholder="TAG"
                                    autocomplete="off"
                                    value="{{ search_tags_value }}">
@@ -25,11 +25,21 @@
                         </div>
                     </div>
                     <p></p>
-                    <div class="search-wrapper">
-                        <input id="id_search_field" type="text" name="search" required placeholder="ENTRY"
-                               autocomplete="off"
-                               value="{{ search_value }}" class="search-box">
-                        <button id="id_search_close_icon" onclick="searchCleanClick()" type="button" class="close-icon"></button>
+                    <div class="d-flex">
+                        <select class="search-language">
+                            <option>DA</option>
+                            <option>FA</option>
+                            <option>DE</option>
+                        </select>
+                        <div class="search_container">
+                            <div class="search-box">
+                                <input id="id_search_field" type="text" name="search" required placeholder="ENTRY"
+                                       autocomplete="off"
+                                       value="{{ search_value }}">
+                            </div>
+                            <button id="id_search_close_icon" onclick="searchCleanClick()" type="button"
+                                    class="close-icon"></button>
+                        </div>
                     </div>
                     <div id="id_search_field_autocomplete" style="position: absolute" class="autocomplete">
                         <div></div>

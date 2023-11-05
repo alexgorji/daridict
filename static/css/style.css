@@ -300,8 +300,8 @@ a {
     direction: ltr !important;
 }
 
-.tag_search_container {
-    width: 100%;
+.search_container {
+    right: 20px;
 }
 
 #id_search_form input {
@@ -317,10 +317,6 @@ a {
 
 [data-popper-placement=left] .popover-body {
     direction: rtl;
-}
-
-.search-wrapper {
-    height: 30px;
 }
 
 
