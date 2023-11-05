@@ -62,13 +62,15 @@
                     <!-- language headers -->
                     {% for dict_language in dict_languages %}
                         <th>
-                            <p{% if dict_language.direction == 'RTL' %} dir="rtl"{% endif %}>
-                                {% if user.is_authenticated %}
-                                    <a href="{% url 'dict_language' dict_language.pk %}">{{ dict_language.value }}</a>
-                                {% else %}
-                                    {{ dict_language.value }}
-                                {% endif %}
-                            </p>
+                            <div>
+                                <p{% if dict_language.direction == 'RTL' %} dir="rtl"{% endif %}>
+                                    {% if user.is_authenticated %}
+                                        <a href="{% url 'dict_language' dict_language.pk %}">{{ dict_language.value }}</a>
+                                    {% else %}
+                                        {{ dict_language.value }}
+                                    {% endif %}
+                                </p>
+                            </div>
                         </th>
                     {% endfor %}
                     <th>
