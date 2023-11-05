@@ -25,11 +25,8 @@
                 </div>
                 <p></p>
                 <div class="d-flex">
-                    <select class="item-search-language">
-                        <option>DA</option>
-                        <option>FA</option>
-                        <option>DE</option>
-                    </select>
+                    {{ search_language_form.as_p }}
+
                     <div class="item-search-container">
                         <input id="id_search_field" type="text" name="search" required placeholder="ENTRY"
                                autocomplete="off"
@@ -37,12 +34,11 @@
                         <button id="id_search_close_icon" onclick="searchCleanClick()" type="button"
                                 class="close-icon">X
                         </button>
+                        <div id="id_search_field_autocomplete" class="autocomplete">
+                            <div></div>
+                        </div>
                     </div>
                 </div>
-                <div id="id_search_field_autocomplete" style="position: absolute" class="autocomplete">
-                    <div></div>
-                </div>
-                <p></p>
             </form>
             {% if user.is_authenticated %}
                 <div style="position:relative;" id="id-entry-form">

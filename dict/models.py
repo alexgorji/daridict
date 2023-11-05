@@ -29,6 +29,8 @@ class PrintSaveMixin:
 
 class DictLanguage(PrintSaveMixin, models.Model, AdminLinkMixin):
     value = models.CharField(max_length=20, blank=False, unique=True)
+    abbreviation = models.CharField(max_length=20, null=True, default=None, unique=True)
+
     history = HistoricalRecords()
     LTR = 'LTR'
     RTL = 'RTL'

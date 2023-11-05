@@ -316,13 +316,15 @@ input:focus {
 
 #id_search_field_autocomplete {
     direction: rtl;
+    position: absolute;
+    right: 0;
 }
 
 #id_search_field:valid ~ .close-icon {
     display: inline-block;
 }
 
-.item-search-language {
+#id_search_language {
     height: 1.7rem;
     background-color: #f8f9fa;
     margin-right: 0.2rem;

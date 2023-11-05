@@ -7,12 +7,13 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import generic
 
-from .forms import DictItemForm, DictItemUpdateForm, DictEntrySortingForm
+from .forms import DictItemForm, DictItemUpdateForm, DictEntrySortingForm, DictSearchLanguageForm
 from .model_helpers import remove_redundant_spaces, remove_short_vowels
 from .models import DictItem, DictLanguage, Tag, DictEntry, DictSource, HistoricalDictItem, HistoricalDictEntry, \
     HistoricalDictLanguage, HistoricalDictSource, HistoricalTag
 
 default_sorted_by = 'Dari'
+default_search_language = 'Dari'
 
 
 def is_ajax(request):
@@ -134,25 +135,55 @@ def show_and_update_entries(request):
             request.session['sorted_by'] = sorted_by
         sorting_form = DictEntrySortingForm(initial={'sorted_by': sorted_by})
 
+        # get search language and set Sorting Form
+        search_language = request.GET.get('search_language', default_search_language)
+        # if not search_language:
+        #     search_language = request.session.get('search_language', default_search_language)
+        # else:
+        #     request.session['sorted_by'] = sorted_by
+        search_language_form = DictSearchLanguageForm(initial={'search_language': search_language})
         # get search value and set entries for paginator
 
         search_tags_value = request.GET.get('tags', '')
         search_value = request.GET.get('search', '')
 
         if search_value != '':
+            if search_value == 'آ':
+                search_value = 'ا'
             if search_tags_value != '':
-                queried_entries = DictEntry.objects.all().filter(
-                    (Q(item_dari__cleaned_value__istartswith=search_value) |
-                     Q(item_farsi__cleaned_value__istartswith=search_value) |
-                     Q(item_german__cleaned_value__istartswith=search_value)) & Q(
-                        tags__name__in=search_tags_value.split(', '))
-                ).order_by(f'item_{sorted_by.lower()}__sorting_value')
+                if search_language == 'Farsi':
+                    queried_entries = DictEntry.objects.all().filter(
+                        Q(item_farsi__cleaned_value__istartswith=search_value) & Q(
+                            tags__name__in=search_tags_value.split(', '))
+                    ).order_by(f'item_{sorted_by.lower()}__sorting_value')
+                elif search_language == 'German':
+                    queried_entries = DictEntry.objects.all().filter(
+                        Q(item_german__cleaned_value__istartswith=search_value) & Q(
+                            tags__name__in=search_tags_value.split(', '))
+                    ).order_by(f'item_{sorted_by.lower()}__sorting_value')
+                elif search_language == 'Dari':
+                    queried_entries = DictEntry.objects.all().filter(
+                        Q(item_dari__cleaned_value__istartswith=search_value) & Q(
+                            tags__name__in=search_tags_value.split(', '))
+                    ).order_by(f'item_{sorted_by.lower()}__sorting_value')
+                else:
+                    AttributeError(f'search_language {search_language} not implemented.')
             else:
-                queried_entries = DictEntry.objects.all().filter(
-                    Q(item_dari__cleaned_value__istartswith=search_value) |
-                    Q(item_farsi__cleaned_value__istartswith=search_value) |
-                    Q(item_german__cleaned_value__istartswith=search_value)
-                ).order_by(f'item_{sorted_by.lower()}__sorting_value')
+                if search_language == 'Farsi':
+                    queried_entries = DictEntry.objects.all().filter(
+                        item_farsi__cleaned_value__istartswith=search_value).order_by(
+                        f'item_{sorted_by.lower()}__sorting_value')
+                elif search_language == 'German':
+                    queried_entries = DictEntry.objects.all().filter(
+                        item_german__cleaned_value__istartswith=search_value).order_by(
+                        f'item_{sorted_by.lower()}__sorting_value')
+                elif search_language == 'Dari':
+                    queried_entries = DictEntry.objects.all().filter(
+                        item_dari__cleaned_value__istartswith=search_value).order_by(
+                        f'item_{sorted_by.lower()}__sorting_value')
+                else:
+                    AttributeError(f'search_language {search_language} not implemented.')
+
         else:
             if search_tags_value != '':
                 queried_entries = DictEntry.objects.filter(tags__name__in=search_tags_value.split(', ')).order_by(
@@ -259,7 +290,8 @@ def show_and_update_entries(request):
                 'entry_update_display': entry_update_display,
                 'entry_cancel_display': entry_cancel_display,
                 'search_value': search_value,
-                'search_tags_value': search_tags_value
+                'search_tags_value': search_tags_value,
+                'search_language_form': search_language_form
             })
 
 

@@ -270,7 +270,8 @@ function loadAutocompletions() {
         field = fields[key];
         autocomplete(field, "id_" + language + "-value_autocomplete", false, language);
     }
-    autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, false, null);
+    language = $('#id_search_language').val().toLowerCase()
+    autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, false, language);
     autocomplete($('#id_tag_names'), "id_tag_names_autocomplete", true);
     autocomplete($('#id_tag_search_field'), "id_tag_search_autocomplete", true);
     autocomplete($('#id_source_names'), "id_source_names_autocomplete", false, true);
