@@ -42,7 +42,7 @@ input:focus {
     border: 1px solid transparent !important;
 }
 
-.child_input_rtl input{
+.child_input_rtl input, .child_input_rtl textarea{
     direction: rtl;
     padding-right: 2px;
 }
