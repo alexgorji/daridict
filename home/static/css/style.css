@@ -42,6 +42,10 @@ input:focus {
     border: 1px solid transparent !important;
 }
 
+.child_input_rtl input{
+    direction: rtl;
+    padding-right: 2px;
+}
 /* autocomplete*/
 
 .autocomplete {

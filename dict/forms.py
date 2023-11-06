@@ -21,6 +21,7 @@ class DictItemForm(forms.ModelForm):
 
 
 class DictItemUpdateForm(forms.ModelForm):
+
     class Meta:
         model = DictItem
         fields = ['value', 'comment']
