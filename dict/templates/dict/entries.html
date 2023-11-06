@@ -4,12 +4,7 @@
 {% endblock %}
 {% block content %}
     <div class="row gx-0">
-        <div>
-            <button class="sidebar-toggler btn-close bg-secondary rounded-3 p-2" data-bs-toggle="collapse"
-                    href="#sideBar" role="button"
-                    aria-expanded="false" aria-controls="sideBar"></button>
-        </div>
-        <div id="sideBar" class="col-12 col-md-3 collapse show left-side-bar dont-collapse-lm ">
+        <div id="sideBar" class="col-12 col-md-3 left-side-bar">
             <form class="search-form" id="id_search_form" action="" method="get" autocomplete="off" novalidate="">
                 {{ sorting_form.as_p }}
                 <div class="d-flex">
@@ -46,7 +41,7 @@
                 </div>
             {% endif %}
         </div>
-        <div class="col-12 col-md-9 table-wrapper overflow-scroll">
+        <div class="col-12 col-md-9 overflow-scroll" id="id_table_wrapper">
             <table class="my-table my-items-table {% if user.is_authenticated %} admin {% else %} not-admin {% endif %}">
                 <thead>
                 <tr>
@@ -62,7 +57,7 @@
                     <!-- language headers -->
                     {% for dict_language in dict_languages %}
                         <th>
-                            <div>
+                            <div class="latin-font">
                                 <p{% if dict_language.direction == 'RTL' %} dir="rtl"{% endif %}>
                                     {% if user.is_authenticated %}
                                         <a href="{% url 'dict_language' dict_language.pk %}">{{ dict_language.value }}</a>
@@ -98,8 +93,7 @@
                 $("#id_search_form").submit();
             });
             let url = new URL(window.location.href)
-            let go_to_id = '#id_entry_' + url.searchParams.get('go_to_entry')
-            loopPages(page, {{ number_of_pages }}, window.location.search, go_to_id);
+            loopPages(page, {{ number_of_pages }}, window.location.search, url.searchParams.get('go_to_entry'));
         });
 
 

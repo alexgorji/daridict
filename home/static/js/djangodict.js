@@ -202,10 +202,26 @@ function editClick(entryID) {
         loadAutocompletions();
         saveUpdateButtons()
     });
-    $('.table-wrapper').animate({
-        scrollTop: $('#id_entry_' + entryID).position().top - 55
-    }, 2000);
-    window.scrollTo(0, 0)
+    go_to_entry(entryID, 0)
+}
+
+function go_to_entry(entryID, mobile = null) {
+    console.log('go_to_entry', entryID)
+    let entry = $('#id_entry_' + entryID)
+    console.log(entry, entry.length)
+    if (entry.length === 1) {
+        let table_wrapper = $('#id_table_wrapper')
+        table_wrapper.animate({
+            scrollTop: entry.position().top - entry.height()
+        }, 500);
+        if (mobile === 0) {
+            window.scrollTo(0, 0)
+        } else {
+            window.scrollTo(0, entry.position().top + table_wrapper.position().top)
+        }
+    }
+
+
 }
 
 function approvedClick(entryID) {
@@ -254,27 +270,24 @@ function getAndAppendPage(page, get_parameters) {
     });
 }
 
-function loopPages(page, number_of_pages, get_parameters, go_to_id) {
+function loopPages(page, number_of_pages, get_parameters, entry_id_number) {
     getAndAppendPage(page, get_parameters).done(function () {
         page += 1
-        let go_to = $(go_to_id)
-        if (go_to.length) {
-            go_to_id = null
+        let entry = $('#id_entry_' + entry_id_number)
+        let old_entry_id = entry_id_number
+        if (entry.length) {
+            entry_id_number = null
         }
         // console.log('in get_and_append_page done, next page', page)
         if (page <= number_of_pages) {
-            loopPages(page, number_of_pages, get_parameters, go_to_id)
+            loopPages(page, number_of_pages, get_parameters, entry_id_number)
         }
         toggle_edit_buttons()
         $(function () {
             $('.tag-button').popover()
             $('.comment-button').popover()
         })
-        if (go_to.length) {
-            $('.table-wrapper').animate({
-                scrollTop: go_to.position().top - 55
-            }, 2000);
-        }
+        go_to_entry(old_entry_id)
 
     });
 }
@@ -327,7 +340,6 @@ function saveUpdateButtons() {
         const tag_names = $('#id_tag_names').val()
         const source_names = $('#id_source_names').val()
         const entry_id = $(this).attr('data-entry-id')
-        console.log('update clicked', entry_id)
         $.post('', {
             'dari_value': dari_value,
             'farsi_value': farsi_value,
@@ -345,12 +357,12 @@ function saveUpdateButtons() {
             $("#id_entry_" + entry_id).append(data)
             $("#id_entry_" + entry_id).find($('[data-toggle="popover"]')).popover()
         });
-        $('.table-wrapper').animate({
-            scrollTop: $('#id_entry_' + entry_id).position().top - 55
-        }, 2000);
-
-        let x = document.getElementsByClassName("table-wrapper")[0]
-        window.scrollTo(0, $('#id_entry_' + entry_id).position().top + $('.table-wrapper').position().top)
+        // $('#id_table_wrapper').animate({
+        //     scrollTop: $('#id_entry_' + entry_id).position().top - 55
+        // }, 2000);
+        //
+        // window.scrollTo(0, $('#id_entry_' + entry_id).position().top + $('#id_table_wrapper').position().top)
+        go_to_entry(entry_id)
     });
     $('button[name = "entry-save"]').on('click', function () {
         const csrftoken = getCookie('csrftoken');
@@ -372,7 +384,7 @@ function saveUpdateButtons() {
             if (data) {
                 $('.my-table').find('tbody').prepend(data);
                 toggle_edit_buttons();
-                $('.table-wrapper').animate({
+                $('#id_table_wrapper').animate({
                     scrollTop: 0
                 }, 300)
             }
