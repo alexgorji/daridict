@@ -205,6 +205,7 @@ function editClick(entryID) {
     $('.table-wrapper').animate({
         scrollTop: $('#id_entry_' + entryID).position().top - 55
     }, 2000);
+    window.scrollTo(0, 0)
 }
 
 function approvedClick(entryID) {
@@ -347,6 +348,9 @@ function saveUpdateButtons() {
         $('.table-wrapper').animate({
             scrollTop: $('#id_entry_' + entry_id).position().top - 55
         }, 2000);
+
+        let x = document.getElementsByClassName("table-wrapper")[0]
+        window.scrollTo(0, $('#id_entry_' + entry_id).position().top + $('.table-wrapper').position().top)
     });
     $('button[name = "entry-save"]').on('click', function () {
         const csrftoken = getCookie('csrftoken');
