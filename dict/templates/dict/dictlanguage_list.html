@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}
+    Languages
+{% endblock %}
+{% block content %}
+    {% for lang in dictlanguage_list %}
+        <div><a href="{% url 'dict_language' lang.pk %}">{{ lang }}</a></div>
+    {% endfor %}
+
+{% endblock %}

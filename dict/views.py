@@ -319,6 +319,10 @@ class DictLanguageDetailView(LoginRequiredMixin, generic.DetailView):
         return redirect('dict_language', pk)
 
 
+class DictLanguageListView(LoginRequiredMixin, generic.ListView):
+    model = DictLanguage
+
+
 class TagListView(generic.ListView):
     model = Tag
     ordering = 'name'
