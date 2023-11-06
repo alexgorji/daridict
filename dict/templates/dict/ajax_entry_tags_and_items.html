@@ -1,7 +1,7 @@
 {% load languagetags %}
 {% for dict_item in entry.get_ordered_items %}
     <td>
-        <div class="px-2">
+        <div class="px-1">
             {% if dict_item %}
                 <p {% if dict_item.language.direction == 'RTL' %} dir="rtl"{% else %} class="latin-font" {% endif %}>
                     {% if user.is_authenticated %}

@@ -42,10 +42,11 @@ input:focus {
     border: 1px solid transparent !important;
 }
 
-.child_input_rtl input, .child_input_rtl textarea{
+.child_input_rtl input, .child_input_rtl textarea {
     direction: rtl;
     padding-right: 2px;
 }
+
 /* autocomplete*/
 
 .autocomplete {
@@ -134,7 +135,7 @@ input:focus {
 }
 
 .my-table td, .my-table th {
-    padding: 0.75em 0.5em 0 0.5em;
+    padding-top: 0.75rem;
 }
 
 
@@ -145,6 +146,7 @@ input:focus {
     position: sticky;
     top: 0;
     z-index: 2;
+    text-align: inherit !important;
 }
 
 
