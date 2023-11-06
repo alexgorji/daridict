@@ -202,6 +202,9 @@ function editClick(entryID) {
         loadAutocompletions();
         saveUpdateButtons()
     });
+    $('.table-wrapper').animate({
+        scrollTop: $('#id_entry_' + entryID).position().top - 55
+    }, 2000);
 }
 
 function approvedClick(entryID) {
@@ -266,7 +269,6 @@ function loopPages(page, number_of_pages, get_parameters, go_to_id) {
             $('.tag-button').popover()
             $('.comment-button').popover()
         })
-        console.log('go_to', go_to)
         if (go_to.length) {
             $('.table-wrapper').animate({
                 scrollTop: go_to.position().top - 55
@@ -342,6 +344,9 @@ function saveUpdateButtons() {
             $("#id_entry_" + entry_id).append(data)
             $("#id_entry_" + entry_id).find($('[data-toggle="popover"]')).popover()
         });
+        $('.table-wrapper').animate({
+            scrollTop: $('#id_entry_' + entry_id).position().top - 55
+        }, 2000);
     });
     $('button[name = "entry-save"]').on('click', function () {
         const csrftoken = getCookie('csrftoken');
