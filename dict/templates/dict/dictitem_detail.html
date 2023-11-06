@@ -4,14 +4,16 @@
 {% endblock %}
 {% block content %}
     {{ dictitem }}
-    <p>Item: <strong>{{ dictitem.value }}</strong> <a href="{% url 'dict_item_update' dictitem.pk %}">Edit</a> <a href="{% url 'admin:dict_dictitem_change' dictitem.pk %}">Admin</a></p>
+    <p>Item: <strong>{{ dictitem.value }}</strong> <a href="{% url 'dict_item_update' dictitem.pk %}">Edit</a> <a
+            href="{% url 'admin:dict_dictitem_change' dictitem.pk %}">Admin</a></p>
     <p>Language: <a href="{% url 'dict_language' dictitem.language.pk %}">{{ dictitem.language }}</a></p>
     <p>Comment:
         <span {% if dictitem.language.direction == 'RTL' %} dir="rtl" {% endif %}>{{ dictitem.comment }}</span>
     </p>
     {% for entry in dictitem.get_entries %}
         <div class="d-flex">
-            <p><a href="{% url 'admin:dict_dictentry_change' entry.pk%}">{{ entry }}</a></p>
+{#            <p><a href="{% url 'admin:dict_dictentry_change' entry.pk %}">{{ entry }}</a></p>#}
+            <p><a href="{% url 'dictionary'%}?go_to_entry={{ entry.id }}">{{ entry }}</a></p>
         </div>
     {% endfor %}
 {% endblock %}

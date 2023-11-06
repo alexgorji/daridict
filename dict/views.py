@@ -134,10 +134,9 @@ def show_and_update_entries(request):
         else:
             request.session['sorted_by'] = sorted_by
         sorting_form = DictEntrySortingForm(initial={'sorted_by': sorted_by})
-
         # get search language and set Sorting Form
         search_language = request.GET.get('search_language', default_search_language)
-        search_language_form = DictSearchLanguageForm(initial={'search_language':search_language})
+        search_language_form = DictSearchLanguageForm(initial={'search_language': search_language})
         # get search value and set entries for paginator
 
         search_tags_value = request.GET.get('tags', '')
@@ -367,9 +366,3 @@ class SourceListView(generic.ListView):
 class SourceCreateView(generic.CreateView):
     model = DictSource
     fields = '__all__'
-
-def update_session(request):
-    if not is_ajax(request) or not request.method=='POST':
-        return HttpResponseNotAllowed(['POST'])
-    request.session['search_language'] = request.POST['search_language']
-    return HttpResponse('ok')

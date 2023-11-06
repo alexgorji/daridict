@@ -250,18 +250,29 @@ function getAndAppendPage(page, get_parameters) {
     });
 }
 
-function loopPages(page, number_of_pages, get_parameters) {
-    getAndAppendPage(page, get_parameters).done(function (data) {
+function loopPages(page, number_of_pages, get_parameters, go_to_id) {
+    getAndAppendPage(page, get_parameters).done(function () {
         page += 1
+        let go_to = $(go_to_id)
+        if (go_to.length) {
+            go_to_id = null
+        }
         // console.log('in get_and_append_page done, next page', page)
         if (page <= number_of_pages) {
-            loopPages(page, number_of_pages, get_parameters)
+            loopPages(page, number_of_pages, get_parameters, go_to_id)
         }
         toggle_edit_buttons()
         $(function () {
             $('.tag-button').popover()
             $('.comment-button').popover()
         })
+        console.log('go_to', go_to)
+        if (go_to.length) {
+            $('.table-wrapper').animate({
+                scrollTop: go_to.position().top - 55
+            }, 2000);
+        }
+
     });
 }
 

@@ -93,16 +93,13 @@
 
         page = 1
         $(document).ready(function () {
-            /*
-            $('#id_search_language').change(function () {
-                let language = $('#id_search_language').val()
-                console.log('change search language', language)
-                autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, false, language.toLowerCase());
-            });*/
+
             $('#id_sorted_by').change(function () {
                 $("#id_search_form").submit();
             });
-            loopPages(page, {{ number_of_pages }}, window.location.search);
+            let url = new URL(window.location.href)
+            let go_to_id = '#id_entry_' + url.searchParams.get('go_to_entry')
+            loopPages(page, {{ number_of_pages }}, window.location.search, go_to_id);
         });
 
 
