@@ -136,10 +136,7 @@ def show_and_update_entries(request):
         sorting_form = DictEntrySortingForm(initial={'sorted_by': sorted_by})
 
         # get search language and set Sorting Form
-        search_language = request.session.get('search_language', None)
-        if not search_language:
-            search_language = request.GET.get('search_language', default_search_language)
-        request.session['search_language'] = search_language
+        search_language = request.GET.get('search_language', default_search_language)
         search_language_form = DictSearchLanguageForm(initial={'search_language':search_language})
         # get search value and set entries for paginator
 

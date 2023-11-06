@@ -93,17 +93,13 @@
 
         page = 1
         $(document).ready(function () {
+            /*
             $('#id_search_language').change(function () {
                 let language = $('#id_search_language').val()
+                console.log('change search language', language)
                 autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, false, language.toLowerCase());
-                $.post("{% url 'update_session' %}", {
-                    csrfmiddlewaretoken: "{{ csrf_token}}",
-                    search_language: language
-                }, function (data) {
-                });
-            });
+            });*/
             $('#id_sorted_by').change(function () {
-                console.log('sorted by')
                 $("#id_search_form").submit();
             });
             loopPages(page, {{ number_of_pages }}, window.location.search);
@@ -111,6 +107,7 @@
 
 
         window.onload = function () {
+            console.log('auto completion entries html onload')
             loadAutocompletions();
             saveUpdateButtons();
         }

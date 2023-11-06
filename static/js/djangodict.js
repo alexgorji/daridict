@@ -1,6 +1,7 @@
 let currentFocus = -1;
 
 function autocomplete(inp, autocompleteFieldId, tags = false, sources = false, language) {
+    console.log('autocomplete', 'autocompleteFieldId', autocompleteFieldId, 'tags', tags, 'sources', sources, 'language', language)
     /*inp: text field element for each language */
     if (tags === true) {
         inp.on("input click", function () {
@@ -44,8 +45,10 @@ function autocomplete(inp, autocompleteFieldId, tags = false, sources = false, l
         });
     } else {
         inp.on("input", function () {
+            // inp.replaceWith(inp.cloneNode(true));
             let value = inp.val()
             if (this.id === "id_search_field") {
+                language = $('#id_search_language').val()
                 let button = document.getElementById('id_search_close_icon')
                 if (value.length > 0) {
                     button.style.display = 'inline-block'
@@ -143,7 +146,13 @@ function autocomplete(inp, autocompleteFieldId, tags = false, sources = false, l
 function searchCleanClick() {
     let button = document.getElementById('id_search_close_icon')
     button.style.display = 'none'
-    window.location.href = window.location.href.replace(/search=.*/, 'search=');
+    // window.location.href = window.location.href.replace(/search=.*/, 'search=');
+    let url = new URL(window.location.href);
+    url.searchParams.delete('search')
+    url.searchParams.append('search', '')
+    url.searchParams.delete('search_language')
+    url.searchParams.append('search_language', $('#id_search_language').val())
+    window.location.href = url.toString()
 }
 
 let opened_edit_buttons
@@ -257,6 +266,7 @@ function loopPages(page, number_of_pages, get_parameters) {
 }
 
 function loadAutocompletions() {
+    console.log('loadAutocompletions')
     let fields = {
         'german': $("#id_german-value"),
         'farsi': $("#id_farsi-value"),
@@ -268,9 +278,10 @@ function loadAutocompletions() {
     for (let key in fields) {
         language = key;
         field = fields[key];
-        autocomplete(field, "id_" + language + "-value_autocomplete", false, language);
+        autocomplete(field, "id_" + language + "-value_autocomplete", false, false, language);
     }
     language = $('#id_search_language').val().toLowerCase()
+    // console.log('loadAutocomplete search lang', language)
     autocomplete($('#id_search_field'), "id_search_field_autocomplete", false, false, language);
     autocomplete($('#id_tag_names'), "id_tag_names_autocomplete", true);
     autocomplete($('#id_tag_search_field'), "id_tag_search_autocomplete", true);
