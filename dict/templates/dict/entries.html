@@ -102,6 +102,9 @@
             loadAutocompletions();
             saveUpdateButtons();
         }
+        $("body").on('click', function () {
+            $('.popover').remove();
+        })
 
     </script>
 {% endblock %}
