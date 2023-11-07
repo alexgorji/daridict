@@ -3,12 +3,14 @@
     Dari Dictionary Tag: {{ tag }}
 {% endblock %}
 {% block content %}
-    <p>Tag: <strong>{{ tag.name }}</strong></p>
+    <p>Tag: <strong>{% if user.is_authenticated %}
+        <a href="{% url 'admin:dict_tag_change' tag.id %}">{{ tag.name }}</a>{% else %}{{ tag.name }}{% endif %}</strong>
+    </p>
     {% for dictentry in tag.dictentry_set.all %}
         <div class="d-flex">
             <p>
                 {% if user.is_authenticated %}
-                    <a href="{% url 'admin:dict_dictentry_change' dictentry.pk %}">{{ dictentry }}</a>
+                    <p><a href="{% url 'dictionary' %}?go_to_entry={{ dictentry.id }}">{{ dictentry }}</a></p>
                 {% else %}
                     {{ dictentry.simple_string }}
                 {% endif %}
