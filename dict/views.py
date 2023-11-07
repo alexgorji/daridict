@@ -1,10 +1,12 @@
+import re
 from itertools import chain
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
+from django.db import IntegrityError
 from django.db.models import Q, RestrictedError
-from django.http import HttpResponse, HttpResponseNotAllowed
-from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, reverse
 from django.views import generic
 
 from .forms import DictItemForm, DictItemUpdateForm, DictEntrySortingForm, DictSearchLanguageForm
@@ -297,14 +299,29 @@ class DictItemDetailView(LoginRequiredMixin, generic.DetailView):
 class DictItemUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = DictItem
     form_class = DictItemUpdateForm
+    error = None
 
     def post(self, request, *args, **kwargs):
         delete_me = request.POST.get('delete')
         if delete_me:
-            self.get_object().delete()
+            try:
+                self.get_object().delete()
+            except RestrictedError as err:
+                error = re.search(r'"(.*)"', str(err)).group(0)
+                error = error.replace("\"", '')
+                for x in [str(obj) for obj in err.restricted_objects]:
+                    error += f" {x}"
+                return render(request, 'dict/dictitem_form.html',
+                              {'dictitem': DictItem.objects.get(pk=self.kwargs['pk']), 'form': self.get_form(),
+                               'error': error})
             return redirect('dictionary')
+        try:
+            return super().post(request, *args, **kwargs)
+        except IntegrityError as err:
 
-        return super().post(request, *args, **kwargs)
+            return render(request, 'dict/dictitem_form.html',
+                          {'dictitem': DictItem.objects.get(pk=self.kwargs['pk']), 'form': self.get_form(),
+                           'error': err})
 
 
 class DictLanguageDetailView(LoginRequiredMixin, generic.DetailView):

@@ -3,6 +3,7 @@
     Dari Dictionary Edit Item: {{ dictitem }}
 {% endblock %}
 {% block content %}
+    <p class="error">{{ error }}</p>
     <p>Language: <a href="{% url 'dict_language' dictitem.language.pk %}">{{ dictitem.language }}</a></p>
     <form method="post" novalidate>{% csrf_token %}
         <div {% if dictitem.language.value != 'German' %}class="child_input_rtl"{% endif %}>
