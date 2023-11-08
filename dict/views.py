@@ -334,7 +334,9 @@ class DictLanguageDetailView(LoginRequiredMixin, generic.DetailView):
             except RestrictedError as err:
                 print(err)
         if request.POST.get('delete-all-items-with-no-entries'):
-            for item in DictItem.objects.all():
+            language = request.POST.get('language')
+            print(request.POST)
+            for item in DictItem.objects.filter(language__value=language):
                 if len(item.get_entries()) == 0:
                     item.delete()
         return redirect('dict_language', pk)
