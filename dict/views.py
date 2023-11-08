@@ -333,6 +333,10 @@ class DictLanguageDetailView(LoginRequiredMixin, generic.DetailView):
                 DictItem.objects.get(id=request.POST.get('selected-item-id')).delete()
             except RestrictedError as err:
                 print(err)
+        if request.POST.get('delete-all-items-with-no-entries'):
+            for item in DictItem.objects.all():
+                if len(item.get_entries()) == 0:
+                    item.delete()
         return redirect('dict_language', pk)
 
 

@@ -5,11 +5,19 @@
 {% block content %}
     <h2>{{ dictlanguage }}</h2>
     {{ err }}
+    {% if user.is_authenticated %}
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="delete-all-items-with-no-entries" value="Delete">
+            <input class="btn rounded-pill py-0 edit-button" type="submit"
+                   onclick="return confirm('Are you sure?')" value="delete all items with no entries">
+        </form>
+    {% endif %}
     {% for item in dictlanguage.get_sorted_items %}
         <div class="d-flex">
             <div><a href="{% url 'dict_item' item.pk %}">{{ item.id }}: {{ item.value }}</a></div>
             <div class="ps-3 pe-3">entries: {{ item.get_entries|length }}</div>
-            {% if item.get_entries|length == 0 %}
+            {% if user.is_authenticated and item.get_entries|length == 0 %}
                 <form action="" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="selected-item-id" value={{ item.id }}>
