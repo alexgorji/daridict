@@ -147,6 +147,8 @@ def show_and_update_entries(request):
         if search_value != '':
             if search_value == 'آ':
                 search_value = 'ا'
+            search_value = remove_short_vowels(search_value)
+            search_value = remove_redundant_spaces(search_value)
             if search_tags_value != '':
                 if search_language == 'Farsi':
                     queried_entries = DictEntry.objects.all().filter(
