@@ -44,6 +44,7 @@ function autocomplete(inp, autocompleteFieldId, tags = false, sources = false, l
             });
         });
     } else {
+        console.log(inp.attr('id'))
         inp.on("input", function () {
             // inp.replaceWith(inp.cloneNode(true));
             let value = inp.val()
@@ -56,8 +57,7 @@ function autocomplete(inp, autocompleteFieldId, tags = false, sources = false, l
                     button.style.display = 'none'
                 }
             }
-
-            $.get('', {'language': language, 'autocomplete': value}, function (data) {
+            $.get('', {'language': language, 'autocomplete': value, 'input_id': inp.attr('id')}, function (data) {
                 $('#' + autocompleteFieldId).children().replaceWith(data);
                 /*make the matching letters bold*/
                 /*on click for matched word*/

@@ -4,9 +4,9 @@ from itertools import chain
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db import IntegrityError
-from django.db.models import Q, RestrictedError
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect, reverse
+from django.db.models import Q, RestrictedError, Count
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from django.views import generic
 
 from .forms import DictItemForm, DictItemUpdateForm, DictEntrySortingForm, DictSearchLanguageForm
@@ -210,13 +210,16 @@ def show_and_update_entries(request):
                 else:
                     word_beginning = remove_short_vowels(remove_redundant_spaces(word_beginning)).lower()
                     language = request.GET.get('language')
-                    if language:
+                    if request.GET.get('input_id') == 'id_search_field':
+                        query = DictItem.objects.annotate(
+                            number_of_entries=Count("entry_german_item") + Count("entry_dari_item") + Count(
+                                "entry_farsi_item"))
+                        items = [item.value for item in query.filter(language__value=language.capitalize(),
+                                                                     cleaned_value__istartswith=word_beginning,
+                                                                     number_of_entries__gt=0)]
+                    else:
                         items = [item.value for item in DictItem.objects.filter(language__value=language.capitalize(),
                                                                                 cleaned_value__istartswith=word_beginning)]
-                    else:
-                        items = [item.value for item in
-                                 DictItem.objects.filter(cleaned_value__istartswith=word_beginning)]
-                        items = list(dict.fromkeys(items))
                 return render(request, 'dict/ajax_autocomplete.html', {'items': items})
             elif 'autocompletetags' in request.GET:
                 word_beginnings = request.GET['autocompletetags'].split(', ')
