@@ -15,7 +15,7 @@
                             <button type="button" class="comment-button btn" data-toggle="popover" title="comment:"
                                     {% if dict_item.language.direction == 'RTL' %}data-bs-placement="left"
                                     {% else %}data-bs-placement="right" {% endif %}
-                                    data-bs-content="{{ dict_item.comment }}" data-bs-trigger="hover focus">cmt
+                                    data-bs-content="{{ dict_item.get_comment_with_source }}" data-bs-trigger="hover focus">cmt
 
                             </button>
                         </sup>

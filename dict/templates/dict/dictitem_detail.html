@@ -10,9 +10,12 @@
     <p>Comment:
         <span {% if dictitem.language.direction == 'RTL' %} dir="rtl" {% endif %}>{{ dictitem.comment }}</span>
     </p>
+    <p>Comment's Source:
+        <a href="{{ dictitem.comment_source.url }}" target="_blank">{{ dictitem.comment_source }}</a>
+    </p>
     {% for entry in dictitem.get_entries %}
         <div class="d-flex">
-            <p><a href="{% url 'dictionary'%}?go_to_entry={{ entry.id }}">{{ entry }}</a></p>
+            <p><a href="{% url 'dictionary' %}?go_to_entry={{ entry.id }}">{{ entry }}</a></p>
         </div>
     {% endfor %}
 {% endblock %}

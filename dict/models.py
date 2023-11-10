@@ -56,12 +56,25 @@ class DictLanguage(PrintSaveMixin, models.Model, AdminLinkMixin):
         ordering = ['id']
 
 
+class DictSource(PrintSaveMixin, models.Model, AdminLinkMixin):
+    name = models.CharField(max_length=1000, unique=True)
+    url = models.URLField(max_length=300, blank=True)
+    history = HistoricalRecords()
+
+    def get_absolute_url(self):
+        return reverse('source_list')
+
+    def __str__(self):
+        return self.name
+
+
 class DictItem(PrintSaveMixin, models.Model, AdminLinkMixin):
     language = models.ForeignKey(to=DictLanguage, on_delete=models.RESTRICT)
     value = models.CharField(max_length=250, blank=False)
     cleaned_value = models.CharField(max_length=250, blank=False)
     sorting_value = models.CharField(max_length=250, blank=False)
     comment = models.TextField(blank=True)
+    comment_source = models.ForeignKey(to=DictSource, on_delete=models.SET_NULL, null=True, blank=True)
     history = HistoricalRecords()
 
     class Meta:
@@ -86,6 +99,10 @@ class DictItem(PrintSaveMixin, models.Model, AdminLinkMixin):
         else:
             raise NotImplementedError(f'language: {self.language.value} is not an entry language.')
 
+    def get_comment_with_source(self):
+
+        return f'{self.comment} ({self.comment_source})' if self.comment_source else self.comment
+
     def save(self, *args, **kwargs):
         self.cleaned_value = remove_redundant_spaces(self.value)
         self.cleaned_value = remove_short_vowels(self.cleaned_value)
@@ -107,18 +124,6 @@ class Tag(PrintSaveMixin, models.Model, AdminLinkMixin):
     def save(self, *args, **kwargs):
         self.name = self.name.strip()
         return super().save(*args, **kwargs)
-
-
-class DictSource(PrintSaveMixin, models.Model, AdminLinkMixin):
-    name = models.CharField(max_length=1000, unique=True)
-    url = models.URLField(max_length=300, blank=True)
-    history = HistoricalRecords()
-
-    def get_absolute_url(self):
-        return reverse('source_list')
-
-    def __str__(self):
-        return self.name
 
 
 class DictEntry(PrintSaveMixin, models.Model, AdminLinkMixin):

@@ -1,6 +1,6 @@
 from django import forms
 
-from dict.models import DictItem, DictLanguage, Tag, DictEntry, DictSource
+from dict.models import DictItem, DictLanguage, Tag
 
 
 class DictItemForm(forms.ModelForm):
@@ -24,7 +24,7 @@ class DictItemUpdateForm(forms.ModelForm):
 
     class Meta:
         model = DictItem
-        fields = ['value', 'comment']
+        fields = ['value', 'comment', 'comment_source']
 
 
 class TagForm(forms.Form):
