@@ -26,8 +26,9 @@ def select_comment_source():
             re_search = re.search('\((.*)\)$', item.comment)
             if re_search:
                 possible_source = re_search.groups()[0]
-                source = DictSource.objects.filter(name=possible_source)
+                source = DictSource.objects.filter(name=possible_source)[0]
                 if source:
                     m = re.search('(\(.*\))$', item.comment)
                     item.comment = item.comment[:m.start()] + item.comment[m.end():]
+                    item.comment_source = source
                     item.save()
