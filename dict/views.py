@@ -143,7 +143,6 @@ def show_and_update_entries(request):
 
         search_tags_value = request.GET.get('tags', '')
         search_value = request.GET.get('search', '')
-
         if search_value != '':
             if search_value == 'آ':
                 search_value = 'ا'
@@ -151,20 +150,20 @@ def show_and_update_entries(request):
             search_value = remove_redundant_spaces(search_value)
             if search_tags_value != '':
                 if search_language == 'Farsi':
-                    queried_entries = DictEntry.objects.all().filter(
+                    queried_entries = DictEntry.objects.filter(
                         Q(item_farsi__cleaned_value__istartswith=search_value) & Q(
                             tags__name__in=search_tags_value.split(', '))
-                    ).order_by(f'item_{sorted_by.lower()}__sorting_value')
+                    ).distinct().order_by(f'item_{sorted_by.lower()}__sorting_value')
                 elif search_language == 'German':
-                    queried_entries = DictEntry.objects.all().filter(
+                    queried_entries = DictEntry.objects.filter(
                         Q(item_german__cleaned_value__istartswith=search_value) & Q(
                             tags__name__in=search_tags_value.split(', '))
-                    ).order_by(f'item_{sorted_by.lower()}__sorting_value')
+                    ).distinct().order_by(f'item_{sorted_by.lower()}__sorting_value')
                 elif search_language == 'Dari':
-                    queried_entries = DictEntry.objects.all().filter(
+                    queried_entries = DictEntry.objects.filter(
                         Q(item_dari__cleaned_value__istartswith=search_value) & Q(
                             tags__name__in=search_tags_value.split(', '))
-                    ).order_by(f'item_{sorted_by.lower()}__sorting_value')
+                    ).distinct().order_by(f'item_{sorted_by.lower()}__sorting_value')
                 else:
                     AttributeError(f'search_language {search_language} not implemented.')
             else:
@@ -185,7 +184,7 @@ def show_and_update_entries(request):
 
         else:
             if search_tags_value != '':
-                queried_entries = DictEntry.objects.filter(tags__name__in=search_tags_value.split(', ')).order_by(
+                queried_entries = DictEntry.objects.filter(tags__name__in=search_tags_value.split(', ')).distinct().order_by(
                     f'item_{sorted_by.lower()}__sorting_value')
             else:
                 queried_entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
