@@ -357,11 +357,7 @@ function saveUpdateButtons() {
             $("#id_entry_" + entry_id).append(data)
             $("#id_entry_" + entry_id).find($('[data-toggle="popover"]')).popover()
         });
-        // $('#id_table_wrapper').animate({
-        //     scrollTop: $('#id_entry_' + entry_id).position().top - 55
-        // }, 2000);
-        //
-        // window.scrollTo(0, $('#id_entry_' + entry_id).position().top + $('#id_table_wrapper').position().top)
+        cancelClick()
         go_to_entry(entry_id)
     });
     $('button[name = "entry-save"]').on('click', function () {
