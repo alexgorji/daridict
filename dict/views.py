@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 from django.views import generic
 
 from .forms import DictItemForm, DictItemUpdateForm, DictEntrySortingForm, DictSearchLanguageForm
-from .model_helpers import remove_redundant_spaces, remove_short_vowels
+from .model_helpers import remove_spaces, remove_short_vowels, clean_value
 from .models import DictItem, DictLanguage, Tag, DictEntry, DictSource, HistoricalDictItem, HistoricalDictEntry, \
     HistoricalDictLanguage, HistoricalDictSource, HistoricalTag
 
@@ -144,24 +144,21 @@ def show_and_update_entries(request):
         search_tags_value = request.GET.get('tags', '')
         search_value = request.GET.get('search', '')
         if search_value != '':
-            if search_value == 'آ':
-                search_value = 'ا'
-            search_value = remove_short_vowels(search_value)
-            search_value = remove_redundant_spaces(search_value)
+            cleaned_search_value = clean_value(search_value)
             if search_tags_value != '':
                 if search_language == 'Farsi':
                     queried_entries = DictEntry.objects.filter(
-                        Q(item_farsi__cleaned_value__istartswith=search_value) & Q(
+                        Q(item_farsi__cleaned_value__istartswith=cleaned_search_value) & Q(
                             tags__name__in=search_tags_value.split(', '))
                     ).distinct().order_by(f'item_{sorted_by.lower()}__sorting_value')
                 elif search_language == 'German':
                     queried_entries = DictEntry.objects.filter(
-                        Q(item_german__cleaned_value__istartswith=search_value) & Q(
+                        Q(item_german__cleaned_value__istartswith=cleaned_search_value) & Q(
                             tags__name__in=search_tags_value.split(', '))
                     ).distinct().order_by(f'item_{sorted_by.lower()}__sorting_value')
                 elif search_language == 'Dari':
                     queried_entries = DictEntry.objects.filter(
-                        Q(item_dari__cleaned_value__istartswith=search_value) & Q(
+                        Q(item_dari__cleaned_value__istartswith=cleaned_search_value) & Q(
                             tags__name__in=search_tags_value.split(', '))
                     ).distinct().order_by(f'item_{sorted_by.lower()}__sorting_value')
                 else:
@@ -169,22 +166,23 @@ def show_and_update_entries(request):
             else:
                 if search_language == 'Farsi':
                     queried_entries = DictEntry.objects.all().filter(
-                        item_farsi__cleaned_value__istartswith=search_value).order_by(
+                        item_farsi__cleaned_value__istartswith=cleaned_search_value).order_by(
                         f'item_{sorted_by.lower()}__sorting_value')
                 elif search_language == 'German':
                     queried_entries = DictEntry.objects.all().filter(
-                        item_german__cleaned_value__istartswith=search_value).order_by(
+                        item_german__cleaned_value__istartswith=cleaned_search_value).order_by(
                         f'item_{sorted_by.lower()}__sorting_value')
                 elif search_language == 'Dari':
                     queried_entries = DictEntry.objects.all().filter(
-                        item_dari__cleaned_value__istartswith=search_value).order_by(
+                        item_dari__cleaned_value__istartswith=cleaned_search_value).order_by(
                         f'item_{sorted_by.lower()}__sorting_value')
                 else:
                     AttributeError(f'search_language {search_language} not implemented.')
 
         else:
             if search_tags_value != '':
-                queried_entries = DictEntry.objects.filter(tags__name__in=search_tags_value.split(', ')).distinct().order_by(
+                queried_entries = DictEntry.objects.filter(
+                    tags__name__in=search_tags_value.split(', ')).distinct().order_by(
                     f'item_{sorted_by.lower()}__sorting_value')
             else:
                 queried_entries = DictEntry.objects.all().order_by(f'item_{sorted_by.lower()}__sorting_value')
@@ -207,7 +205,8 @@ def show_and_update_entries(request):
                 if len(word_beginning) < 2:
                     pass
                 else:
-                    word_beginning = remove_short_vowels(remove_redundant_spaces(word_beginning)).lower()
+                    word_beginning = word_beginning.strip()
+                    word_beginning = remove_short_vowels(remove_spaces(word_beginning)).lower()
                     language = request.GET.get('language')
                     if request.GET.get('input_id') == 'id_search_field':
                         query = DictItem.objects.annotate(

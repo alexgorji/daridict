@@ -1,4 +1,4 @@
-from .model_helpers import remove_redundant_spaces, remove_short_vowels, translate_to_sorting_value
+from .model_helpers import remove_spaces, remove_short_vowels, translate_to_sorting_value
 from .models import DictItem, DictEntry, DictLanguage
 
 
@@ -32,7 +32,7 @@ def create_entries(item_dari, item_farsi, item_german):
 
 def fill_cleaned_values():
     for dict_item in DictItem.objects.all():
-        dict_item.cleaned_value = remove_redundant_spaces(dict_item.value)
+        dict_item.cleaned_value = remove_spaces(dict_item.value)
         if dict_item.language.value in ['Dari', 'Farsi']:
             dict_item.cleaned_value = remove_short_vowels(dict_item.cleaned_value)
 

@@ -32,3 +32,11 @@ def select_comment_source():
                     item.comment = item.comment[:m.start()] + item.comment[m.end():]
                     item.comment_source = source[0]
                     item.save()
+
+
+def items_reset_cleaned_and_sorting_values():
+    """
+    cleaned_value and sorting_value of all items will be set with saving it againg
+    """
+    for item in DictItem.objects.all():
+        item.save()

@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from simple_history.models import HistoricalRecords
 
-from dict.model_helpers import remove_redundant_spaces, remove_short_vowels, translate_to_sorting_value, equalize_alef
+from dict.model_helpers import translate_to_sorting_value, clean_value
 
 
 class AdminLinkMixin:
@@ -104,9 +104,8 @@ class DictItem(PrintSaveMixin, models.Model, AdminLinkMixin):
         return f'{self.comment} ({self.comment_source})' if self.comment_source else self.comment
 
     def save(self, *args, **kwargs):
-        self.cleaned_value = remove_redundant_spaces(self.value)
-        self.cleaned_value = remove_short_vowels(self.cleaned_value)
-        self.cleaned_value = equalize_alef(self.cleaned_value)
+        self.value = self.value.strip()
+        self.cleaned_value = clean_value(self.value)
         self.sorting_value = translate_to_sorting_value(self.cleaned_value.lower())
         super().save(*args, **kwargs)
 
