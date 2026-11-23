@@ -1,5 +1,16 @@
-debug*
-*.pyc
+# Local environment files
+/.env
+/.env.*
+!/.env.example
+
+# Python virtual environments and bytecode
+/.venv/
+/venv/
 __pycache__/
-.venv/
-.env.docker
+*.pyc
+
+# Local logs and editor artifacts
+/debug.log
+/debug.log.*
+/.history/
+.DS_Store

@@ -1,4 +1,5 @@
-# Local development only. Do not reuse these credentials elsewhere.
+name: daridict
+
 x-postgres-env: &postgres-env
   POSTGRES_DB: daridict_db
   POSTGRES_USER: daridict
@@ -11,9 +12,19 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: ["sh", "-ec", "python manage.py migrate --noinput; exec python manage.py runserver 0.0.0.0:8000"]
+    command:
+      - sh
+      - -ec
+      - |
+        python manage.py migrate --noinput
+        exec gunicorn --bind 0.0.0.0:8000 --workers 2 --access-logfile - --reload daridict.wsgi:application
     ports:
       - "127.0.0.1:${DARIDICT_PORT:-1234}:8000"
+    volumes:
+      - ./manage.py:/app/manage.py:ro
+      - ./daridict:/app/daridict:ro
+      - ./dict:/app/dict:ro
+      - ./home:/app/home:ro
 
   postgres:
     image: postgres:17-bookworm

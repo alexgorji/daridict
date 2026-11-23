@@ -15,4 +15,11 @@ DATABASES = {
 }
 
 STATIC_URL = '/static/'
+WHITENOISE_USE_FINDERS = True
+MIDDLEWARE = [
+    MIDDLEWARE[0],
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    *MIDDLEWARE[1:],
+]
+
 LOGGING = {'version': 1, 'disable_existing_loggers': False}
