@@ -26,7 +26,9 @@ COPY manage.py ./
 COPY daridict ./daridict
 COPY dict ./dict
 COPY home ./home
+COPY --chmod=755 container/daridict.sh /usr/local/bin/daridict
 
 USER daridict
 EXPOSE 8000
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--access-logfile", "-", "daridict.wsgi:application"]
+ENTRYPOINT ["/usr/local/bin/daridict"]
+CMD ["serve"]

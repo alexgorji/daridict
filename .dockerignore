@@ -9,6 +9,8 @@
 !dict/**
 !home/
 !home/**
+!container/
+!container/daridict.sh
 
 **/.env*
 **/local.py
