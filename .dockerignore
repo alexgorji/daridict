@@ -1,0 +1,20 @@
+# Only send application source and locked dependencies to the builder.
+**
+!pyproject.toml
+!uv.lock
+!manage.py
+!daridict/
+!daridict/**
+!dict/
+!dict/**
+!home/
+!home/**
+
+**/.env*
+**/local.py
+**/__pycache__/
+**/*.pyc
+**/.DS_Store
+**/*.log
+**/*.sql
+**/*.sqlite3
