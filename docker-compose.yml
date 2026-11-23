@@ -8,6 +8,10 @@ x-postgres-env: &postgres-env
 services:
   backend:
     build: .
+    env_file:
+      - container/env
+      - path: .env.local
+        required: false
     environment: *postgres-env
     depends_on:
       postgres:
